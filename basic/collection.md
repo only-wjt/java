@@ -1,8 +1,4 @@
----
-title: collection
-tags: collection,java,basic
-grammar_cjkRuby: true
----
+# ->集合<-
 转载至[简书作者Ruheng](https://www.jianshu.com/p/589d58033841)
 ### 简介
 &emsp;&emsp;本篇文章主要对java集合的框架进行介绍，使大家对java集合的整体框架有个了解。具体介绍了Collection接口，Map接口以及Collection接口的三个子接口Set，List，Queue。
