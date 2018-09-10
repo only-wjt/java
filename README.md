@@ -1,2 +1,2 @@
 # java
-java基础
+java学习笔记
