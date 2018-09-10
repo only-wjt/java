@@ -23,7 +23,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;2.数组元素即可以是基本类型的值，也可以是对象。`集合里只能保存对象` （实际上只是保存对象的引用变量），基本数据类型的变量要转换成对应的包装类才能放入集合类中。
 ### Java集合类之间的继承关系:
-&emsp;&emsp;Java的集合类主要由两个接口派生而出：Collection和Map,Collection和Map是Java集合框架的根接口。`Map实现类用于保存具有映射关系的数据`。Map保存的每项数据都是key-value对，也就是由key和value两个值组成。==Map里的key是不可重复的==，key用户标识集合里的每项数据。如下图：
+&emsp;&emsp;Java的集合类主要由两个接口派生而出：Collection和Map,Collection和Map是Java集合框架的根接口。`Map实现类用于保存具有映射关系的数据`。Map保存的每项数据都是key-value对，也就是由key和value两个值组成。`Map里的key是不可重复的`，key用户标识集合里的每项数据。如下图：
 
 ![collection大家庭](./images/collection_assortment.png)
 
