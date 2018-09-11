@@ -39,4 +39,30 @@ grammar_cjkRuby: true
 
 ### iterator()遍历集合
 
-&emsp;&emsp;Iterator接口经常被称作迭代器，它是Collection接口的父接口。但Iterator主要用于遍历集合中的元素。其中有两个方法hasNext()以及next(),hasNext()代表如果下一个还有元素，则返回true，next()返回迭代的下一个元素
+&emsp;&emsp;Iterator接口经常被称作迭代器，它是Collection接口的父接口。但Iterator主要用于遍历集合中的元素。其中有两个方法hasNext()以及next(),hasNext()代表如果下一个还有元素，则返回true，next()返回迭代的下一个元素。
+
+````
+public class IteratorExample {
+    public static void main(String[] args){
+        //创建集合，添加元素  
+        Collection<Day> days = new ArrayList<Day>();
+        for(int i =0;i<10;i++){
+            Day day = new Day(i,i*60,i*3600);
+            days.add(day);
+        }
+        //获取days集合的迭代器
+        Iterator<Day> iterator = days.iterator();
+        while(iterator.hasNext()){//判断是否有下一个元素
+            Day next = iterator.next();//取出该元素
+            //逐个遍历，取得元素后进行后续操作
+            .....
+        }
+    }
+
+}
+
+作者：Ruheng
+链接：https://www.jianshu.com/p/589d58033841
+來源：简书
+简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+````
