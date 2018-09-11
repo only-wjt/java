@@ -34,3 +34,5 @@ grammar_cjkRuby: true
 ### Collection接口中的方法：
 
 ![collection_method](./images/collection_method.png)
+
+&emsp;&emsp;常用的方法有iterator(),添加元素，删除元素，返回Collection集合的个数以及清空集合等
