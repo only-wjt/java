@@ -39,3 +39,4 @@ grammar_cjkRuby: true
 
 ### iterator()遍历集合
 
+&emsp;&emsp;Iterator接口经常被称作迭代器，它是Collection接口的父接口。但Iterator主要用于遍历集合中的元素。
