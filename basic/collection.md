@@ -61,3 +61,24 @@ public class IteratorExample {
 ````
 &emsp;&emsp;注意：当使用Iterator对集合元素进行迭代时，`Iterator并不是把集合元素本身传给了迭代变量，而是把集合元素的值传给了迭代变量`（`就如同参数传递是值传递，基本数据类型传递的是值，引用类型传递的仅仅是对象的引用变量`），所以修改迭代变量的值对集合元素本身没有任何影响。 
 &emsp;&emsp;下面代码正好显示了这一点：
+````
+public class IteratorExample {
+    public static void main(String[] args){
+        List<String> list =Arrays.asList("java语言","C语言","C++语言");
+        Iterator<String> iterator = list.iterator();
+        while(iterator.hasNext()){
+            String next = iterator.next();//集合元素的值传给了迭代变量，仅仅传递了对象引用。保存的仅仅是指向对象内存空间的地址
+            next ="修改后的";
+            System.out.println(next);
+            
+        }
+        System.out.println(list);
+    }
+
+}
+
+作者：Ruheng
+链接：https://www.jianshu.com/p/589d58033841
+來源：简书
+简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+````
