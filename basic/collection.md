@@ -172,10 +172,7 @@ HashSet判断两个元素相等的标准：两个对象通过equals()方法比�
 
 注意：HashSet是根据元素的hashCode值来快速定位的，如果HashSet中两个以上的元素具有相同的hashCode值，将会导致性能下降。所以如果重写类的equals()方法和hashCode()方法时，应尽量保证两个对象通过hashCode()方法返回值相等时，通过equals()方法比较返回true。
 
-作者：Ruheng
-链接：https://www.jianshu.com/p/9081017a2d67
-來源：简书
-简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+
 
 
 
