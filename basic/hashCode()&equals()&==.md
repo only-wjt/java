@@ -121,5 +121,6 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 不相等的对象的hashCode()的结果可以相等。hashCode()在注意关注碰撞问题的时候，也要关注生成速度问题，完美hash不现实 
 3. 一旦重写了equals()函数（重写equals的时候还要注意要满足自反性、对称性、传递性、一致性），就必须重写hashCode()函数。而且hashCode()的生成哈希值的依据应该是equals()中用来比较是否相等的字段 
 如果两个由equals()规定相等的对象生成的hashCode不等，对于hashMap来说，他们很可能分别映射到不同位置，没有调用equals()比较是否相等的机会，两个实际上相等的对象可能被插入不同位置，出现错误。其他一些基于哈希方法的集合类可能也会有这个问题 
+建议写法
 1. 给int变量result赋予某个非零整数值，例如17 
 2. 位对象内每个有意义的域f(即每个可以做equals()操作的域)计算出一个int散列值c：
