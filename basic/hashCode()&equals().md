@@ -93,3 +93,4 @@ public int hashCode() {
 &emsp;&emsp;hashCode是对象的散列值 ,不同的对象是可能会有相同的散列值的，所以两个对象的hashCode()方法相等，不代表 equals相等
 &emsp;&emsp;`hashCode()就是一个提高效率的策略问题` ，因为hashCode是int型的，int型比较运算是相当快的。所以`比较两个对象是否相等，可以先比较其hashCode` 如果hashCode不相等说明肯定是两个不同的对象。但hashCode相等的情况下，并不一定equals也相等，就再执行equals方法真正来比较两者是否相等。
 &emsp;&emsp;也就是说hashCode()方法效率比较高，一般做两个对象的比较时，先判断hashCode()是否相等。如果不相等，则两个对象必然不相等，如果hashCode()相等，再比较equals()方法，如果相等，则两个对象相等。
+[enter description here](https://blog.csdn.net/silviakafka/article/details/44201849)
