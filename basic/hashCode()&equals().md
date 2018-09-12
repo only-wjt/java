@@ -9,5 +9,5 @@ grammar_cjkRuby: true
 
 equals：查看底层object的equals方法 public boolean equals(Object obj) { return (this == obj); }
 
-当对象所属的类没有重写根类Object的equals()方法时  调用==判断 即物理相等。当对象所属的类重写equals()方法（可能因为需要自己特有的“逻辑相等”概念)。equals()判断的根据就因具体实现而异：
+&emsp;&emsp;当对象所属的类没有重写根类Object的equals()方法时  调用==判断 即物理相等。当对象所属的类重写equals()方法（可能因为需要自己特有的“逻辑相等”概念)。equals()判断的根据就因具体实现而异：
 如String类重写equals()来判断字符串的值是否相等
