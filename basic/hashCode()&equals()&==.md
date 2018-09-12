@@ -114,13 +114,14 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 ### 重写hashCode()和equal()
 &emsp;&emsp;Object版本的equal只是简单地判断是不是同一个实例。但是有的时候，我们想要的的是逻辑上的相等。比如有一个学生类student，有一个属性studentID，只要studentID相等，不是同一个实例我们也认为是同一学生。当我们认为`判定equals的相等应该是逻辑上的相等而不是只是判断是不是内存中的同一个东西的时候`，就需要重写equals()。而涉及到HashMap的时候，重写了equals()，就需要重写hashCode()
 
-基本原则 
-1. 同一个对象（没有发生过修改）无论何时调用hashCode()得到的返回值必须一样。 
-如果一个key对象在put的时候调用hashCode()决定了存放的位置，而在get的时候调用hashCode()得到了不一样的返回值，这个值映射到了一个和原来不一样的地方，那么肯定就找不到原来那个键值对了。 
-2. hashCode()的返回值相等的对象不一定相等，通过hashCode()和equals()必须能唯一确定一个对象 
-不相等的对象的hashCode()的结果可以相等。hashCode()在注意关注碰撞问题的时候，也要关注生成速度问题，完美hash不现实 
-3. 一旦重写了equals()函数（重写equals的时候还要注意要满足自反性、对称性、传递性、一致性），就必须重写hashCode()函数。而且hashCode()的生成哈希值的依据应该是equals()中用来比较是否相等的字段 
-如果两个由equals()规定相等的对象生成的hashCode不等，对于hashMap来说，他们很可能分别映射到不同位置，没有调用equals()比较是否相等的机会，两个实际上相等的对象可能被插入不同位置，出现错误。其他一些基于哈希方法的集合类可能也会有这个问题 
-建议写法
+&emsp;&emsp;基本原则 
+&emsp;&emsp;1. 同一个对象（没有发生过修改）无论何时调用hashCode()得到的返回值必须一样。 
+&emsp;&emsp;如果一个key对象在put的时候调用hashCode()决定了存放的位置，而在get的时候调用hashCode()得到了不一样的返回值，这个值映射到了一个和原来不一样的地方，那么肯定就找不到原来那个键值对了。 
+&emsp;&emsp;2. hashCode()的返回值相等的对象不一定相等，通过hashCode()和equals()必须能唯一确定一个对象 
+&emsp;&emsp;不相等的对象的hashCode()的结果可以相等。hashCode()在注意关注碰撞问题的时候，也要关注生成速度问题，完美hash不现实 
+&emsp;&emsp;3. 一旦重写了equals()函数（重写equals的时候还要注意要满足自反性、对称性、传递性、一致性），就必须重写hashCode()函数。而且hashCode()的生成哈希值的依据应该是equals()中用来比较是否相等的字段 .如果两个由equals()规定相等的对象生成的hashCode不等，对于hashMap来说，他们很可能分别映射到不同位置，没有调用equals()比较是否相等的机会，两个实际上相等的对象可能被插入不同位置，出现错误。其他一些基于哈希方法的集合类可能也会有这个问题 
+
+
+&emsp;&emsp;建议写法
 1. 给int变量result赋予某个非零整数值，例如17 
 2. 位对象内每个有意义的域f(即每个可以做equals()操作的域)计算出一个int散列值c：
