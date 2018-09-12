@@ -123,5 +123,5 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 
 
 &emsp;&emsp;建议写法
-1. 给int变量result赋予某个非零整数值，例如17 
-2. 位对象内每个有意义的域f(即每个可以做equals()操作的域)计算出一个int散列值c：
+&emsp;&emsp;1. 给int变量result赋予某个非零整数值，例如17 
+&emsp;&emsp;2. 位对象内每个有意义的域f(即每个可以做equals()操作的域)计算出一个int散列值c：
