@@ -88,3 +88,4 @@ public int hashCode() {
 ````
 
 **两个对象的equals()方法等同->两对象hashCode()必相同,hashCode()相同不能推导 equals()相等**
+个人理解是两个对象的逻辑相等必须要通过equals做比较
