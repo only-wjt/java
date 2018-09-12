@@ -46,4 +46,4 @@ equals：查看底层object的equals方法
 public native int hashCode();
 ````
 
-&emsp;&emsp;方法的计算依赖于对象实例的ID（内存地址），每个Object对象的hashCode都是唯一的通过将该对象的内部地址转换成一个整数来实现的 ，toString方法也会用到这个hashCode
+&emsp;&emsp;方法的计算依赖于对象实例的ID（内存地址），每个Object对象的hashCode都是唯一的，通过将该对象的内部地址转换成一个整数来实现的 ，toString方法也会用到这个hashCode
