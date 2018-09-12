@@ -78,3 +78,11 @@ private final char value[];
 ````
 
 &emsp;&emsp;String的hashCode计算方式就是遍历字符数组 计算其加权和
+
+
+Integer类hashCode()返回的是它值本身
+````
+public int hashCode() {
+        return value;
+    }
+````
