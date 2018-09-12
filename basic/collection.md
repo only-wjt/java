@@ -101,3 +101,9 @@ equals()
 equals() 的作用是``用来判断两个对象是否相等。``
 
 equals() 定义在JDK的Object.java中。`通过判断两个对象的地址是否相等`(即，是否是同一个对象)来区分它们是否相等。源码如下：
+
+````
+public boolean equals(Object obj) {
+       return (this == obj);
+   }
+````
