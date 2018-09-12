@@ -90,4 +90,5 @@ public int hashCode() {
 **两个对象的equals()方法等同->两对象hashCode()必相同,hashCode()相同不能推导 equals()相等**
 **个人理解是两个对象的逻辑相等必须要通过equals做比较**
 
-hashCode是对象的散列值 ,不同的对象是可能会有相同的散列值的
+&emsp;&emsp;hashCode是对象的散列值 ,不同的对象是可能会有相同的散列值的
+&emsp;&emsp;hashCode（）就是一个提高效率的策略问题 ，因为hashCode是int型的，int型比较运算是相当快的。所以比较两个对象是否相等，可以先比较其hashCode  如果hashCode不相等说明肯定是两个不同的对象。但hashCode相等的情况下，并不一定equals也相等，就再执行equals方法真正来比较两者是否相等
