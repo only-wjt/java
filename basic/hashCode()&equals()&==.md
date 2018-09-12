@@ -125,3 +125,7 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 &emsp;&emsp;建议写法
 &emsp;&emsp;1. 给int变量result赋予某个非零整数值，例如17 
 &emsp;&emsp;2. 位对象内每个有意义的域f(即每个可以做equals()操作的域)计算出一个int散列值c：
+&emsp;&emsp;3. 合并计算得到的散列值： 
+result = 37 * result + c 
+&emsp;&emsp;4. 返回result 
+&emsp;&emsp;5. 检查hashCode()最后生成的结果，确保相同的对象有相同的散列值
