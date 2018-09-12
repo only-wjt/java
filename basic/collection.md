@@ -86,3 +86,13 @@ public class IteratorExample {
 
 #### HashSet简介
 &emsp;&emsp;HashSet是Set接口的典型实现，实现了Set接口中的所有方法，并没有添加额外的方法，``大多数时候使用Set集合时就是使用这个实现类``。HashSet按Hash算法来存储集合中的元素。因此```具有很好的存取和查找性能``。
+
+### HashSet特点
+
+1.不能保证元素的排列顺序，顺序可能与添加顺序不同，顺序也有可能发生变化。
+2.HashSet不是同步的，如果多个线程同时访问一个HashSet，则必须通过代码来保证其同步。
+3.集合元素值可以是null。
+除此之外，HashSet判断两个元素是否相等的标准也是其一大特点。HashSet集合判断两个元素相等的标准是两个对象通过equals()方法比较相等，并且两个对象的hashCode()方法返回值也相等。
+
+写到这里，我们就要介绍下equals()和hashCode()方法了。
+
