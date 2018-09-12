@@ -25,7 +25,7 @@ equals：查看底层object的equals方法
         if (anObject instanceof String) {//如果物理不相等，则继续判断String对象中的每一个字符是否相等
             String anotherString = (String) anObject;
             int n = value.length;
-            if (n == anotherString.value.length) {
+            if (n == anotherString.value.length) {//先判断两个String对象长度是否相等，相等继续判断，不相等，返回false
                 char v1[] = value;
                 char v2[] = anotherString.value;
                 int i = 0;
