@@ -96,7 +96,7 @@ public class IteratorExample {
 
 写到这里，我们就要介绍下equals()和hashCode()方法了。
 
-#### equals()和hashCode()
+#### equals()和hashCode()*详细请见同目录下的hashCode()与equals()*
 #### equals()
 equals() 的作用是``用来判断两个对象是否相等。``
 
