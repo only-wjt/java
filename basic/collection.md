@@ -173,6 +173,6 @@ hashCode()也分两种情况。一种是Object类中默认的方法，另一种�
 &emsp;&emsp;注意：HashSet是根据元素的hashCode值来快速定位的，如果HashSet中两个以上的元素具有相同的hashCode值，将会导致性能下降。所以如果重写类的equals()方法和hashCode()方法时，应尽量保证两个对象通过hashCode()方法返回值相等时，通过equals()方法比较返回true。
 
 
-### **未完待续**
+# **未完待续**
 
 
