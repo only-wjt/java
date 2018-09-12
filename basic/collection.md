@@ -84,4 +84,4 @@ public class IteratorExample {
 
 #### 一、hashSet
 #### HashSet简介
-&emsp;&emsp;HashSet是Set接口的典型实现，实现了Set接口中的所有方法，并没有添加额外的方法，大多数时候使用Set集合时就是使用这个实现类。HashSet按Hash算法来存储集合中的元素。因此具有很好的存取和查找性能。
+&emsp;&emsp;HashSet是Set接口的典型实现，实现了Set接口中的所有方法，并没有添加额外的方法，``大多数时候使用Set集合时就是使用这个实现类``。HashSet按Hash算法来存储集合中的元素。因此具有很好的存取和查找性能。
