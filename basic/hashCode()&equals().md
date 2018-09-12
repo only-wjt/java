@@ -40,4 +40,4 @@ equals：查看底层object的equals方法
         return false;
     }
 ````
-hashCode():java.lang.Object类的源码中   方法是native的
+hashCode():java.lang.Object类的源码中方法是native的
