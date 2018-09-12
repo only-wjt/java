@@ -136,8 +136,7 @@ result = 37 * result + c
 |   byte、char、short或int  |  c = (int)f  |
 |   long |   c = (int)(f^(f^>>>32))  |
 |   float  |  c = Float.floatToIntBits(f)	   |
-|  double   |   long l = Double.doubleToLongBits(f);
-c = (int(l^(l>>>32)))  |
+|  double   |   long l = Double.doubleToLongBits(f);c = (int(l^(l>>>32)))  |
 |  Object,其equals()调用这个域的equals()   |  c = f.hashCode()   |
 |   数组  |   对每个元素应用上述规则  |
 
