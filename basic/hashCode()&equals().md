@@ -70,3 +70,5 @@ public int hashCode() {
         return h;
     }
 ````
+
+&emsp;&emsp;String底层是一个final的char数组
