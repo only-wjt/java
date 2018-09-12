@@ -53,3 +53,5 @@ public String toString() {
         return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }
 ````
+
+如果重写了hashCode();
