@@ -107,3 +107,5 @@ public boolean equals(Object obj) {
        return (this == obj);
    }
 ````
+既然Object.java中定义了equals()方法，这就意味着所有的Java类都实现了equals()方法，所有的类都可以通过equals()去比较两个对象是否相等。 但是，使用默认的“equals()”方法，等价于“==”方法。我们也可以在Object的子类中重写此方法，自定义“equals()”方法，在其中定义自己的判断逻辑，如果满足则返回true，不满足则返回false。下面我们自定义一个类 Person,并认为年龄，身高相等的两个Person对象，equals()方法比较结果相等。
+
