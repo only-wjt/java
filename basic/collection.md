@@ -79,3 +79,11 @@ public class IteratorExample {
 
 ````
 ### 集合Set：
+#### 简介
+Set集合与Collection集合基本相同，没有提供任何额外的方法。实际上Set就是Collection，只是行为略有不同（Set不允许包含重复元素）。
+Set集合不允许包含相同的元素，如果试图把两个相同的元素加入同一个Set集合中，则添加操作失败，add()方法返回false，且新元素不会被加入。
+
+作者：Ruheng
+链接：https://www.jianshu.com/p/589d58033841
+來源：简书
+简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
