@@ -40,3 +40,4 @@ equals：查看底层object的equals方法
         return false;
     }
 ````
+hashcode()
