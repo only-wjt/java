@@ -19,7 +19,7 @@ equals：查看底层object的equals方法
 &emsp;&emsp;如String类重写equals()来判断字符串的值是否相等。
 ````
  public boolean equals(Object anObject) {
-        if (this == anObject) {
+        if (this == anObject) {//先判断是不是物理相等此时相当于==
             return true;
         }
         if (anObject instanceof String) {
