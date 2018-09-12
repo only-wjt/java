@@ -99,7 +99,6 @@ public int hashCode() {
 
 &emsp;&emsp;重写了equals方法则一定要重写hashCode
 emsp;emsp;就像String类一样，equals方法不同于Object的equals，它的hashCode方法也不一样。
-emsp;emsp;为什么：反证一下，如果不重写hashCode，那么两个字符串，不同的对象，但里面的内容是一样的，equals则返回true。但他们的hashCode却返回实例的ID（内存地址）。那么这两个对象的hashCode就不相等了！违反了上面所说的：equals方法是鉴定两个对象逻辑相等的唯一标准 
-emsp;emsp;两个对象的equals()方法等同===>两对象hashCode()必相同。 
+emsp;emsp;为什么：反证一下，如果不重写hashCode，那么两个字符串，不同的对象，但里面的内容是一样的，equals则返回true。但他们的hashCode却返回实例的ID（内存地址）。那么这两个对象的hashCode就不相等了！违反了上面所说的：equals方法是鉴定两个对象逻辑相等的唯一标准 。两个对象的equals()方法等同===>两对象hashCode()必相同。 
 hashCode()相同  不能推导  equals()相等
 emsp;emsp;因此，重写了equals方法则一定要重写hashCode。保证上面的语句成立
