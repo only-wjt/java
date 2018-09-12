@@ -29,7 +29,7 @@ equals：查看底层object的equals方法
                 char v1[] = value;
                 char v2[] = anotherString.value;
                 int i = 0;
-                while (n-- != 0) {
+                while (n-- != 0) {//循环遍历，比较两个String对象同一位置上的字符是否相等
                     if (v1[i] != v2[i])
                             return false;
                     i++;
