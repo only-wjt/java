@@ -144,3 +144,31 @@ result = 37 * result + c
 &emsp;&emsp;5. 检查hashCode()最后生成的结果，确保相同的对象有相同的散列值
 
 ### forexample
+&emsp;&emsp;假设需要记录学生的成绩，每个学生本身有姓名，年龄，性别几个属性，把姓名、性别、年龄都一样的当成是同一个人（虽然不严谨）。学生对象自然就是key，成绩是Value
+
+````
+class Student {
+    String name;
+    int age;
+    //true表示男，false表示女
+    boolean sex;
+
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 37*result+name.hashCode();
+        result = 37*result+age;
+        result = 37*result+(sex ? 0 : 1);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Student &&
+                this.name.equals(((Student)obj).name) &&
+                this.age ==  ((Student)obj).age &&
+                this.sex == ((Student)obj).sex;
+    }
+}
+````
