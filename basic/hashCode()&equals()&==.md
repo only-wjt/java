@@ -142,3 +142,5 @@ result = 37 * result + c
 
 &emsp;&emsp;4. 返回result 
 &emsp;&emsp;5. 检查hashCode()最后生成的结果，确保相同的对象有相同的散列值
+
+### forexample
