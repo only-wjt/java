@@ -103,3 +103,11 @@ public int hashCode() {
 ## hashMap中的hashCode()和equals()
 
 &emsp;&emsp;HashMap中维护了一个特别的数据结构，就是Entry
+
+````
+static class Entry<K,V> implements Map.Entry<K,V> {
+        final K key;
+        V value;
+        Entry<K,V> next;
+        int hash;
+````
