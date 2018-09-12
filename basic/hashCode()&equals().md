@@ -102,3 +102,4 @@ public int hashCode() {
 
 ## hashMap中的hashCode()和equals()
 
+&emsp;&emsp;HashMap中维护了一个特别的数据结构，就是Entry
