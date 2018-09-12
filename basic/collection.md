@@ -95,3 +95,9 @@ public class IteratorExample {
 除此之外，HashSet判断两个元素是否相等的标准也是其一大特点。HashSet集合判断两个元素相等的标准是两个对象通过equals()方法比较相等，并且两个对象的hashCode()方法返回值也相等。
 
 写到这里，我们就要介绍下equals()和hashCode()方法了。
+
+equals()和hashCode()
+equals()
+equals() 的作用是** 用来判断两个对象是否相等。**
+
+equals() 定义在JDK的Object.java中。通过判断两个对象的地址是否相等(即，是否是同一个对象)来区分它们是否相等。源码如下：
