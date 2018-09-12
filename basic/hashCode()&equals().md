@@ -22,7 +22,7 @@ equals：查看底层object的equals方法
         if (this == anObject) {//先判断是不是物理相等此时相当于==
             return true;
         }
-        if (anObject instanceof String) {
+        if (anObject instanceof String) {//如果物理不相等，则继续判断String对象中的每一个字符是否相等
             String anotherString = (String) anObject;
             int n = value.length;
             if (n == anotherString.value.length) {
