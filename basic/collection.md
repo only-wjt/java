@@ -90,8 +90,8 @@ public class IteratorExample {
 #### HashSet特点
 
 1.`不能保证元素的排列顺序`，顺序可能与添加顺序不同，顺序也有可能发生变化。
-2.HashSet不是同步的，如果多个线程同时访问一个HashSet，则必须通过代码来保证其同步。
+2.HashSet不是同步的，如果多个线程同时访问一个HashSet，则必须通过代码来保证其同步。其实查看源代码发现HashSet内部维护数据的采用的是HashMap，根本原因是HashMap不是线程安全的类。导致了HashSet的非线程安全。
 3.集合元素值可以是null。
-除此之外，HashSet判断两个元素是否相等的标准也是其一大特点。HashSet集合判断两个元素相等的标准是两个对象通过equals()方法比较相等，并且两个对象的hashCode()方法返回值也相等。其实查看源代码发现HashSet内部维护数据的采用的是HashMap，根本原因是HashMap不是线程安全的类。导致了HashSet的非线程安全。
+除此之外，HashSet判断两个元素是否相等的标准也是其一大特点。HashSet集合判断两个元素相等的标准是两个对象通过equals()方法比较相等，并且两个对象的hashCode()方法返回值也相等。
 
 写到这里，我们就要介绍下equals()和hashCode()方法了。
