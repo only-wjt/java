@@ -149,12 +149,12 @@ public class EqualTest {
 hashCode()
 hashCode() 的作用是`获取哈希码`，也称为散列码；它`实际上是返回一个int整数`。这个哈希码的作用是确定该对象在哈希表中的索引位置。
 
-hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。虽然，每个Java类都包含hashCode() 函数。但是，仅仅当创建某个“类"的散列表时，该类的hashCode() 才有用。更通俗地说就是`创建包含该类的HashMap，Hashtable，HashSet集合时，hashCode() 才有用`。因为HashMap，Hashtable，HashSet就是散列表集合。
-`在散列表中，hashCode()作用是：确定该类的每一个对象在散列表中的位置；其它情况下类的hashCode() 没有作用`。在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。
+&emps;&emps;hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。虽然，每个Java类都包含hashCode() 函数。但是，仅仅当创建某个“类"的散列表时，该类的hashCode() 才有用。更通俗地说就是`创建包含该类的HashMap，Hashtable，HashSet集合时，hashCode() 才有用`。因为HashMap，Hashtable，HashSet就是散列表集合。
+&emps;&emps;`在散列表中，hashCode()作用是：确定该类的每一个对象在散列表中的位置；其它情况下类的hashCode() 没有作用`。在散列表中hashCode() 的作用是获取对象的散列码，进而确定该对象在散列表中的位置。
 
 hashCode()也分两种情况。一种是Object类中默认的方法，另一种是在子类中重写的方法。
-(01) 若某个类没有覆盖hashCode()方法，当它的通过hashCode()比较两个对象时，实际上是比较两个对象是不是同一个对象。这时，等价于通过“==”去比较这两个对象，即两个对象的内存地址是否相同。
-(02) 我们可以覆盖类的hashCode()方法，来让hashCode()通过其它方式比较两个对象是否相等。通常的做法是：若两个对象的内容相等，则hashCode()方法返回true；否则，返回fasle。
+&emps;&emps;(01) 若某个类没有覆盖hashCode()方法，当它的通过hashCode()比较两个对象时，实际上是比较两个对象是不是同一个对象。这时，等价于通过“==”去比较这两个对象，即两个对象的内存地址是否相同。
+&emps;&emps;(02) 我们可以覆盖类的hashCode()方法，来让hashCode()通过其它方式比较两个对象是否相等。通常的做法是：若两个对象的内容相等，则hashCode()方法返回true；否则，返回fasle。
 
 通过对以上两个方法的了解。我们可以接下来学习HashSet集合中如何判断两个元素是否相等？
 
