@@ -128,4 +128,17 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 &emsp;&emsp;3. 合并计算得到的散列值： 
 result = 37 * result + c 
 &emsp;&emsp;4. 返回result 
-&emsp;&emsp;5. 检查hashCode()最后生成的结果，确保相同的对象有相同的散列值
+&emsp;&emsp;
+
+|   域类型  |   计算 |
+| --- | --- |
+|  boolean   |  c=(f ? 0 : 1)   |
+|   byte、char、short或int  |  c = (int)f  |
+|   long |   c = (int)(f^(f^>>>32))  |
+|   float  |  c = Float.floatToIntBits(f)	   |
+|  double   |   long l = Double.doubleToLongBits(f);
+c = (int(l^(l>>>32)))  |
+|  Object,其equals()调用这个域的equals()   |  c = f.hashCode()   |
+|   数组  |   对每个元素应用上述规则  |
+
+5. 检查hashCode()最后生成的结果，确保相同的对象有相同的散列值
