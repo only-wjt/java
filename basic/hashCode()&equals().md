@@ -72,3 +72,7 @@ public int hashCode() {
 ````
 
 &emsp;&emsp;String底层是一个final的char数组
+
+````
+private final char value[];
+````
