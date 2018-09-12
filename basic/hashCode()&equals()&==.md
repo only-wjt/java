@@ -114,7 +114,7 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 ### 重写hashCode()和equal()
 &emps;&emps;Object版本的equal只是简单地判断是不是同一个实例。但是有的时候，我们想要的的是逻辑上的相等。比如有一个学生类student，有一个属性studentID，只要studentID相等，不是同一个实例我们也认为是同一学生。当我们认为`判定equals的相等应该是逻辑上的相等而不是只是判断是不是内存中的同一个东西的时候`，就需要重写equals()。而涉及到HashMap的时候，重写了equals()，就需要重写hashCode()
 
-我们总结一下几条基本原则 
+基本原则 
 1. 同一个对象（没有发生过修改）无论何时调用hashCode()得到的返回值必须一样。 
 如果一个key对象在put的时候调用hashCode()决定了存放的位置，而在get的时候调用hashCode()得到了不一样的返回值，这个值映射到了一个和原来不一样的地方，那么肯定就找不到原来那个键值对了。 
 2. hashCode()的返回值相等的对象不一定相等，通过hashCode()和equals()必须能唯一确定一个对象 
