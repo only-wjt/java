@@ -77,4 +77,4 @@ public int hashCode() {
 private final char value[];
 ````
 
-String的hashCode计算方式就是遍历字符数组 计算其加权和
+&emsp;&emsp;String的hashCode计算方式就是遍历字符数组 计算其加权和
