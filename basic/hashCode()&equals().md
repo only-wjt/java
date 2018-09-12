@@ -93,3 +93,19 @@ public int hashCode() {
 &emsp;&emsp;hashCode是对象的散列值 ,不同的对象是可能会有相同的散列值的，所以两个对象的hashCode()方法相等，不代表 equals相等
 &emsp;&emsp;`hashCode()就是一个提高效率的策略问题` ，因为hashCode是int型的，int型比较运算是相当快的。所以`比较两个对象是否相等，可以先比较其hashCode` 如果hashCode不相等说明肯定是两个不同的对象。但hashCode相等的情况下，并不一定equals也相等，就再执行equals方法真正来比较两者是否相等。
 &emsp;&emsp;也就是说hashCode()方法效率比较高，一般做两个对象的比较时，先判断hashCode()是否相等。如果不相等，则两个对象必然不相等，如果hashCode()相等，再比较equals()方法，如果相等，则两个对象相等。
+
+
+### 注意：
+
+重写了equals方法则一定要重写hashCode
+
+就像String类一样，equals方法不同于Object的equals，它的hashCode方法也不一样。
+
+为什么：反证一下，如果不重写hashCode，那么两个字符串，不同的对象，但里面的内容是一样的，equals则返回true。但他们的hashCode却返回实例的ID（内存地址）。那么这两个对象的hashCode就不相等了！
+
+违反了上面所说的：equals方法是鉴定两个对象逻辑相等的唯一标准 
+
+两个对象的equals()方法等同===>两对象hashCode()必相同。 
+hashCode()相同  不能推导  equals()相等
+
+因此，重写了equals方法则一定要重写hashCode。保证上面的语句成立
