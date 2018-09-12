@@ -87,4 +87,4 @@ public int hashCode() {
     }
 ````
 
-两个对象的equals()方法等同===>两对象hashCode()必相同。hashCode()相同  不能推导  equals()相等
+**两个对象的equals()方法等同===>两对象hashCode()必相同。hashCode()相同  不能推导  equals()相等**
