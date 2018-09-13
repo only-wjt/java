@@ -30,7 +30,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;Spring单例Bean与单例模式的区别在于它们关联的环境不一样，`单例模式是指在一个JVM进程中仅有一个实例`，而Spring单例是指一个Spring Bean容器(ApplicationContext)中仅有一个实例。
 
-&emsp;&emsp;Spring的单例Bean是与其容器（ApplicationContext）密切相关的，所以在一个JVM进程中，如果有多个Spring容器，即使是单例bean，也一定会创建多个实例，代码示例如下：
+&emsp;&emsp;Spring的单例Bean是与其容器（ApplicationContext）密切相关的，所以在一个JVM进程中，`如果有多个Spring容器，即使是单例bean，也一定会创建多个实例`，代码示例如下：
 
 //  第一个Spring Bean容器
 ApplicationContext context_1 = new FileSystemXmlApplicationContext("classpath:/ApplicationContext.xml");
