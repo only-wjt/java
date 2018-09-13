@@ -32,6 +32,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;Spring的单例Bean是与其容器（ApplicationContext）密切相关的，所以在一个JVM进程中，`如果有多个Spring容器，即使是单例bean，也一定会创建多个实例`，代码示例如下：
 
+````
 //  第一个Spring Bean容器
 ApplicationContext context_1 = new FileSystemXmlApplicationContext("classpath:/ApplicationContext.xml");
 Person yiifaa_1 = context_1.getBean("yiifaa", Person.class);
@@ -40,14 +41,8 @@ ApplicationContext context_2 = new FileSystemXmlApplicationContext("classpath:/A
 Person yiifaa_2 = context_2.getBean("yiifaa", Person.class);
 //  这里绝对不会相等，因为创建了多个实例
 System.out.println(yiifaa_1 == yiifaa_2);
-1
-2
-3
-4
-5
-6
-7
-8
+````
+
 以下是Spring的配置文件：
 
 <!-- 即使声明了为单例，只要有多个容器，也一定会创建多个实例 -->
