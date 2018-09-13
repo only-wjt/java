@@ -166,7 +166,7 @@ public class Singleton6 {
 
 &emsp;&emsp;静态内部类虽然保证了单例在多线程并发下的线程安全性，但是在遇到序列化对象时，默认的方式运行得到的结果就是多例的。这种情况不多做说明了，使用时请注意。
 
-4.static静态代码块实现
+### static静态代码块实现
 
 ````
 public class Singleton6 {
@@ -187,7 +187,7 @@ public class Singleton6 {
 }
 ```` 
 
-5.内部枚举类实现
+### 内部枚举类实现
 
 复制代码
 public class SingletonFactory {
