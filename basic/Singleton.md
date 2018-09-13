@@ -197,7 +197,7 @@ public class SingletonFactory {
         Singleton;
         private Singleton8 singleton;
         
-        //枚举类的构造方法在类加载是被实例化 
+        //枚举类的构造方法在类加载时被实例化 
         private EnmuSingleton(){
             singleton = new Singleton8();
         }
