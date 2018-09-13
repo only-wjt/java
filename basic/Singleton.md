@@ -1,5 +1,5 @@
 ---
-title: 单例模式
+title: Singleton
 tags: 新建,模板,小书匠
 grammar_cjkRuby: true
 ---
