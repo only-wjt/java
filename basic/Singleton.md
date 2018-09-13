@@ -79,7 +79,7 @@ System.out.println(yiifaa_1 == yiifaa_2);
 
 ### 懒汉式单例（延迟加载方式）
 
-
+````
 // 懒汉式单例
 public class Singleton2 {
 
@@ -95,7 +95,7 @@ public class Singleton2 {
         return single;
     }
 }
-复制代码
+
  
 
 该示例虽然用延迟加载方式实现了懒汉式单例，但在多线程环境下会产生多个single对象，如何改造请看以下方式:
