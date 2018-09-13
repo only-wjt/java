@@ -27,3 +27,48 @@ grammar_cjkRuby: true
 &emsp;&emsp;还记得我们最早使用的MVC框架Struts1中的action就是单例模式的，而到了Struts2就使用了多例。在Struts1里，当有多个请求访问，每个都会分配一个新线程，在这些线程，操作的都是同一个action对象，每个用户的数据都是不同的，而action却只有一个。到了Struts2， action对象为每一个请求产生一个实例，并不会带来线程安全问题。
 
 ### Spring中的单例模式
+
+&emsp;&emsp;Spring单例Bean与单例模式的区别在于它们关联的环境不一样，`单例模式是指在一个JVM进程中仅有一个实例`，而Spring单例是指一个Spring Bean容器(ApplicationContext)中仅有一个实例。
+
+首先看单例模式，在一个JVM进程中（理论上，一个运行的JAVA程序就必定有自己一个独立的JVM）仅有一个实例，于是无论在程序中的何处获取实例，始终都返回同一个对象，以Java内置的Runtime为例（现在枚举是单例模式的最佳实践），无论何时何处获取，下面的判断始终为真：
+
+//  基于懒汉模式实现
+//  在一个JVM实例中始终只有一个实例
+Runtime.getRuntime() == Runtime.getRuntime()
+1
+2
+3
+与此相比，Spring的单例Bean是与其容器（ApplicationContext）密切相关的，所以在一个JVM进程中，如果有多个Spring容器，即使是单例bean，也一定会创建多个实例，代码示例如下：
+
+//  第一个Spring Bean容器
+ApplicationContext context_1 = new FileSystemXmlApplicationContext("classpath:/ApplicationContext.xml");
+Person yiifaa_1 = context_1.getBean("yiifaa", Person.class);
+//  第二个Spring Bean容器
+ApplicationContext context_2 = new FileSystemXmlApplicationContext("classpath:/ApplicationContext.xml");
+Person yiifaa_2 = context_2.getBean("yiifaa", Person.class);
+//  这里绝对不会相等，因为创建了多个实例
+System.out.println(yiifaa_1 == yiifaa_2);
+1
+2
+3
+4
+5
+6
+7
+8
+以下是Spring的配置文件：
+
+<!-- 即使声明了为单例，只要有多个容器，也一定会创建多个实例 -->
+<bean id="yiifaa" class="com.stixu.anno.Person" scope="singleton">
+    <constructor-arg name="username">
+        <value>yiifaa</value>
+    </constructor-arg>
+</bean>
+1
+2
+3
+4
+5
+6
+总结
+Spring的单例bean与Spring bean管理容器密切相关，每个容器都会创建自己独有的实例，所以与GOF设计模式中的单例模式相差极大，但在实际应用中，如果将对象的生命周期完全交给Spring管理(不在其他地方通过new、反射等方式创建)，其实也能达到单例模式的效果。
