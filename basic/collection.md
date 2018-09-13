@@ -177,3 +177,4 @@ hashCode()也分两种情况。一种是Object类中默认的方法，另一种�
 
 
 # hashMap[hashMap的源码分析](http://alex09.iteye.com/blog/539545)
+[hashMap与Hashtable的区别](https://blog.csdn.net/wangxing233/article/details/79452946)
