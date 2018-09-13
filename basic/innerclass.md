@@ -27,15 +27,9 @@ public class TestStaticClass {
 ````
  
 
-如果没有用static修饰InterClass，则只能按如下方式调用：
+&emsp;&emsp;如果没有用static修饰InterClass，则只能按如下方式调用：
 
- 
-
- 
-
- 
-
-Java代码  收藏代码
+````
 package inner_class;  
   
 public class OuterClass {  
@@ -47,9 +41,6 @@ public class OuterClass {
 }  
  
 
- 
-
-Java代码  收藏代码
 public class TestStaticClass {  
     public static void main(String[] args) {  
         // OutClass需要先生成一个实例  
@@ -57,3 +48,4 @@ public class TestStaticClass {
         oc.new InnerClass();  
     }  
 }  
+````
