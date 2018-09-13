@@ -101,7 +101,7 @@ public class Singleton2 {
 
 &emsp;&emsp;使用synchronized同步锁
 
-复制代码
+````
 public class Singleton3 {
     // 私有构造
     private Singleton3() {}
@@ -120,6 +120,8 @@ public class Singleton3 {
         return single;
     }
 }
+````
+
 复制代码
 在方法上加synchronized同步锁或是用同步代码块对类加同步锁，此种方式虽然解决了多个实例对象问题，但是该方式运行效率却很低下，下一个线程想要获取对象，就必须等待上一个线程释放锁之后，才可以继续运行。
 
