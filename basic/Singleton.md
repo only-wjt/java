@@ -146,7 +146,7 @@ public class Singleton4 {
 
 &emsp;&emsp;使用双重检查进一步做了优化，可以避免整个方法被锁，只对需要锁的代码部分加锁，可以提高执行效率。
 
-3.静态内部类实现
+### 静态内部类实现
 
 ````
 public class Singleton6 {
