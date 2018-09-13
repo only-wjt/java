@@ -77,9 +77,9 @@ System.out.println(yiifaa_1 == yiifaa_2);
 
 &emsp;&emsp;Singleton通过将`构造方法限定为private避免了类在外部被实例化`，`在同一个虚拟机范围内，Singleton的唯一实例只能通过getInstance()方法访问`。（`事实上，通过Java反射机制是能够实例化构造方法为private的类的`，那基本上会使所有的Java单例实现失效。此问题在此处不做讨论，姑且闭着眼就认为反射机制不存在。）
 
-2.懒汉式单例（延迟加载方式）
+### 懒汉式单例（延迟加载方式）
 
-复制代码
+
 // 懒汉式单例
 public class Singleton2 {
 
