@@ -1,6 +1,6 @@
 ---
 title: Singleton
-tags: 新建,模板,小书匠
+tags: spring,singleton
 grammar_cjkRuby: true
 ---
 
