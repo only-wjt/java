@@ -26,7 +26,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;还记得我们最早使用的MVC框架Struts1中的action就是单例模式的，而到了Struts2就使用了多例。在Struts1里，当有多个请求访问，每个都会分配一个新线程，在这些线程，操作的都是同一个action对象，每个用户的数据都是不同的，而action却只有一个。到了Struts2， action对象为每一个请求产生一个实例，并不会带来线程安全问题。
 
-### Spring中的单例模式
+### Spring中的单例模式[详细请见](https://raw.githubusercontent.com/only-wjt/java/master/basic/spring's%20singleton.md)
 
 &emsp;&emsp;Spring单例Bean与单例模式的区别在于它们关联的环境不一样，`单例模式是指在一个JVM进程中仅有一个实例`，而Spring单例是指一个Spring Bean容器(ApplicationContext)中仅有一个实例。
 
