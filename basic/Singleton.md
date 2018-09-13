@@ -45,17 +45,14 @@ System.out.println(yiifaa_1 == yiifaa_2);
 
 以下是Spring的配置文件：
 
+````
 <!-- 即使声明了为单例，只要有多个容器，也一定会创建多个实例 -->
 <bean id="yiifaa" class="com.stixu.anno.Person" scope="singleton">
     <constructor-arg name="username">
         <value>yiifaa</value>
     </constructor-arg>
 </bean>
-1
-2
-3
-4
-5
-6
+````
+
 总结
 Spring的单例bean与Spring bean管理容器密切相关，每个容器都会创建自己独有的实例，所以与GOF设计模式中的单例模式相差极大，但在实际应用中，如果将对象的生命周期完全交给Spring管理(不在其他地方通过new、反射等方式创建)，其实也能达到单例模式的效果。
