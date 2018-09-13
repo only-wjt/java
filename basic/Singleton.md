@@ -30,15 +30,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;Spring单例Bean与单例模式的区别在于它们关联的环境不一样，`单例模式是指在一个JVM进程中仅有一个实例`，而Spring单例是指一个Spring Bean容器(ApplicationContext)中仅有一个实例。
 
-首先看单例模式，在一个JVM进程中（理论上，一个运行的JAVA程序就必定有自己一个独立的JVM）仅有一个实例，于是无论在程序中的何处获取实例，始终都返回同一个对象，以Java内置的Runtime为例（现在枚举是单例模式的最佳实践），无论何时何处获取，下面的判断始终为真：
-
-//  基于懒汉模式实现
-//  在一个JVM实例中始终只有一个实例
-Runtime.getRuntime() == Runtime.getRuntime()
-1
-2
-3
-与此相比，Spring的单例Bean是与其容器（ApplicationContext）密切相关的，所以在一个JVM进程中，如果有多个Spring容器，即使是单例bean，也一定会创建多个实例，代码示例如下：
+&emsp;&emsp;Spring的单例Bean是与其容器（ApplicationContext）密切相关的，所以在一个JVM进程中，如果有多个Spring容器，即使是单例bean，也一定会创建多个实例，代码示例如下：
 
 //  第一个Spring Bean容器
 ApplicationContext context_1 = new FileSystemXmlApplicationContext("classpath:/ApplicationContext.xml");
