@@ -54,3 +54,173 @@ System.out.println(yiifaa_1 == yiifaa_2);
 </bean>
 ````
 &emsp;&emsp;总结:Spring的单例bean与Spring bean管理容器密切相关，每个容器都会创建自己独有的实例，所以与GOF设计模式中的单例模式相差极大，但在实际应用中，如果将对象的生命周期完全交给Spring管理(不在其他地方通过new、反射等方式创建)，其实也能达到单例模式的效果。
+
+
+## 实现单例模式的方式
+
+1.饿汉式单例（立即加载方式）
+
+复制代码
+// 饿汉式单例
+public class Singleton1 {
+    // 私有构造
+    private Singleton1() {}
+
+    private static Singleton1 single = new Singleton1();
+
+    // 静态工厂方法
+    public static Singleton1 getInstance() {
+        return single;
+    }
+}
+复制代码
+ 
+
+饿汉式单例在类加载初始化时就创建好一个静态的对象供外部使用，除非系统重启，这个对象不会改变，所以本身就是线程安全的。
+
+Singleton通过将构造方法限定为private避免了类在外部被实例化，在同一个虚拟机范围内，Singleton的唯一实例只能通过getInstance()方法访问。（事实上，通过Java反射机制是能够实例化构造方法为private的类的，那基本上会使所有的Java单例实现失效。此问题在此处不做讨论，姑且闭着眼就认为反射机制不存在。）
+
+2.懒汉式单例（延迟加载方式）
+
+复制代码
+// 懒汉式单例
+public class Singleton2 {
+
+    // 私有构造
+    private Singleton2() {}
+
+    private static Singleton2 single = null;
+
+    public static Singleton2 getInstance() {
+        if(single == null){
+            single = new Singleton2();
+        }
+        return single;
+    }
+}
+复制代码
+ 
+
+该示例虽然用延迟加载方式实现了懒汉式单例，但在多线程环境下会产生多个single对象，如何改造请看以下方式:
+
+使用synchronized同步锁
+
+复制代码
+public class Singleton3 {
+    // 私有构造
+    private Singleton3() {}
+
+    private static Singleton3 single = null;
+
+    public static Singleton3 getInstance() {
+        
+        // 等同于 synchronized public static Singleton3 getInstance()
+        synchronized(Singleton3.class){
+          // 注意：里面的判断是一定要加的，否则出现线程安全问题
+            if(single == null){
+                single = new Singleton3();
+            }
+        }
+        return single;
+    }
+}
+复制代码
+在方法上加synchronized同步锁或是用同步代码块对类加同步锁，此种方式虽然解决了多个实例对象问题，但是该方式运行效率却很低下，下一个线程想要获取对象，就必须等待上一个线程释放锁之后，才可以继续运行。
+
+复制代码
+public class Singleton4 {
+    // 私有构造
+    private Singleton4() {}
+
+    private static Singleton4 single = null;
+
+    // 双重检查
+    public static Singleton4 getInstance() {
+        if (single == null) {
+            synchronized (Singleton4.class) {
+                if (single == null) {
+                    single = new Singleton4();
+                }
+            }
+        }
+        return single;
+    }
+}
+复制代码
+ 
+
+使用双重检查进一步做了优化，可以避免整个方法被锁，只对需要锁的代码部分加锁，可以提高执行效率。
+
+3.静态内部类实现
+
+复制代码
+public class Singleton6 {
+    // 私有构造
+    private Singleton6() {}
+
+    // 静态内部类
+    private static class InnerObject{
+        private static Singleton6 single = new Singleton6();
+    }
+    
+    public static Singleton6 getInstance() {
+        return InnerObject.single;
+    }
+}
+复制代码
+ 
+
+静态内部类虽然保证了单例在多线程并发下的线程安全性，但是在遇到序列化对象时，默认的方式运行得到的结果就是多例的。这种情况不多做说明了，使用时请注意。
+
+4.static静态代码块实现
+
+复制代码
+public class Singleton6 {
+    
+    // 私有构造
+    private Singleton6() {}
+    
+    private static Singleton6 single = null;
+
+    // 静态代码块
+    static{
+        single = new Singleton6();
+    }
+    
+    public static Singleton6 getInstance() {
+        return single;
+    }
+}
+复制代码
+ 
+
+5.内部枚举类实现
+
+复制代码
+public class SingletonFactory {
+    
+    // 内部枚举类
+    private enum EnmuSingleton{
+        Singleton;
+        private Singleton8 singleton;
+        
+        //枚举类的构造方法在类加载是被实例化 
+        private EnmuSingleton(){
+            singleton = new Singleton8();
+        }
+        public Singleton8 getInstance(){
+            return singleton;
+        }
+    }
+    public static Singleton8 getInstance() {
+        return EnmuSingleton.Singleton.getInstance();
+    }
+}
+
+class Singleton8{
+    public Singleton8(){}
+}
+复制代码
+ 
+
+以上就是本文要介绍的所有单例模式的理解和实现，相信这篇文章能让大家更清楚的理解单例模式，希望大家有问题可以探讨，多多指教！
