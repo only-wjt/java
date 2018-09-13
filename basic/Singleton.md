@@ -189,7 +189,7 @@ public class Singleton6 {
 
 ### 内部枚举类实现
 
-复制代码
+````
 public class SingletonFactory {
     
     // 内部枚举类
@@ -213,7 +213,6 @@ public class SingletonFactory {
 class Singleton8{
     public Singleton8(){}
 }
-复制代码
- 
+```` 
 
 以上就是本文要介绍的所有单例模式的理解和实现，相信这篇文章能让大家更清楚的理解单例模式，希望大家有问题可以探讨，多多指教！
