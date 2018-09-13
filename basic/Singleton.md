@@ -99,7 +99,7 @@ public class Singleton2 {
 
 &emsp;&emsp;该示例虽然用延迟加载方式实现了懒汉式单例，但在多线程环境下会产生多个single对象，如何改造请看以下方式:
 
-使用synchronized同步锁
+#### 使用synchronized同步锁
 
 复制代码
 public class Singleton3 {
