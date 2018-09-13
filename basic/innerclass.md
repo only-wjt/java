@@ -5,12 +5,12 @@ grammar_cjkRuby: true
 ---
 
 
-Java里面static一般用来修饰成员变量或函数。但有一种特殊用法是用static修饰内部类，普通类是不允许声明为静态的，只有内部类才可以。被static修饰的内部类可以直接作为一个普通类来使用，而不需实例一个外部类（见如下代码）
+&emsp;&emsp;Java里面static一般用来修饰成员变量或函数。但有一种特殊用法是用static修饰内部类，普通类是不允许声明为静态的，只有内部类才可以。被static修饰的内部类可以直接作为一个普通类来使用，而不需实例一个外部类（见如下代码）
 
  
 
 
-Java代码  收藏代码
+Java代码  
 public class OuterClass {  
     public static class InnerClass{  
         InnerClass(){  
