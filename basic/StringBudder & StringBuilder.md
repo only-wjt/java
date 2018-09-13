@@ -5,4 +5,8 @@ grammar_cjkRuby: true
 ---
 
 
-欢迎使用 **{小书匠}(xiaoshujiang)编辑器**，您可以通过 `小书匠主按钮>模板` 里的模板管理来改变新建文章的内容。
+String：适用于少量的字符串操作的情况
+
+　　StringBuilder：适用于单线程下在字符缓冲区进行大量操作的情况
+
+　　StringBuffer：适用多线程下在字符缓冲区进行大量操作的情况
