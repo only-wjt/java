@@ -168,7 +168,7 @@ public class Singleton6 {
 
 4.static静态代码块实现
 
-复制代码
+````
 public class Singleton6 {
     
     // 私有构造
@@ -185,8 +185,7 @@ public class Singleton6 {
         return single;
     }
 }
-复制代码
- 
+```` 
 
 5.内部枚举类实现
 
