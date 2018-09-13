@@ -1,5 +1,5 @@
 ---
-title: innerclass
+title: inner class
 tags: basic
 grammar_cjkRuby: true
 ---
