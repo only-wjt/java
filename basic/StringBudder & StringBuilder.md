@@ -11,3 +11,5 @@ StringBuilder：适用于单线程下在字符缓冲区进行大量操作的情�
 
 StringBuffer：适用多线程下在字符缓冲区进行大量操作的情况
 [简介](https://www.cnblogs.com/su-feng/p/6659064.html)
+
+[详细](https://blog.csdn.net/weixin_41101173/article/details/79677982)
