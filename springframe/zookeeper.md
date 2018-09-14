@@ -52,14 +52,8 @@ grammar_cjkRuby: true
 
 ### 事物操作
 
-    在ZooKeeper中，能改变ZooKeeper服务器状态的操作称为事务操作。一般包括数据节点
-创建与删除、数据内容更新和客户端会话创建与失效等操作。对应每一个事务请求，ZooKeeper
-都会为其分配一个全局唯一的事务ID，用 ZXID 表示，通常是一个64位的数字。每一个 ZXID
-对应一次更新操作，从这些 ZXID 中可以间接地识别出 ZooKeeper 处理这些事务操作请求的
-全局顺序。
+&emsp;&emsp;在ZooKeeper中，能改变ZooKeeper服务器状态的操作称为事务操作。一般包括数据节点创建与删除、数据内容更新和客户端会话创建与失效等操作。对应每一个事务请求，ZooKeeper都会为其分配一个全局唯一的事务ID，用 ZXID 表示，通常是一个64位的数字。每一个ZXID对应一次更新操作，从这些 ZXID 中可以间接地识别出 ZooKeeper 处理这些事务操作请求的全局顺序。
 
-7 .Watcher(事件监听器)
+### Watcher(事件监听器)
 
-    是 ZooKeeper 中一个很重要的特性。ZooKeeper允许用户在指定节点上注册一些 Watcher，
-并且在一些特定事件触发的时候，ZooKeeper 服务端会将事件通知到感兴趣的客户端上去。该
-机制是 ZooKeeper 实现分布式协调服务的重要特性。
+&emsp;&emsp;是 ZooKeeper 中一个很重要的特性。ZooKeeper允许用户在指定节点上注册一些 Watcher，并且在一些特定事件触发的时候，ZooKeeper 服务端会将事件通知到感兴趣的客户端上去。该机制是 ZooKeeper 实现分布式协调服务的重要特性。
