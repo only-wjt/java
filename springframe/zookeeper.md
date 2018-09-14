@@ -22,3 +22,5 @@ grammar_cjkRuby: true
 ![zoo.cfg](./images/zookeeper.jpg)
 
 &emsp;&emsp;在装有 ZooKeeper 的机器的终端执行 zookeeper-server status 可以看当前节点的 ZooKeeper是什么角色（Leader or Follower）。
+
+&emsp;&emsp;ZooKeeper 默认只有 Leader 和 Follower 两种角色，没有 Observer 角色。为了使用 Observer 模式，在任何想变成Observer的节点的配置文件中加入:peerType=observer 并在所有 server 的配置文件中，配置成 observer 模式的 server 的那行配置追加 :observer
