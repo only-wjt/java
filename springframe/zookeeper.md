@@ -21,3 +21,4 @@ grammar_cjkRuby: true
 
 ![zoo.cfg](./images/zookeeper.jpg)
 
+&emsp;&emsp;在装有 ZooKeeper 的机器的终端执行 zookeeper-server status 可以看当前节点的 ZooKeeper是什么角色（Leader or Follower）。
