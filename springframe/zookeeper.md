@@ -27,18 +27,10 @@ grammar_cjkRuby: true
 
 ### 节点读写服务分工
 
-   1.ZooKeeper 集群的所有机器通过一个 Leader 选举过程来选定一台被称为『Leader』
-   的机器，Leader服务器为客户端提供读和写服务。
+&emsp;&emsp;1.ZooKeeper 集群的所有机器通过一个 Leader 选举过程来选定一台被称为『Leader』的机器，Leader服务器为客户端提供读和写服务。
 
-   2.Follower 和 Observer 都能提供读服务，不能提供写服务。两者唯一的区别在于，
-   Observer机器不参与 Leader 选举过程，也不参与写操作的『过半写成功』策略，因
-   此 Observer 可以在不影响写性能的情况下提升集群的读性能。
-1
-2
-3
-4
-5
-6
+&emsp;&emsp;2.Follower 和 Observer 都能提供读服务，不能提供写服务。两者唯一的区别在于，Observer机器不参与 Leader 选举过程，也不参与写操作的『过半写成功』策略，因此 Observer 可以在不影响写性能的情况下提升集群的读性能。
+
 3 . Session
 
       Session 是指客户端会话，在讲解客户端会话之前，我们先来了解下客户端连接。在
