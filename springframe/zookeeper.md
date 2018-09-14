@@ -19,4 +19,4 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;zoo.cfg配置文件示例 
 
-![zoo.cfg](./images/zookeeper's zoo.cfg.jpg)
+![zoo.cfg](./images/zookeeper.jpg)
