@@ -41,7 +41,7 @@ grammar_cjkRuby: true
 &emsp;&emsp;zookeeper的结构其实就是一个树形结构，leader就相当于其中的根结点，其它节点就相当follow节点，每个节点都保留自己的内容。
 &emsp;&emsp;zookeeper的节点分两类：持久节点和临时节点
 &emsp;&emsp;- 持久节点：
-&emsp;&emsp;&emsp;&emsp;所谓持久节点是指一旦这个 树形结构上被创建了，除非主动进行对树节点的移除操作，否则这个 节点将一直保存在 ZooKeeper 上。
+&emsp;&emsp;&emsp;&emsp;所谓持久节点是指一旦这个树形结构上被创建了，除非主动进行对树节点的移除操作，否则这个节点将一直保存在 ZooKeeper 上。
 &emsp;&emsp;-临时节点：
 &emsp;&emsp;&emsp;&emsp;临时节点的生命周期跟客户端会话绑定，一旦客户端会话失效，那么这个客户端创建的所有临时节点都会被移除。
 
