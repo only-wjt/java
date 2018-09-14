@@ -11,7 +11,7 @@ grammar_cjkRuby: true
 
 
 ### 集群角色
-zookeeper中包含三个角色：Leader、Follower、Observer
+&emsp;&emsp;zookeeper中包含三个角色：Leader、Follower、Observer
 
 
 一个 ZooKeeper 集群同一时刻只会有一个 Leader，其他都是 Follower 或 Observer。
