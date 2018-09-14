@@ -13,7 +13,6 @@ grammar_cjkRuby: true
 ### 集群角色
 &emsp;&emsp;zookeeper中包含三个角色：Leader、Follower、Observer
 
-
 一个 ZooKeeper 集群同一时刻只会有一个 Leader，其他都是 Follower 或 Observer。
 
 ZooKeeper 配置很简单，每个节点的配置文件(zoo.cfg)都是一样的，只有 myid 文件不一样。myid 的值必须是 zoo.cfg中server.{数值} 的{数值}部分。
