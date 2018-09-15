@@ -5,8 +5,8 @@ grammar_cjkRuby: true
 ---
 # 待完善
 
-spring 中单利模式的理解
-一、Spring单例模式与线程安全
+
+## Spring单例模式与线程安全
 
 
 Spring框架里的bean，或者说组件，获取实例的时候都是默认的单例模式，这是在多线程开发的时候要尤其注意的地方。
