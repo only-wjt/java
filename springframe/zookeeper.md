@@ -1,6 +1,6 @@
 ---
 title: zookeeper
-tags: 新建,模板,小书匠
+tags: 注册中心，zookeeper，java
 grammar_cjkRuby: true
 ---
 
