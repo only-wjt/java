@@ -47,7 +47,6 @@ grammar_cjkRuby: true
 &emsp;&emsp;Java中的多线程是一种抢占式的机制而不是分时机制。线程主要有以下几种状态：新建，就绪，运行，阻塞，死亡。`抢占式机制指的是有多个线程处于就绪状态，但是只有一个线程在运行。`
 
 ![thread中的方法](./images/thread中的方法.png)
-![thread中的方法](./images/thread%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95.png)
 
 #### sleep()方法
 
