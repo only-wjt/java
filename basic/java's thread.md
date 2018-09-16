@@ -36,7 +36,7 @@ grammar_cjkRuby: true
 ##### 同步阻塞：
 &emsp;&emsp;线程在获取 synchronized 同步锁失败(因为同步锁被其他线程占用)。
 
-![Thread中的方法](./images/thread' method.png)
+
 
 ##### 其他阻塞：
 &emsp;&emsp;通过调用线程的 sleep() 或 join() 发出了 I/O 请求时，线程就会进入到阻塞状态。当sleep() 状态超时，join() 等待线程终止或超时，或者 I/O 处理完毕，线程重新转入就绪状态。
@@ -48,6 +48,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;Java中的多线程是一种抢占式的机制而不是分时机制。线程主要有以下几种状态：新建，就绪，运行，阻塞，死亡。`抢占式机制指的是有多个线程处于就绪状态，但是只有一个线程在运行。`
 
+![Thread中的方法](./images/thread' method.png)
 
 #### sleep()方法
 
