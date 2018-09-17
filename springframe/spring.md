@@ -1,6 +1,6 @@
 ---
 title: spring 
-tags: 新建,模板,小书匠
+tags: basic,spring
 grammar_cjkRuby: true
 ---
 
