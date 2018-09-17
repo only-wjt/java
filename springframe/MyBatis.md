@@ -143,3 +143,174 @@ Mybatis中所有的Mapper语句的执行都是通过Executor进行的，Executor
 2)	订票系统(12306)
 3)	....
 解决方案:可将自增长的id设置为随机数,当然有些数据库根本就不支持自增长,此时也可以选择随机数.
+
+
+2.	添加log4j.properties 配置(可以从其它项目中拷贝)
+
+log4j.rootLogger=INFO,stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d [%-5p] %c - %m%n
+
+log4j.logger.com.mybatis3=DEBUG
+log4j.logger.com.jt=DEBUG
+
+3.	设置mybatis的日志实现(mybatis-configs.xml)
+
+  <settings>
+     <setting name="logImpl" value="log4j"/>
+  </settings>
+
+其中name属性的值为固定写法,value的值要依托于使用的日志处理库.
+
+说明:课后了解常用的日志处理库.
+
+
+4.2.	缓存配置应用(了解)
+4.2.1.	缓存基本概述
+1.	缓存是什么? 内存中的一个对象(容器).
+2.	缓存对象的作用?提高程序的性能(最主要的的是访问效率)
+3.	MyBatis 中缓存概述?
+MyBatis 框架中提供了非常强大的缓存特性来提高查询性能,通常可将其分为一级缓存(SqlSession级别)和二级缓存(SqlSessionFactory级别)。
+4.2.2.	缓存基本实现
+MyBatis 一级缓存应用：
+
+MyBatis中一级缓存默认是开启的.不需要任何配置.例如:
+
+测试方案1：（验证一级缓存）
+
+@Test
+public void testFirstLevelCache01(){
+		SqlSession session=factory.openSession();
+		AuthorDao dao=session.getMapper(AuthorDao.class);
+		String id="5e5f90ed324e11e8a9b279bf5362f090";
+		dao.findAuthorById(id);
+		dao.findAuthorById(id);//本次查询从缓存取
+		session.commit();
+		session.close();
+
+}
+
+测试方案1：（验证缓存失效）
+
+验证数据插入导致的缓存失效。
+
+@Test
+public void testFirstLevelCache01(){
+		SqlSession session=factory.openSession();
+		AuthorDao dao=session.getMapper(AuthorDao.class);
+		String id="5e5f90ed324e11e8a9b279bf5362f090";
+		dao.findAuthorById(id);
+		Author entity=new Author();
+		entity.setUsername("user-KK");
+		entity.setPassword("123456");
+		entity.setEmail("KK@t.com");
+		dao.insertAuthor(entity);
+		dao.findAuthorById(id);
+		session.commit();
+		session.close();
+	}
+
+验证更新后的缓存失效。
+
+@Test
+	public void testFirstLevelCache02(){
+		SqlSession session=factory.openSession();
+		AuthorDao dao=session.getMapper(AuthorDao.class);
+		String id="5e5f90ed324e11e8a9b279bf5362f090";
+		Author a1=dao.findAuthorById(id);
+		System.out.println(a1);
+		Author a=new Author();
+		a.setId(id);
+		a.setUsername("user-aaa");
+		a.setEmail("aaa@t.com");
+		dao.updateAuthor(a1);
+		Author a2=dao.findAuthorById(id);
+		System.out.println(a2);
+		session.commit();
+		session.close();
+	}
+
+验证缓存脏读问题（此问题可通过配置缓存类型为STATEMENT类型解决）
+
+@Test
+public void testFirstLevelCache03(){
+		SqlSession session1=2factory.openSession(true);
+		SqlSession session2=factory.openSession(true);
+		AuthorDao dao1=session1.getMapper(AuthorDao.class);
+		AuthorDao dao2=session2.getMapper(AuthorDao.class);
+		String id="5e5f90ed324e11e8a9b279bf5362f090";
+		Author a1=dao1.findAuthorById(id);
+		System.out.println(a1);
+		Author a=new Author();
+		a.setId(id);
+		a.setUsername("user-oo");
+		a.setEmail("oo@t.com");
+		int rows=dao2.updateAuthor(a);
+		session2.close();
+		Author a2=dao1.findAuthorById(id);
+		System.out.println(a2);
+		session1.close();
+	}
+
+
+
+MyBatis：一级缓存应用说明：
+
+1)	默认是开启的(也是应用最多的一种)
+2)	其类型为SESSION或STATEMENT两种，默认是SESSION类型
+a)	缓存对象的生命周期不同(例如session类型的一级缓存，session关闭就失效.)
+b)	其类型的配置可在配置文件中通过这个localCacheScope属性进行配置。
+3)	一级缓存在每次更新(同一个session)后都会失效。
+4)	一级缓存在事务并发执行时可能会出现脏读，但相对于STATEMENT效率会高一些。
+
+MyBatis 二级缓存应用：
+
+MyBatis 二级缓存默认是没有开启的,需要在映射文件中加上<Cache/>元素
+MyBatis 二级缓存应用步骤:
+Step01: 修改mybatis核心配置文件,添加缓存设置.
+
+<settings>
+     <setting name="cacheEnabled" value="true"/>
+  </settings>
+
+Step02: 在映射文件（XxxMapper.xml）中配置Cache策略.
+
+ <cache
+     eviction="LRU"
+     flushInterval="60000"
+     size="512"
+     readOnly="true"/>
+
+这个表示创建了一个 LRU缓存,最多存储512个对象，并每隔 60 秒刷新,而且返回的对象被认为是只读的,因此在不同线程中的调用者之间修改它们会导致冲突。其中：
+
+1)	eviction 表示回收策略(例如LRU,FIFO等，默认为LRU)
+2)	flushInterval 表示刷新间隔
+3)	size(引用数目)可以被设置为任意正整数,要记住你缓存的对象数目和你运行环境的 可用内存资源数目。默认值是 1024。
+4)	readOnly(只读)属性可以被设置为 true 或 false。只读的缓存会给所有调用者返回缓存对象的相同实例。可读写的缓存会返回缓存对象的拷贝(通过序列化) 。这会慢一些,但是安全,因此默认是 false。
+
+Step03: 使用二级缓存了.
+
+@Test
+public void testSecondLevelCache01(){
+		SqlSession session1=factory.openSession();
+		SqlSession session2=factory.openSession();
+		SqlSession session3=factory.openSession();
+		AuthorDao dao1=session1.getMapper(AuthorDao.class);
+		AuthorDao dao2=session2.getMapper(AuthorDao.class);
+		AuthorDao dao3=session3.getMapper(AuthorDao.class);
+		String id="5e5f90ed324e11e8a9b279bf5362f090";
+		Author a1=dao1.findAuthorById(id);
+		System.out.println(a1);
+		session1.close();//session关闭时，a1指向对象会存储到缓存
+		Author a2=dao2.findAuthorById(id);//从二级缓存获取
+		System.out.println(a2);
+		a2.setUsername("user-tedu-01");
+		Author a3=dao3.findAuthorById(id);//从二级缓存获取
+		System.out.println(a3);
+		System.out.println(a1==a2);//true
+		System.out.println(a2==a3);//true
+		//a1,a2,a3指向的是同一个对象
+		session2.close();
+		session3.close();
+	}
