@@ -6,3 +6,11 @@ grammar_cjkRuby: true
 
 
 [四种映射方式](https://blog.csdn.net/lmy86263/article/details/53150091)
+
+resultMap
+
+as
+
+注解
+
+驼峰命名法
