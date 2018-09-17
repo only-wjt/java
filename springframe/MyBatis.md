@@ -1,6 +1,6 @@
 ---
 title: MyBatis
-tags: 新建,模板,小书匠
+tags: java,MyBatis,basic
 grammar_cjkRuby: true
 ---
 
