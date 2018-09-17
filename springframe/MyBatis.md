@@ -52,3 +52,24 @@ MyBatis主要应用于Java技术生态项目的研发。例如：
 
 1）	SQL语句编写的工作量相对较大。（相对hibernate框架）
 2）	SQL语句依赖于数据库，移植性相对较差。（不是最大劣势）
+
+````
+$符合#号的区别
+			#号有预编译的效果,防止sql注入攻击问题
+			#号为参数添加""号 当字符串
+			
+			$符
+				如果需要以字段名称为参数时,使用$符.
+				如果以字段为参数时添加#号.会导致业务异常
+		 原则:能用#号不用$
+````
+在使用#号时，mybatis会自动进行安全检测，所以在有用户输入的需求时
+一般用#号，在传入值时，#号会把值转成字符串。例如：userId=#{userId}
+传入111会转成“111”,传入id会转成“id”，而$在传值时只是把值穿进去
+例如：userId=$“userId”,传入111，是userId，传入id是id，一般在使用order by的时候，输入的是固定的值的时候就用$
+使用#的时候，相当于prepartstatement语句来安全的设置值，preparement 
+Ps = conn.prepareStatement(sql);好处是：更安全，更快首选做法
+
+使用$的时候，相当于statement st = conn.createStatement();
+resultSet rs = st.exectuteQuery(sql)
+缺点:用户输入固定的字符串是不安全的，会导致潜在的sql注入攻击，因此最好不要输入这些字段，要么自行转移校检
