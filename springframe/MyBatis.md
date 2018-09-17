@@ -72,3 +72,11 @@ Ps = conn.prepareStatement(sql);好处是：更安全，更快首选做法
 resultSet rs = st.exectuteQuery(sql)
 缺点:用户输入固定的字符串是不安全的，会导致潜在的sql注入攻击，因此最好不要输入这些字段，要么自行转移校检
 ````
+
+### MyBatis数据处理层
+MyBatis数据处理层主要负责处理数据访问问题
+
+1)	SQL参数映射(Dao方法参数与映射文件中#{}表达式映射)
+2)	SQL解析(语法,语义) 例如: select * from blog where id=#{id}
+3)	SQL 执行(将sql发送到数据库端执行)
+4)	SQL 结果映射(例如将ResultSet中的数据存到map)
