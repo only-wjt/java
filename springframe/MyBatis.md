@@ -98,7 +98,6 @@ MyBatis 项目中核心API：
 1.	SqlSessionFactoryBuilder (负责读取配置文件,创建SqlSessionFactory对象)
 2.	SqlSessionFactory(负责创建SqlSession对象)
 3.	SqlSession(负责连接的维护,事务的处理,类似JDBC中的Connection)
-4.	.....
 
 思考:
 
