@@ -72,7 +72,7 @@ Ps = conn.prepareStatement(sql);好处是：更安全，更快首选做法
 
 使用$的时候，相当于statement st = conn.createStatement();
 resultSet rs = st.exectuteQuery(sql)
-缺点:用户输入固定的字符串是不安全的，会导致潜在的sql注入攻击，因此最好不要输入这些字段，要么自行转移校检
+缺点:用户输入固定的字符串是不安全的，会导致潜在的sql注入攻击， 因此最好不要输入这些字段，要么自行转移校检
 ````
 
 ### MyBatis数据处理层
@@ -91,3 +91,17 @@ MyBatis基础服务层主要负责提供如下几个方面的服务：
 2)	事务服务（保证数据的原子性，一致性，隔离性，一致性。）
 3)	缓存服务（更好的提高查询性能）
 4)	配置服务 (别名配置,映射配置,...,日志配置,....)
+
+### MyBatis 核心API
+MyBatis 项目中核心API：
+
+1.	SqlSessionFactoryBuilder (负责读取配置文件,创建SqlSessionFactory对象)
+2.	SqlSessionFactory(负责创建SqlSession对象)
+3.	SqlSession(负责连接的维护,事务的处理,类似JDBC中的Connection)
+4.	.....
+
+思考:
+
+1)核心组件在应用中的一个角色定位?
+2)应用底层会用到哪些设计模式?建造模式,工厂模式
+
