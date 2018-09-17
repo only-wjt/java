@@ -24,8 +24,13 @@ as
 
 mappers（映射器）
 
-2、  parameterType和resultType
+ parameterType和resultType
 
 parameterType：指定输入参数类型，mybatis通过ognl从输入对象中获取参数值拼接在sql中。
 
 resultType：指定输出结果类型，mybatis将sql查询结果的一行记录数据映射为resultType指定类型的对象。
+
+
+3.	MyBatis 映射文件中常用元素定义有哪些?
+
+[常用元素](https://blog.csdn.net/weixin_36279318/article/details/79993180)
