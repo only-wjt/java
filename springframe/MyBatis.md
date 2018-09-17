@@ -4,7 +4,7 @@ tags: java,MyBatis,basic
 grammar_cjkRuby: true
 ---
 
-MyBatis是用来解决数据持久化和对象关系映射问题的框架
+### MyBatis是用来解决数据持久化和对象关系映射问题的框架
 
 MyBatis 由apache的ibatis演变而来，可以从如下几个方面加强理解与应用。
 
