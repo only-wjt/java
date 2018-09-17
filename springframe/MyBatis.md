@@ -314,7 +314,7 @@ public void testSecondLevelCache01(){
 		session2.close();
 		session3.close();
 	}
-
+association解决多对一，collection解决一对多
 
 readOnly说明:
 
@@ -323,3 +323,5 @@ readOnly说明:
 2)MyBatis 中的二级缓存同样存在脏读问题，尤其是在分布式应用场景中表现出的问题就会更加突出。
 
 ![二级缓存中的readonly区别](./images/mybatis中的二级缓存.png)
+
+![二级缓存](./images/二级缓存.png)
