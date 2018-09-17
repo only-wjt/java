@@ -34,3 +34,10 @@ resultType：指定输出结果类型，mybatis将sql查询结果的一行记录
 3.	MyBatis 映射文件中常用元素定义有哪些?
 
 [常用元素](https://blog.csdn.net/weixin_36279318/article/details/79993180)
+
+
+3)	代理对象的方法执行时，是会调用DefaultSqlSession对象的对应方法吗？(是,例如selectOne,update,insert,….)
+4)	DefaultSqlSession 对象底层操作数据库时，会调用Executor对应的相关方法吗？（会）
+5)	Executor 对象是由谁创建的？（Configuration）
+6)	Configuration对象是由谁创建的？(SqlSessionFactoryBuilder)
+7)	Executor 底层执行时是要访问JDBCAPI吗？（是）
