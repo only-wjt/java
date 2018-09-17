@@ -325,3 +325,4 @@ readOnly说明:
 ![二级缓存中的readonly区别](./images/mybatis中的二级缓存.png)
 
 ![二级缓存](./images/二级缓存.png)
+![一级缓存](./images/一级缓存-02.png)
