@@ -106,6 +106,8 @@ defaultSqlsessionFactory
 defaultSession
 executor
 
+OGNL对象导航图语言
+
 思考:
 
 1)核心组件在应用中的一个角色定位?
