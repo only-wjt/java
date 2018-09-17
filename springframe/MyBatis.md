@@ -314,3 +314,12 @@ public void testSecondLevelCache01(){
 		session2.close();
 		session3.close();
 	}
+
+
+readOnly说明:
+
+1)readOnly的值为true时,缓存中保存的是堆内存中对象的引用.每次从缓存取数据都是获得的同一个对象.readOnly为false时,首先会将查询到的对象,拷贝到缓存一份(对象需要实现序列化接口),然后从缓存取数据每次都是执行对象的拷贝.
+
+2)MyBatis 中的二级缓存同样存在脏读问题，尤其是在分布式应用场景中表现出的问题就会更加突出。
+
+![二级缓存中的readonly区别](./images/mybatis中的二级缓存.png)
