@@ -124,3 +124,15 @@ Mybatis中所有的Mapper语句的执行都是通过Executor进行的，Executor
       <setting name="defaultExecutorType" value="SIMPLE"/>
 
  注意，当Mybatis整合Spring后，Spring扫描后生成的Mapper对象，底层使用的SqlSession都是用的默认的Executor。如果我们需要在程序中使用非默认的Executor时，我们可以在Spring的bean容器中声明SqlSessionFactoryBean，然后在需要指定Executor的类中注入SqlSessionFactory，通过SqlSessionFactory来创建指定ExecutorType的SqlSession。
+ 
+ 
+  <insert id="insertObject"
+           parameterType="blog"
+           useGeneratedKeys="true"
+           keyProperty="id">
+           insert into blog
+           (id,title,content,createdTime)
+           values
+           (null,#{title},#{content},now())
+   </insert>
+其中:keyProperty属性用于指定参数中的id属性.
