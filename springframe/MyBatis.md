@@ -15,9 +15,10 @@ MyBatis 由apache的ibatis演变而来，可以从如下几个方面加强理解
 思考：
 1)	如何理解ORM（对象关系映射）:实现对象以及对象与对象关系的映射。
 
+常用的ORM框架有hibernate，mybatis
 
 hibernate (ORM 框架) :用于解决数据的持久化问题（数据库操作）
-### 	MyBatis 应用场景
+### MyBatis 应用场景
 MyBatis主要应用于Java技术生态项目的研发。例如：
 
 1）	Java传统桌面型项目(例如传统的计费系统等）
