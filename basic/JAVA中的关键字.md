@@ -5,3 +5,5 @@ grammar_cjkRuby: true
 ---
 [未完待续](https://blog.csdn.net/z1002137615/article/details/50943869)
 
+[java中的static关键字](https://www.cnblogs.com/dolphin0520/p/3799052.html)
+
