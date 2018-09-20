@@ -534,3 +534,5 @@ public static int getMonthsInYear(){
 &emsp;&emsp;凡是一种语言，都希望是纯。比如解决某一个方案都喜欢就单单这个语言来写即可。Java平台有个用户和本地C代码进行互操作的API，称为Java Native Interface (Java本地接口)。
 
 ![JNI](./images/JNI.png)
+
+###用 Java 调用 C 的“Hello，JNI”
