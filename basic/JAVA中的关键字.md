@@ -535,4 +535,4 @@ public static int getMonthsInYear(){
 
 ![JNI](./images/JNI.png)
 
-###用 Java 调用 C 的“Hello，JNI”
+### 用 Java 调用 C 的“Hello，JNI”
