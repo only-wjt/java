@@ -636,12 +636,9 @@ Public Class Student {
 &emsp;&emsp;this这个关键字其代表的就是对象中的成员变量或者方法。也就是说，`如果在某个变量前面加上一个this关键字，其指的就是这个对象的成员变量或者方法，`而不是指成员方法的形式参数或者局部变量。
 
 &emsp;&emsp;为此在上面这个代码中，this.name代表的就是对象中的成员变量，又叫做对象的属性，而后面的name则是方法的形式参数，代码this.name=name就是将形式参数的值传递给成员变量。
-
  
 
- 
-
-应用二：调用类的构造方法
+### 调用类的构造方法
 public class Student { //定义一个类，类的名字为student。 
  public Student() { //定义一个方法，名字与类相同故为构造方法
   this(“Hello!”);
