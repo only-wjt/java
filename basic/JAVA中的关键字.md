@@ -508,4 +508,4 @@ public static int getMonthsInYear(){
 
 &emsp;&emsp;在finalize里面抛出的异常会被忽略，同时方法终止。
 
-&emsp;&emsp;当finalize被调用之后，JVM会再一次检测这个对象是否能被存活的线程访问得到，如果不是，则清除该对象。也就是finalize只能被调用一次；也就是说，覆盖了finalize方法的对象需要经过两个GC周期才能被清除。
+&emsp;&emsp;当finalize被调用之后，JVM会再一次检测这个对象是否能被存活的线程访问得到，如果不是，则清除该对象。也就是finalize只能被调用一次；也就是说，`覆盖了finalize方法的对象需要经过两个GC周期才能被清除。`
