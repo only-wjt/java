@@ -536,3 +536,7 @@ public static int getMonthsInYear(){
 ![JNI](./images/JNI.png)
 
 ### 用 Java 调用 C 的“Hello，JNI”
+
+#### 1.创建一个Java类，里面包含着一个 native 的方法和加载库的方法 loadLibrary。
+
+#### 2、运行javah，得到包含该方法的C声明头文件.h
