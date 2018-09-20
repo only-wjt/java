@@ -256,4 +256,4 @@ class Music4 {
 
 ## final
 
-final关键字一般会在匿名内部类用到，而且，我们常用的String也是用fianl修饰的
+&emsp;&emsp;前言：final关键字一般会在匿名内部类用到，而且，我们常用的String也是用fianl修饰的
