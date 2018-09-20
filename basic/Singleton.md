@@ -267,6 +267,8 @@ public class Singleton7 {
 ````
 
 ### 静态内部类实现懒加载：
+
+````
 //静态内部类单例
 public class Singleton8 {
     private static class SingletonHolder {
@@ -277,18 +279,11 @@ public class Singleton8 {
         return SingletonHolder.INSTANCE;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-同样利用了classloder的机制来保证初始化instance时只有一个线程，它跟饿汉式的两种方式不同的是：饿汉式的两种方式是只要Singleton类被装载了，那么instance就会被实例化（没有达到lazy loading效果），而这种方式是Singleton类被装载了，instance还未被初始化。因为SingletonHolder类没有被主动使用，只有显示通过调用getInstance方法时，才会显示装载SingletonHolder类，从而实例化instance。想象一下，如果实例化instance很消耗资源，我想让他延迟加载，另外一方面，我不希望在Singleton类加载时就实例化，因为我不能确保Singleton类还可能在其他的地方被主动使用从而被加载，那么这个时候实例化instance显然是不合适的。
-静态内部类方式单例再度研究：序列化和反序列化问题：
+````
+
+&emsp;&emsp;同样利用了classloder的机制来保证初始化instance时只有一个线程，它跟饿汉式的两种方式不同的是：饿汉式的两种方式是只要Singleton类被装载了，那么instance就会被实例化（没有达到lazy loading效果），而这种方式是Singleton类被装载了，instance还未被初始化。因为SingletonHolder类没有被主动使用，只有显示通过调用getInstance方法时，才会显示装载SingletonHolder类，从而实例化instance。想象一下，如果实例化instance很消耗资源，我想让他延迟加载，另外一方面，我不希望在Singleton类加载时就实例化，因为我不能确保Singleton类还可能在其他的地方被主动使用从而被加载，那么这个时候实例化instance显然是不合适的。
+
+### 静态内部类方式单例再度研究：序列化和反序列化问题：
 public class MySingleton implements Serializable {
 
     private static final long serialVersionUID = 1L;
