@@ -623,15 +623,15 @@ super.<成员方法名>
  
 
 ### 引用成员变量
-
  
-
+````
 Public Class Student { 
  String name; //定义一个成员变量name
  private void SetName(String name) { //定义一个参数(局部变量)name
   this.name=name; //将局部变量的值传递给成员变量
  }
 }
+````
 
         this这个关键字其代表的就是对象中的成员变量或者方法。也就是说，如果在某个变量前面加上一个this关键字，其指的就是这个对象的成员变量或者方法，而不是指成员方法的形式参数或者局部变量。
 
