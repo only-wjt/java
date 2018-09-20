@@ -667,7 +667,7 @@ public class Student { //定义一个类，类的名字为student。
 
 &emsp;&emsp;this关键字除了可以引用变量或者成员方法之外，还有一个重大的作用就是返回类的引用。
 
-&emsp;&emsp;如在代码中，`可以使用return this，来返回某个类的引用。`此时这个this关键字就代表类的名称。如代码在上面student类中，那么代码代表的含义就是return student。可见，这个this关键字除了可以引用变量或者成员方法之外，还可以作为类的返回值，这才是this关键字最引人注意的地方。
+&emsp;&emsp;如在代码中，`可以使用return this，来返回某个类的引用。``此时这个this关键字就代表类的名称。`如代码在上面student类中，那么代码代表的含义就是return student。可见，这个this关键字除了可以引用变量或者成员方法之外，还可以作为类的返回值，这才是this关键字最引人注意的地方。
 
 ````
 public Class Student {
