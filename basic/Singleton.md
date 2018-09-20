@@ -284,6 +284,8 @@ public class Singleton8 {
 &emsp;&emsp;同样利用了classloder的机制来保证初始化instance时只有一个线程，它跟饿汉式的两种方式不同的是：饿汉式的两种方式是只要Singleton类被装载了，那么instance就会被实例化（没有达到lazy loading效果），而这种方式是Singleton类被装载了，instance还未被初始化。因为SingletonHolder类没有被主动使用，只有显示通过调用getInstance方法时，才会显示装载SingletonHolder类，从而实例化instance。想象一下，如果实例化instance很消耗资源，我想让他延迟加载，另外一方面，我不希望在Singleton类加载时就实例化，因为我不能确保Singleton类还可能在其他的地方被主动使用从而被加载，那么这个时候实例化instance显然是不合适的。
 
 ### 静态内部类方式单例再度研究：序列化和反序列化问题：
+
+````
 public class MySingleton implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -299,21 +301,9 @@ public class MySingleton implements Serializable {
         return MySingletonHandler.instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
+````
+
+````
 public class SaveAndReadForSingleton {
     public static void main(String[] args) {
         MySingleton singleton = MySingleton.getInstance();
@@ -352,46 +342,12 @@ public class SaveAndReadForSingleton {
 
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-这样的单例测试出来时，hash是不一样的，因为没有同步到序列化与反序列化问题。说明反序列化后返回的对象是重新实例化的，单例被破坏了。
-解决：当JVM从内存中反序列化地”组装”一个新对象时,就会自动调用readResolve方法来返回我们指定好的对象，readResolve允许class在反序列化返回对象前替换、解析在流中读出来的对象。实现readResolve方法，一个class可以直接控制反序化返回的类型和对象引用。
+````
+
+&emsp;&emsp;这样的单例测试出来时，hash是不一样的，因为没有同步到序列化与反序列化问题。说明反序列化后返回的对象是重新实例化的，单例被破坏了。
+&emsp;&emsp;解决：当JVM从内存中反序列化地”组装”一个新对象时,就会自动调用readResolve方法来返回我们指定好的对象，readResolve允许class在反序列化返回对象前替换、解析在流中读出来的对象。实现readResolve方法，一个class可以直接控制反序化返回的类型和对象引用。
+
+````
 public class MySingleton1 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -413,35 +369,12 @@ public class MySingleton1 implements Serializable {
         return MySingletonHandler.instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-修改SaveAndReadForSingleton文件中的MySingleton，输出
-2133927002
-调用了readResolve方法！解决序列化与反序列化问题！
-2133927002
-1
-2
-3
-（4）枚举：
+
+修改SaveAndReadForSingleton文件中的MySingleton，输出2133927002
+调用了readResolve方法！解决序列化与反序列化问题！2133927002
+````
+
+### 枚举：
 //枚举实现单例
 public enum EnumSingletonFactory {
     singletonFactory;
