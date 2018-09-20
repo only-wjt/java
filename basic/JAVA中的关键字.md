@@ -511,6 +511,7 @@ public static int getMonthsInYear(){
 &emsp;&emsp;当finalize被调用之后，JVM会再一次检测这个对象是否能被存活的线程访问得到，如果不是，则清除该对象。也就是finalize只能被调用一次；也就是说，`覆盖了finalize方法的对象需要经过两个GC周期才能被清除。`
 
 ### finalize机制本身就是存在问题的。
+
 &emsp;&emsp;finalize机制可能会导致性能问题，死锁和线程挂起。
 
 &emsp;&emsp;finalize中的错误可能导致内存泄漏；如果不在需要时，也没有办法取消垃圾回收；并且没有指定不同执行finalize对象的执行顺序。此外，没有办法保证finlize的执行时间。
