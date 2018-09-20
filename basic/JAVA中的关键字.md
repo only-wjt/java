@@ -423,4 +423,10 @@ class MyClass {
 &emsp;&emsp;final方法在编译阶段绑定，称为静态绑定(static binding)。
 &emsp;&emsp;没有在声明时初始化final变量的称为空白final变量(blank final variable)，它们必须在构造器中初始化，或者调用this()初始化。不这么做的话，编译器会报错“final变量(变量名)需要进行初始化”。
 &emsp;&emsp;将类、方法、变量声明为final能够提高性能，这样JVM就有机会进行估计，然后优化。
-&emsp;&emsp;按照Java代码惯例，final变量就是常量，而且通常常量名要大写：
+&emsp;&emsp;按照Java代码惯例，final变量就是常量，而且通常常量名要大写
+
+
+## finally
+&emsp;&emsp;finally作为异常处理的一部分，它只能用在try/catch语句中，并且附带一个语句块，表示这段语句最终一定会被执行（不管有没有抛出异常），经常被用在需要释放资源的情况下。
+
+&emsp;&emsp;之前在写爬虫的时候数据库连接的频率很高，有时候数据处理的不好，sql报错后，抛出异常但后边的数据库连接没有断开。导致最后数据库连接数过大，不让再连接了（因为是个人库，所以直接重启了一下）。这个释放数据库连接的操作就可以用finally来进行。
