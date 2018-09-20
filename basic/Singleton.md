@@ -232,8 +232,8 @@ public class Singleton5 {
 &emsp;&emsp;&emsp;&emsp;不使用volatile的问题是什么呢？？
 &emsp;&emsp;在 JVM 的即时编译器中存在指令重排序的优化。也就是说上面的第二步和第三步的顺序是不能保证的，最终的执行顺序可能是 1-2-3 也可能是 1-3-2。如果是后者，则在 3 执行完毕、2 未执行之前，被线程二抢占了，这时 instance 已经是非 null 了（但却没有初始化），所以线程二会直接返回 instance，然后使用，然后顺理成章地报错。
 &emsp;&emsp;用volatile的意义并不在于其他线程一定要去内存总读取instance，而在于它限制了CPU对内存操作的重拍序，使其他线程在看到3之前2一定是执行过的。
-（2）饿汉式单例：
-意思是：类装载时就实例化该单例类
+### 饿汉式单例：
+&emsp;&emsp;意思是：类装载时就实例化该单例类
 public class Singleton6 {
     //一初始化类就初始化这个单例了！！！
     private static Singleton6 singleton6= new Singleton6();
