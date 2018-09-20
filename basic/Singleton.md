@@ -11,6 +11,10 @@ grammar_cjkRuby: true
  - 单例模式特点：
 
 
+
+
+
+
 线程安全的问题
 单例模式的选择
 Spring中的单例模式
