@@ -448,3 +448,41 @@ public static int func (){
 ````
 
 &emsp;&emsp;最终输出3。
+
+
+&emsp;&emsp;finally的优先覆盖
+&emsp;&emsp;这里还需要指出，finally子句有最高的控制流返回权，其可以覆盖try、catch块内的任意Exception值、return值。如下的函数，将会返回12，而不是10。
+
+````
+public static int getMonthsInYear(){
+    try{
+        return 10;
+    } finally {
+        return 12;
+    }
+}
+````
+
+&emsp;&emsp;同样地，如下函数，最后并不会抛出异常，而是返回值。
+
+````
+public static int getMonthsInYear(){
+    try{
+        throw new RuntimeException();
+    } finally {
+        return 12;
+    }
+}
+````
+
+&emsp;&emsp;再对比这个函数，却抛出异常，并不返回值。
+
+````
+public static int getMonthsInYear(){
+    try{
+        return 12;          
+    } finally {
+        throw new RuntimeException();
+    }
+}
+````
