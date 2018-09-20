@@ -523,7 +523,7 @@ public static int getMonthsInYear(){
 &emsp;&emsp;占有非堆资源的对象实例，类应该提供一个方法以明确释放这些资源，如果合适的话他们也应该实现AutoCloseable接口。
 
 
-## Native
+## Native[详细见这里](https://www.cnblogs.com/Qian123/p/5702574.html)
 
 >public native int hashCode();
 
