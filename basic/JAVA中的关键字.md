@@ -650,7 +650,7 @@ public class Student { //定义一个类，类的名字为student。
 }
 ````
 
-&emsp;&emsp;在一个Java类中，其方法可以分为成员方法和构造方法两种。
+&emsp;&emsp;在一个Java类中，`其方法可以分为成员方法和构造方法`两种。
 
 &emsp;&emsp;构造方法是一个与类同名的方法，在Java类中必须存在一个构造方法。
 
