@@ -291,3 +291,18 @@ class Music4 {
 #### 类的final变量和普通变量有什么区别？
 
 &emsp;&emsp;当用final作用于类的成员变量时，成员变量（注意是类的成员变量，局部变量只需要保证在使用之前被初始化赋值即可）必须在定义时或者构造器中进行初始化赋值，而且final变量一旦被初始化赋值之后，就不能再被赋值了。
+
+````
+public class Test {
+    public static void main(String[] args)  {
+        String a = "hello2"; 
+        final String b = "hello";
+        String d = "hello";
+        String c = b + 2; 
+        String e = d + 2;
+        System.out.println((a == c));
+        System.out.println((a == e));
+    }
+}
+````
+
