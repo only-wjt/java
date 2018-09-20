@@ -86,7 +86,7 @@ class Person{
 ## static存在的误区
 
 ### static关键字会改变类中成员的访问权限吗？
-&emsp;&emsp;
+&emsp;&emsp;在Java中能够影响到访问权限的只有private、public、protected（包括包访问权限）这几个关键字。
 
 ### 能通过this访问静态成员变量吗？
 
