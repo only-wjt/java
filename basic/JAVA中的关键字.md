@@ -446,3 +446,5 @@ public static int func (){
     }
 }
 ````
+
+&emsp;&emsp;最终输出3。
