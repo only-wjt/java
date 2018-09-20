@@ -375,6 +375,8 @@ public class MySingleton1 implements Serializable {
 ````
 
 ### 枚举：
+
+````
 //枚举实现单例
 public enum EnumSingletonFactory {
     singletonFactory;
@@ -386,25 +388,18 @@ public enum EnumSingletonFactory {
         return instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
+````
+
+````
 在thread中调用实现：
 @Override  
     public void run() {     System.out.println(EnumFactory.singletonFactory.getInstance().hashCode());  
     }
-1
-2
-3
-但是此博客 引起我思考，是违反单一职责的，因为它暴露了枚举的细节，所以我们需要改造他。
+````
+
+&emsp;&emsp;但是此博客 引起我思考，是违反单一职责的，因为它暴露了枚举的细节，所以我们需要改造他。
+
+````
 //使用工厂来生成枚举类
 //通过工厂类的静态方法去访问枚举类，然后通过枚举类访问它的单例。
 public class ClassFactory {
@@ -426,37 +421,15 @@ public class ClassFactory {
         return MyEnumSingleton.singletonFactory.getInstance();
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
+````
+
+````
 在thread中调用实现：
  @Override  
     public void run() {   
         System.out.println(ClassFactory.getInstance().hashCode());  
     }  
-1
-2
-3
-4
+````
 枚举类的方式不仅能避免多线程同步问题，而且还能防止反序列化重新创建新的对象。不过实际工程代码中，很少去用此方式。
 三、推荐使用：
 上述的各种单例都讲完了：基本是五种写法。懒汉，恶汉，双重校验锁，枚举和静态内部类。
