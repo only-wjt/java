@@ -575,3 +575,6 @@ public static int getMonthsInYear(){
 &emsp;&emsp;2.为了访问一个老的系统或者使用一个已有的库，而这个系统或这个库不是用JAVA编写的
 
 &emsp;&emsp;3.为了加快程序的性能，而将一段时间敏感的代码作为本地方法实现。
+
+
+## super
