@@ -527,3 +527,5 @@ public static int getMonthsInYear(){
 
 >public native int hashCode();
 
+&emsp;&emsp;为什么会有native关键字的出现
+
