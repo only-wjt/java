@@ -546,3 +546,5 @@ public static int getMonthsInYear(){
 ### 4、生成dll共享库，然后Java程序load库，调用即可。
 
 ![JNI调用C流程](./images/JNI调用C流程.png)
+
+### 其他介绍
