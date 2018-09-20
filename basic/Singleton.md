@@ -234,6 +234,9 @@ public class Singleton5 {
 &emsp;&emsp;用volatile的意义并不在于其他线程一定要去内存总读取instance，而在于它限制了CPU对内存操作的重拍序，使其他线程在看到3之前2一定是执行过的。
 ### 饿汉式单例：
 &emsp;&emsp;意思是：类装载时就实例化该单例类
+
+
+````
 public class Singleton6 {
     //一初始化类就初始化这个单例了！！！
     private static Singleton6 singleton6= new Singleton6();
