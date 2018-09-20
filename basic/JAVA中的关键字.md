@@ -232,6 +232,6 @@ class Music4 {
 
 &emsp;&emsp;3.子类继承抽象类必须实现其中抽象方法，除非子类也是抽象类。
 
-&emsp;&emsp；4.抽象类的非抽象方法都可以被正常调用。调用方式包括通过子类调用，直接调用static方法等。
+&emsp;&emsp;4.抽象类的非抽象方法都可以被正常调用。调用方式包括通过子类调用，直接调用static方法等。
 
 &emsp;&emsp;5.abstract 不能与private、static、final、native、synchronized共用。（相互之间矛盾，直接编译报错）
