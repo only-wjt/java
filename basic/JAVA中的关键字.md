@@ -369,3 +369,4 @@ class MyClass {
     public static double j = Math.random();
 }
 ````
+&emsp;&emsp;运行这段代码就会发现，每次打印的两个j值都是一样的，而i的值却是不同的。从这里就可以知道final和static变量的区别了。
