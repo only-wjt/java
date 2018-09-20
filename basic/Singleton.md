@@ -60,9 +60,11 @@ System.out.println(yiifaa_1 == yiifaa_2);
 ## 采用单例模式来记录状态值的类的两大方法：
 ### &emsp;&emsp;（一）、由容器管理单例的生命周期。Java EE容器或者框架级容器，自行管理对象的生命周期。
 ### &emsp;&emsp;（二）状态随时记录。异步记录的方式或者使用观察者模式，记录状态变化，确保重新初始化也可从资源环境获得销毁前的数据。
-二、各式各样的单例及其线程安全问题：
-（1）懒汉式单例：
-意思：就是需要使用这个对象的时候才去创建这个对象。
+
+## 各式各样的单例及其线程安全问题：
+### （1）懒汉式单例：
+&emsp;&emsp;意思：就是需要使用这个对象的时候才去创建这个对象。
+````
 //懒汉式单例
 public class Singleton1 {
     private static Singleton1 singleton1=null;
@@ -81,24 +83,8 @@ public class Singleton1 {
         return singleton1;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
+````
+
 //测试线程
 public class SingleThread1 extends Thread {
 //哈希值对应的是唯一的嘛，如果不一样了，就说明使用的不是同一个对象咯。
