@@ -400,3 +400,9 @@ class MyClass {
 ````
 
 &emsp;&emsp;运行这段代码就会发现输出结果为 helloworld。很显然，用final进行修饰并没有阻止在changeValue中改变buffer指向的对象的内容。有人说假如把final去掉了，万一在changeValue中让buffer指向了其他对象怎么办。有这种想法的朋友可以自己动手写代码试一下这样的结果是什么，如果把final去掉了，然后在changeValue中让buffer指向了其他对象，也不会影响到main方法中的buffer，`原因在于java采用的是值传递，对于引用变量，传递的是引用的值，也就是说让实参和形参同时指向了同一个对象，因此让形参重新指向另一个对象对实参并没有任何影响。`
+
+#### 下面总结了一些使用final关键字的好处
+
+&emsp;&emsp;final关键字提高了性能。JVM和Java应用都会缓存final变量。
+&emsp;&emsp;final变量可以安全的在多线程环境下进行共享，而不需要额外的同步开销。
+&emsp;&emsp;使用final关键字，JVM会对方法、变量及类进行优化。
