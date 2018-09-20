@@ -261,3 +261,5 @@ class Music4 {
 ### final关键字的基本用法
 
 &emsp;&emsp;在Java中，final关键字可以用来修饰类、方法和变量（包括成员变量和局部变量）。
+
+#### final用来修饰类
