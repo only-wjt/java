@@ -127,6 +127,8 @@ public class SingletonTest {
 
 #### 线程安全的懒汉式单例设计：
 &emsp;&emsp;1.锁住获取方法方式：
+
+````
 public class Singleton3 {
     private static Singleton3 instance = null;
 
@@ -145,26 +147,8 @@ public class Singleton3 {
         return instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-2.锁住部分代码块的方式：
+````
+&emsp;&emsp;锁住部分代码块的方式：
 public class Singleton2 {
     private static Singleton2 instance = null;
      private Singleton2(){
