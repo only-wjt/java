@@ -148,7 +148,10 @@ public class Singleton3 {
     }
 }
 ````
+
 &emsp;&emsp;锁住部分代码块的方式：
+
+````
 public class Singleton2 {
     private static Singleton2 instance = null;
      private Singleton2(){
@@ -170,31 +173,11 @@ public class Singleton2 {
         return instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-3.锁住初始化对象操作的方式：但是！！！这不是线程安全的！！一会有这个方式的优化从而实现线程安全。
-为什么？？
-因为多个访问已经进入到创建的那里了。
+````
+
+&emsp;&emsp;锁住初始化对象操作的方式：但是！！！这不是线程安全的！！一会有这个方式的优化从而实现线程安全。为什么？？因为多个访问已经进入到创建的那里了。
+
+````
 public class Singleton4 {
     private static Singleton4 instance = null;
     private Singleton4(){}
@@ -214,27 +197,11 @@ public class Singleton4 {
         return instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-4.锁住初始化对象操作的方式，但有个再检查操作：
+````
+
+&emsp;&emsp;锁住初始化对象操作的方式，但有个再检查操作：
+
+````
 public class Singleton5 {
     //使用volatile关键字保其可见性
     volatile private static Singleton5 instance = null;
@@ -257,28 +224,8 @@ public class Singleton5 {
         return instance;
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
+````
+
 使用了volatile关键字来保证其线程间的可见性；在同步代码块中使用二次检查，以保证其不被重复实例化。集合其二者，这种实现方式既保证了其高效性，也保证了其线程安全性。
 解析volatile在此的作用：
 volatile（涉及java内存模型的知识）会禁止CPU对内存访问重排序（并不一定禁止指令重排），也就是CPU执行初始化操作，那么他会保证其他CPU看到的操作顺序是1.给 instance 分配内存–2.调用 Singleton 的构造函数来初始化成员变量–3.将instance对象指向分配的内存空间（执行完这步 instance 就为非 null 了），（虽然在CPU内由于流水线多发射并不一定是这个顺序）
