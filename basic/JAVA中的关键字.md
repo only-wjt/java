@@ -408,6 +408,7 @@ class MyClass {
 &emsp;&emsp;使用final关键字，JVM会对方法、变量及类进行优化。
 
 #### 关于final的重要知识点
+
 &emsp;&emsp;final关键字可以用于成员变量、本地变量、方法以及类。
 &emsp;&emsp;final成员变量必须在声明的时候初始化或者在构造器中初始化，否则就会报编译错误。
 &emsp;&emsp;你不能够对final变量再次赋值。
