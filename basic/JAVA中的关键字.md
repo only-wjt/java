@@ -85,9 +85,9 @@ class Person{
 
 ## static存在的误区
 
-1.static关键字会改变类中成员的访问权限吗？
+### static关键字会改变类中成员的访问权限吗？
 
-2.能通过this访问静态成员变量吗？
+### 能通过this访问静态成员变量吗？
 
 ````
 public class Main {　　
