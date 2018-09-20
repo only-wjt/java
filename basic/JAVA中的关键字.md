@@ -525,6 +525,5 @@ public static int getMonthsInYear(){
 
 ## Native
 
->	
-public native int hashCode();
+>public native int hashCode();
 
