@@ -136,7 +136,7 @@ public class Main {　　
 
 &emsp;&emsp;使用了abstract关键字的类就是抽象类，使用了abstract关键字的方法就是抽象方法。按照常理来说，抽象类会包含一个以上的抽象方法。言下之意，你非要让一个抽象类不包含抽象方法，也是可以的。但是只要包含了一个抽象方法，这个类就必须是抽象类。抽象类（抽象方法）通常都是继承时会用的到，是java多态性的体现。
 
-&emsp;&emsp;&emsp;&emsp;创建抽象类和方法有时对我们非常有用，因为它们使一个类的抽象变成明显的事实，可明确告诉用户和编译器自己打算如何用它。
+&emsp;&emsp;创建抽象类和方法有时对我们非常有用，因为它们使一个类的抽象变成明显的事实，可明确告诉用户和编译器自己打算如何用它。
 
 &emsp;&emsp;abstract用法其实比较简单：
 
@@ -224,14 +224,14 @@ class Music4 {
 
 ````
 
-注意点：
+&emsp;&emsp;注意点：
 
-1.一个抽象类不一定有抽象方法，但只要有一个抽象方法就一定是抽象类。
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.一个抽象类不一定有抽象方法，但只要有一个抽象方法就一定是抽象类。
 
-2.抽象类不可创建新对象。但是抽象类允许有构造方法。（子类可以继承构造方法）
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;2.抽象类不可创建新对象。但是抽象类允许有构造方法。（子类可以继承构造方法）
 
-3.子类继承抽象类必须实现其中抽象方法，除非子类也是抽象类。
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3.子类继承抽象类必须实现其中抽象方法，除非子类也是抽象类。
 
-4.抽象类的非抽象方法都可以被正常调用。调用方式包括通过子类调用，直接调用static方法等。
+&emsp;&emsp;&emsp;&emsp;4.抽象类的非抽象方法都可以被正常调用。调用方式包括通过子类调用，直接调用static方法等。
 
-5.abstract 不能与private、static、final、native、synchronized共用。（相互之间矛盾，直接编译报错）
+&emsp;&emsp;5.abstract 不能与private、static、final、native、synchronized共用。（相互之间矛盾，直接编译报错）
