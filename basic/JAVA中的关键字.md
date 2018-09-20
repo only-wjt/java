@@ -268,7 +268,7 @@ class Music4 {
 
 &emsp;&emsp;`在使用final修饰类的时候，要注意谨慎选择，除非这个类真的在以后不会用来继承或者出于安全的考虑，尽量不要将类设计为final类。`
 
-#### final修饰方法
+#### final用来修饰方法
 
 &emsp;&emsp;<java编程思想>
 
@@ -278,3 +278,5 @@ class Music4 {
 &emsp;&emsp;因此，如果只有在想明确禁止 该方法在子类中被覆盖的情况下才将方法设置为final的。
 
 &emsp;&emsp;注：类的private方法会隐式地被指定为final方法。
+
+#### fianl用来修饰变量
