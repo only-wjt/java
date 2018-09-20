@@ -542,3 +542,5 @@ public static int getMonthsInYear(){
 #### 2、运行javah，得到包含该方法的C声明头文件.h
 
 #### 3、根据头文件，写C实现本地方法。
+
+### 4、生成dll共享库，然后Java程序load库，调用即可。
