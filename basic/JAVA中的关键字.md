@@ -82,3 +82,6 @@ class Person{
     }
 }
 ````
+
+## static存在的误区
+
