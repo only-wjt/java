@@ -555,10 +555,8 @@ public static int getMonthsInYear(){
 &emsp;&emsp;使用native关键字说明这个方法是原生函数，也就是这个方法是用C/C++语言实现的，并且被编译成了DLL，由java去调用。
 &emsp;&emsp;这些函数的实现体在DLL中，JDK的源代码中并不包含，你应该是看不到的。对于不同的平台它们也是不同的。这也是java的底层机制，实际上java就是在不同的平台上调用不同的native方法实现对操作系统的访问的。
 
-
-1。native 是用做java 和其他语言（如c++）进行协作时用的
-也就是native 后的函数的实现不是用java写的
-2。既然都不是java，那就别管它的源代码了，呵呵
+&emsp;&emsp;1。native 是用做java 和其他语言（如c++）进行协作时用的也就是native 后的函数的实现不是用java写的
+&emsp;&emsp;2。既然都不是java，那就别管它的源代码了，呵呵
 
 
 native的意思就是通知操作系统，
