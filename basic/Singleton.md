@@ -85,6 +85,7 @@ public class Singleton1 {
 }
 ````
 
+````
 //测试线程
 public class SingleThread1 extends Thread {
 //哈希值对应的是唯一的嘛，如果不一样了，就说明使用的不是同一个对象咯。
@@ -94,16 +95,9 @@ public class SingleThread1 extends Thread {
     }
 
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
+````
+
+````
 //测试类
 public class SingletonTest {
 
@@ -117,19 +111,7 @@ public class SingletonTest {
         }
     }
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
+
 //打印的结果：
 569219718
 1259146238
@@ -141,20 +123,10 @@ public class SingletonTest {
 635681435
 622018771
 1439317371
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-线程安全的懒汉式单例设计：
-1.锁住获取方法方式：
+````
+
+#### 线程安全的懒汉式单例设计：
+&emsp;&emsp;1.锁住获取方法方式：
 public class Singleton3 {
     private static Singleton3 instance = null;
 
