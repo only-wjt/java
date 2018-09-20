@@ -254,7 +254,7 @@ class Music4 {
 &emsp;&emsp;如果基本功能在不断改变，那么就需要使用抽象类。如果不断改变基本功能并且使用接口，那么就需要改变所有实现了该接口的类。
 
 
-## final
+## final[转载](http://www.cnblogs.com/dolphin0520/p/3736238.html)
 
 &emsp;&emsp;前言：final关键字一般会在匿名内部类用到，而且，我们常用的String也是用fianl修饰的
 
