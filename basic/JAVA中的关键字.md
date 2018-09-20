@@ -558,11 +558,9 @@ public static int getMonthsInYear(){
 &emsp;&emsp;1。native 是用做java 和其他语言（如c++）进行协作时用的也就是native 后的函数的实现不是用java写的
 &emsp;&emsp;2。既然都不是java，那就别管它的源代码了，呵呵
 
-
 &emsp;&emsp;native的意思就是通知操作系统，这个函数你必须给我实现，因为我要使用。所以native关键字的函数都是操作系统实现的，java只能调用。
 
-
-java是跨平台的语言，既然是跨了平台，所付出的代价就是牺牲一些对底层的控制，而java要实现对底层的控制，就需要一些其他语言的帮助，这个就是native的作用了
+&emsp;&emsp;java是跨平台的语言，既然是跨了平台，所付出的代价就是牺牲一些对底层的控制，而java要实现对底层的控制，就需要一些其他语言的帮助，这个就是native的作用了
 
 Java不是完美的，Java的不足除了体现在运行速度上要比传统的C++慢许多之外，Java无法直接访问到操作系统底层（如系统硬件等)，为此Java使用native方法来扩展Java程序的功能。
 　　可以将native方法比作Java程序同Ｃ程序的接口，其实现步骤：
