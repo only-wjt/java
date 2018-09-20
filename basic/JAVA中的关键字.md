@@ -540,3 +540,5 @@ public static int getMonthsInYear(){
 #### 1.创建一个Java类，里面包含着一个 native 的方法和加载库的方法 loadLibrary。
 
 #### 2、运行javah，得到包含该方法的C声明头文件.h
+
+#### 3、根据头文件，写C实现本地方法。
