@@ -1323,7 +1323,7 @@ public class Test {
 }
 ````
 
-　　采用Lock：
+&emsp;&emsp;采用Lock：
 
 ````
  public class Test {
@@ -1357,9 +1357,9 @@ public class Test {
 }
 ````
 
-　　采用AtomicInteger：
+&emsp;&emsp;采用AtomicInteger：
   
-  ````
+````
 public class Test {
     public  int inc = 0;
     Lock lock = new ReentrantLock();
