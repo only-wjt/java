@@ -175,6 +175,7 @@ public class Singleton3 {
 
 &emsp;&emsp;锁住部分代码块的方式：
 
+
 ````
 public class Singleton2 {
     private static Singleton2 instance = null;
