@@ -60,7 +60,9 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;下图显示了一个线程完整的生命周期
 
-![thread的生命周期](./images/javathread.png)
+
+![thread的生命周](./images/javathread.png)
+
 
 #### 新建状态:
 &emsp;&emsp;使用 new 关键字和 Thread 类或其子类建立一个线程对象后，该线程对象就处于新建状态。它保持这个状态直到程序 start() 这个线程。
