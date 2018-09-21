@@ -35,7 +35,7 @@ grammar_cjkRuby: true
 
 &emsp;&emsp;并行：当系统有一个以上CPU时,则线程的操作有可能非并发。当一个CPU执行一个线程时，另一个CPU可以执行另一个线程，两个线程互不抢占CPU资源，可以同时进行，这种方式我们称之为并行(Parallel)。
 
-&emsp;&emsp;强烈注意：多核，多cup，多机是不同的概念。
+&emsp;&emsp;强烈注意：多核，多cpu，多机是不同的概念。
 
 ### 补充：
 
