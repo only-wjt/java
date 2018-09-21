@@ -137,12 +137,12 @@ grammar_cjkRuby: true
  
 &emsp;&emsp;Thread类中的方法：
 &emsp;&emsp;由于sleep()方法是Thread类的方法，因此它不能改变对象的机锁。所以当在一个Synchronized方法中调用sleep()时，线程虽然休眠了，但是对象的机锁没有被释放，其他线程仍然无法访问这个对象。而wait()方法则会在线程休眠的同时释放掉机锁，其他线程可以访问该对象。
-&emsp;&emsp;Yield()方法：是停止当前线程，让同等优先权的线程运行。如果没有同等优先权的线程，那么Yield()方法将不会起作用。
-&emsp;&emsp;join()方法：是由一个线程调用另一个线程，调用线程等待被调用线程终止。
+&emsp;&emsp;Yield()方法：`是停止当前线程，让同等优先权的线程运行。如果没有同等优先权的线程，那么Yield()方法将不会起作用。`
+&emsp;&emsp;join()方法：`是由一个线程调用另一个线程，`调用线程等待被调用线程终止。
  
 &emsp;&emsp;sleep()与wait()的共同点及不同点：
 &emsp;&emsp;共同点： 他们都是在多线程的环境下，都可以在程序的调用处阻塞指定的毫秒数，并返回。
-&emsp;&emsp;不同点： Thread.sleep(long)可以不在synchronized的块下调用，而且使用Thread.sleep()不会丢失当前线程对任何对象的同步锁(monitor); object.wait(long)必须在synchronized的块下来使用，调用了之后失去对object的monitor, 这样做的好处是它不影响其它的线程对object进行操作。
+&emsp;&emsp;不同点： Thread.sleep(long)可以不在synchronized的块下调用，而且使用Thread.sleep()不会丢失当前线程对任何对象的同步锁(monitor);` object.wait(long)必须在synchronized的块下来使用，`调用了之后失去对object的monitor, 这样做的好处是它不影响其它的线程对object进行操作。
 
 &emsp;&emsp;举个java.util.Timer的例子来说明。
 
