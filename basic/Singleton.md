@@ -148,7 +148,9 @@ public class SingletonTest {
 ````
 
 #### 线程安全的懒汉式单例设计：
+
 &emsp;&emsp;1.锁住获取方法方式：
+
 
 ````
 public class Singleton3 {
