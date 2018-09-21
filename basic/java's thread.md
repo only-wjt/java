@@ -127,22 +127,21 @@ grammar_cjkRuby: true
 ## 线程同步
 
 &emsp;&emsp;一个线程结束的标志是：run()方法结束。
-一个机锁被释放的标志是：synchronized块或方法结束。
-当有多个线程访问共享数据的时候，就需要对线程进行同步。线程同步相关的方法中的几个主要方法的按照所属可以分成：
-Thread类的方法：sleep(),yield()等
-Object的方法：wait()和notify()、notifyAll()等
-Object中的对象头存放的锁信息在控制同步访问时使用。见《java对象在内存中的结构（HotSpot虚拟机）》和《Synchronized之二：synchronized的实现原理》
+&emsp;&emsp;一个机锁被释放的标志是：synchronized块或方法结束。
+&emsp;&emsp;当有多个线程访问共享数据的时候，就需要对线程进行同步。线程同步相关的方法中的几个主要方法的按照所属可以分成：
+&emsp;&emsp;Thread类的方法：sleep(),yield()等
+&emsp;&emsp;Object的方法：wait()和notify()、notifyAll()等
+&emsp;&emsp;Object中的对象头存放的锁信息在控制同步访问时使用。见《java对象在内存中的结构（HotSpot虚拟机）》和《Synchronized之二：synchronized的实现原理》
 
-Wait()方法和notify()方法：当一个线程执行到wait()方法时，它就进入到一个和该对象相关的等待池中，同时失去了对象的机锁。当它被一个notify()方法唤醒时，等待池中的线程就被放到了锁池中。该线程从锁池中获得机锁，然后回到wait()前的中断现场。
+&emsp;&emsp;Wait()方法和notify()方法：当一个线程执行到wait()方法时，它就进入到一个和该对象相关的等待池中，同时失去了对象的机锁。当它被一个notify()方法唤醒时，等待池中的线程就被放到了锁池中。该线程从锁池中获得机锁，然后回到wait()前的中断现场。
  
-Thread类中的方法：
-由于sleep()方法是Thread类的方法，因此它不能改变对象的机锁。所以当在一个Synchronized方法中调用sleep()时，线程虽然休眠了，但是对象的机锁没有被释放，其他线程仍然无法访问这个对象。而wait()方法则会在线程休眠的同时释放掉机锁，其他线程可以访问该对象。
-Yield()方法：是停止当前线程，让同等优先权的线程运行。如果没有同等优先权的线程，那么Yield()方法将不会起作用。
-join()方法：是由一个线程调用另一个线程，调用线程等待被调用线程终止。
+&emsp;&emsp;Thread类中的方法：
+&emsp;&emsp;由于sleep()方法是Thread类的方法，因此它不能改变对象的机锁。所以当在一个Synchronized方法中调用sleep()时，线程虽然休眠了，但是对象的机锁没有被释放，其他线程仍然无法访问这个对象。而wait()方法则会在线程休眠的同时释放掉机锁，其他线程可以访问该对象。
+&emsp;&emsp;Yield()方法：是停止当前线程，让同等优先权的线程运行。如果没有同等优先权的线程，那么Yield()方法将不会起作用。
+&emsp;&emsp;join()方法：是由一个线程调用另一个线程，调用线程等待被调用线程终止。
  
-sleep()与wait()的共同点及不同点：
-共同点： 他们都是在多线程的环境下，都可以在程序的调用处阻塞指定的毫秒数，并返回。
-不同点： Thread.sleep(long)可以不在synchronized的块下调用，而且使用Thread.sleep()不会丢失当前线程对任何对象的同步锁(monitor);
-              object.wait(long)必须在synchronized的块下来使用，调用了之后失去对object的monitor, 这样做的好处是它不影响其它的线程对object进行操作。
+&emsp;&emsp;sleep()与wait()的共同点及不同点：
+&emsp;&emsp;共同点： 他们都是在多线程的环境下，都可以在程序的调用处阻塞指定的毫秒数，并返回。
+&emsp;&emsp;不同点： Thread.sleep(long)可以不在synchronized的块下调用，而且使用Thread.sleep()不会丢失当前线程对任何对象的同步锁(monitor); object.wait(long)必须在synchronized的块下来使用，调用了之后失去对object的monitor, 这样做的好处是它不影响其它的线程对object进行操作。
 
-举个java.util.Timer的例子来说明。
+&emsp;&emsp;举个java.util.Timer的例子来说明。
