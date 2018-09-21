@@ -705,3 +705,87 @@ Return this
 &emsp;&emsp;下面分别分析这两种用法在对象锁和类锁上的效果。
 
 &emsp;&emsp;对象锁的synchronized修饰方法和代码块：
+
+````
+public class TestSynchronized 
+{  
+    public void test1() 
+    {  
+         synchronized(this) 
+         {  
+              int i = 5;  
+              while( i-- > 0) 
+              {  
+                   System.out.println(Thread.currentThread().getName() + " : " + i);  
+                   try 
+                   {  
+                        Thread.sleep(500);  
+                   } 
+                   catch (InterruptedException ie) 
+                   {  
+                   }  
+              }  
+         }  
+    }  
+    public synchronized void test2() 
+    {  
+         int i = 5;  
+         while( i-- > 0) 
+         {  
+              System.out.println(Thread.currentThread().getName() + " : " + i);  
+              try 
+              {  
+                   Thread.sleep(500);  
+              } 
+              catch (InterruptedException ie) 
+              {  
+              }  
+         }  
+    }  
+    public static void main(String[] args) 
+    {  
+         final TestSynchronized myt2 = new TestSynchronized();  
+         Thread test1 = new Thread(  new Runnable() {  public void run() {  myt2.test1();  }  }, "test1"  );  
+         Thread test2 = new Thread(  new Runnable() {  public void run() { myt2.test2();   }  }, "test2"  );  
+         test1.start();;  
+         test2.start();  
+//         TestRunnable tr=new TestRunnable();
+//         Thread test3=new Thread(tr);
+//         test3.start();
+    } 
+}
+ 
+
+ 
+
+test2 : 4
+test2 : 3
+test2 : 2
+test2 : 1
+test2 : 0
+test1 : 4
+test1 : 3
+test1 : 2
+test1 : 1
+test1 : 0
+
+````
+
+上述的代码，第一个方法时用了同步代码块的方式进行同步，传入的对象实例是this，表明是当前对象，当然，如果需要同步其他对象实例，也不可传入其他对象的实例；第二个方法是修饰方法的方式进行同步。因为第一个同步代码块传入的this，所以两个同步代码所需要获得的对象锁都是同一个对象锁，下面main方法时分别开启两个线程，分别调用test1和test2方法，那么两个线程都需要获得该对象锁，另一个线程必须等待。上面也给出了运行的结果可以看到：直到test2线程执行完毕，释放掉锁，test1线程才开始执行。（可能这个结果有人会有疑问，代码里面明明是先开启test1线程，为什么先执行的是test2呢？这是因为java编译器在编译成字节码的时候，会对代码进行一个重排序，也就是说，编译器会根据实际情况对代码进行一个合理的排序，编译前代码写在前面，在编译后的字节码不一定排在前面，所以这种运行结果是正常的， 这里是题外话，最主要是检验synchronized的用法的正确性）
+
+如果我们把test2方法的synchronized关键字去掉，执行结果会如何呢？
+
+````
+test1 : 4
+test2 : 4
+test2 : 3
+test1 : 3
+test1 : 2
+test2 : 2
+test2 : 1
+test1 : 1
+test2 : 0
+test1 : 0
+````
+
+
