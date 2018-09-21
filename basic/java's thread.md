@@ -5,6 +5,8 @@ grammar_cjkRuby: true
 ---
 [参考](https://www.cnblogs.com/duanxz/category/1026463.html)
 
+## 进程和线程
+
 ## Java 多线程编程
 &emsp;&emsp;Java 给多线程编程提供了内置的支持。 `一条线程指的是进程中一个单一顺序的控制流`，一个进程中可以并发多个线程，每条线程并行执行不同的任务。
 多线程是多任务的一种特别的形式，但多线程使用了更小的资源开销。
