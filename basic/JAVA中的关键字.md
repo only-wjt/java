@@ -686,3 +686,6 @@ Return this
 
 }
 ````
+
+
+## synchronized
