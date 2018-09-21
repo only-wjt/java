@@ -222,6 +222,8 @@ customThread.join();
  
 ### 示例
 
+&emsp&emsp;看了一下源代码，发现new Thread()，实际上底层也是实现了runable接口
+
 ````
 class BThread extends Thread {
     public BThread() {
