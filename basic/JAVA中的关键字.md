@@ -242,7 +242,7 @@ class Music4 {
 
 ### 接口和抽象类的区别
 
-![enter description here](./images/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%8C%BA%E5%88%AB.png)
+![区别](./images/接口和抽象类的区别.png)
 
 ### 什么时候使用抽象类和接口
 
