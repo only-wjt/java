@@ -124,7 +124,7 @@ grammar_cjkRuby: true
 
 　　等待调用join方法的线程结束，再继续执行。如：t.join();//主要用于等待t线程运行结束，若无此句，main则会执行完毕，导致结果不可预测。
 
-## 线程同步
+### 线程同步
 
 &emsp;&emsp;一个线程结束的标志是：run()方法结束。
 &emsp;&emsp;一个机锁被释放的标志是：synchronized块或方法结束。
@@ -170,3 +170,188 @@ private void sched(TimerTask task, long time, long period) {
 ````
 
 &emsp;&emsp;但是正如上篇文章讲到的，使用queue.wait(long)的前提条件是sched()动作执行的时间很短，否则如果很长，那么queue.wait()不能够按时醒来。
+
+
+
+## Thread Join()的用法
+ 
+一、join用法
+
+ 
+1.join方法定义在Thread类中，则调用者必须是一个线程
+
+ 
+例如：
+
+ 
+Thread t = new CustomThread();//这里一般是自定义的线程类
+t.start();//线程起动
+t.join();//此处会抛出InterruptedException异常
+ 
+2.上面的两行代码也是在一个线程里面执行的
+
+ 
+以上出现了两个线程，一个是我们自定义的线程类，我们实现了run方法，做一些我们需要的工作；另外一个线程，生成我们自定义线程类的对象，然后执行
+
+ 
+customThread.start();
+customThread.join();
+ 
+在这种情况下，两个线程的关系是一个线程由另外一个线程生成并起动，所以我们暂且认为第一个线程叫做“子线程”，另外一个线程叫做“主线程”。
+
+ 
+二、为什么要用join()方法
+
+ 
+主线程生成并启动了子线程，而子线程里要进行大量的耗时的运算(这里可以借鉴下线程的作用)，当主线程处理完其他的事务后，需要用到子线程的处理结果，这个时候就要用到join();方法了。
+
+ 
+三、join方法的作用
+
+ 
+在网上看到有人说“将两个线程合并”。这样解释我觉得理解起来还更麻烦。不如就借鉴下API里的说法：
+
+ 
+“等待该线程终止。”
+
+ 
+解释一下，是主线程等待子线程的终止。也就是说主线程的代码块中，如果碰到了t.join()方法，此时主线程需要等待（阻塞），等待子线程结束了(Waits for this thread to die.),才能继续执行t.join()之后的代码块。
+
+ 
+四、示例
+复制代码
+class BThread extends Thread {
+    public BThread() {
+        super("[BThread] Thread");
+    };
+    public void run() {
+        String threadName = Thread.currentThread().getName();
+        System.out.println(threadName + " start.");
+        try {
+            for (int i = 0; i < 5; i++) {
+                System.out.println(threadName + " loop at " + i);
+                Thread.sleep(1000);
+            }
+            System.out.println(threadName + " end.");
+        } catch (Exception e) {
+            System.out.println("Exception from " + threadName + ".run");
+        }
+    }
+}
+class AThread extends Thread {
+    BThread bt;
+    public AThread(BThread bt) {
+        super("[AThread] Thread");
+        this.bt = bt;
+    }
+    public void run() {
+        String threadName = Thread.currentThread().getName();
+        System.out.println(threadName + " start.");
+        try {
+            bt.join();
+            System.out.println(threadName + " end.");
+        } catch (Exception e) {
+            System.out.println("Exception from " + threadName + ".run");
+        }
+    }
+}
+public class TestDemo {
+    public static void main(String[] args) {
+        String threadName = Thread.currentThread().getName();
+        System.out.println(threadName + " start.");
+        BThread bt = new BThread();
+        AThread at = new AThread(bt);
+        try {
+            bt.start();
+            Thread.sleep(2000);
+            at.start();
+            at.join();
+        } catch (Exception e) {
+            System.out.println("Exception from main");
+        }
+        System.out.println(threadName + " end!");
+    }
+}
+复制代码
+结果：
+
+复制代码
+main start.    //主线程起动，因为调用了at.join()，要等到at结束了，此线程才能向下执行。 
+[BThread] Thread start. 
+[BThread] Thread loop at 0 
+[BThread] Thread loop at 1 
+[AThread] Thread start.    //线程at启动，因为调用bt.join()，等到bt结束了才向下执行。 
+[BThread] Thread loop at 2 
+[BThread] Thread loop at 3 
+[BThread] Thread loop at 4 
+[BThread] Thread end. 
+[AThread] Thread end.    // 线程AThread在bt.join();阻塞处启动，向下继续执行的结果 
+main end!      //线程AThread结束，此线程在at.join();阻塞处启起动，向下继续执行的结果。
+复制代码
+修改一下代码：
+
+复制代码
+public class TestDemo {
+    public static void main(String[] args) {
+        String threadName = Thread.currentThread().getName();
+        System.out.println(threadName + " start.");
+        BThread bt = new BThread();
+        AThread at = new AThread(bt);
+        try {
+            bt.start();
+            Thread.sleep(2000);
+            at.start();
+            //at.join(); //在此处注释掉对join()的调用
+        } catch (Exception e) {
+            System.out.println("Exception from main");
+        }
+        System.out.println(threadName + " end!");
+    }
+}
+复制代码
+结果：
+
+复制代码
+main start.    // 主线程起动，因为Thread.sleep(2000)，主线程没有马上结束;
+
+[BThread] Thread start.    //线程BThread起动
+[BThread] Thread loop at 0
+[BThread] Thread loop at 1
+main end!   // 在sleep两秒后主线程结束，AThread执行的bt.join();并不会影响到主线程。
+[AThread] Thread start.    //线程at起动，因为调用了bt.join()，等到bt结束了，此线程才向下执行。
+[BThread] Thread loop at 2
+[BThread] Thread loop at 3
+[BThread] Thread loop at 4
+[BThread] Thread end.    //线程BThread结束了
+[AThread] Thread end.    // 线程AThread在bt.join();阻塞处起动，向下继续执行的结果
+复制代码
+五、从源码看join()方法
+在AThread的run方法里，执行了bt.join();，进入看一下它的JDK源码：
+
+public final void join() throws InterruptedException {
+    join(0L);
+}
+复制代码
+    public final synchronized void join(long l)
+        throws InterruptedException
+    {
+        long l1 = System.currentTimeMillis();
+        long l2 = 0L;
+        if(l < 0L)
+            throw new IllegalArgumentException("timeout value is negative");
+        if(l == 0L)
+            for(; isAlive(); wait(0L));
+        else
+            do
+            {
+                if(!isAlive())
+                    break;
+                long l3 = l - l2;
+                if(l3 <= 0L)
+                    break;
+                wait(l3);
+                l2 = System.currentTimeMillis() - l1;
+            } while(true);
+    }
+复制代码
+Join方法实现是通过wait（小提示：Object 提供的方法）。 当main线程调用t.join时候，main线程会获得线程对象t的锁（wait 意味着拿到该对象的锁),调用该对象的wait(等待时间)，直到该对象唤醒main线程 ，比如退出后。这就意味着main 线程调用t.join时，必须能够拿到线程t对象的锁。
