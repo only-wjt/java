@@ -343,27 +343,31 @@ public final void join() throws InterruptedException {
 ````
 
 ````
-    public final synchronized void join(long l)
-        throws InterruptedException
-    {
-        long l1 = System.currentTimeMillis();
-        long l2 = 0L;
-        if(l < 0L)
+  public final synchronized void join(long millis)
+    throws InterruptedException {
+        long base = System.currentTimeMillis();
+        long now = 0;
+
+        if (millis < 0) {
             throw new IllegalArgumentException("timeout value is negative");
-        if(l == 0L)
-            for(; isAlive(); wait(0L));
-        else
-            do
-            {
-                if(!isAlive())
+        }
+
+        if (millis == 0) {
+            while (isAlive()) {
+                wait(0);
+            }
+        } else {
+            while (isAlive()) {
+                long delay = millis - now;
+                if (delay <= 0) {
                     break;
-                long l3 = l - l2;
-                if(l3 <= 0L)
-                    break;
-                wait(l3);
-                l2 = System.currentTimeMillis() - l1;
-            } while(true);
+                }
+                wait(delay);
+                now = System.currentTimeMillis() - base;
+            }
+        }
     }
+
 ````
 
 &emsp;&emsp;Join方法实现是通过wait（小提示：Object 提供的方法）。 当main线程调用t.join时候，main线程会获得线程对象t的锁（wait 意味着拿到该对象的锁),调用该对象的wait(等待时间)，直到该对象唤醒main线程 ，比如退出后。这就意味着main 线程调用t.join时，必须能够拿到线程t对象的锁。
