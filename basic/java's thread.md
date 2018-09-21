@@ -338,7 +338,7 @@ main end!   // 在sleep两秒后主线程结束，AThread执行的bt.join();并�
 
 ````
 public final void join() throws InterruptedException {
-    join(0L);
+    join(0);
 }
 ````
 
