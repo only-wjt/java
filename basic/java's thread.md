@@ -131,7 +131,7 @@ grammar_cjkRuby: true
 &emsp;&emsp;当有多个线程访问共享数据的时候，就需要对线程进行同步。线程同步相关的方法中的几个主要方法的按照所属可以分成：
 &emsp;&emsp;Thread类的方法：sleep(),yield()等
 &emsp;&emsp;Object的方法：wait()和notify()、notifyAll()等
-&emsp;&emsp;Object中的对象头存放的锁信息在控制同步访问时使用。[见《java对象在内存中的结构（HotSpot虚拟机）》)和《Synchronized之二：synchronized的实现原理》
+&emsp;&emsp;Object中的对象头存放的锁信息在控制同步访问时使用。[见《java对象在内存中的结构（HotSpot虚拟机）》](http://www.cnblogs.com/duanxz/p/4967042.html)和《Synchronized之二：synchronized的实现原理》
 
 &emsp;&emsp;Wait()方法和notify()方法：当一个线程执行到wait()方法时，它就进入到一个和该对象相关的等待池中，同时失去了对象的机锁。当它被一个notify()方法唤醒时，等待池中的线程就被放到了锁池中。该线程从锁池中获得机锁，然后回到wait()前的中断现场。
  
