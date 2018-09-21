@@ -1495,3 +1495,27 @@ sleep()
 }
 doSomethingwithconfig(context);
  ````
+ 
+ ##### double check
+
+````
+class Singleton{
+    private volatile static Singleton instance = null;
+     
+    private Singleton() {
+         
+    }
+     
+    public static Singleton getInstance() {
+        if(instance==null) {
+            synchronized (Singleton.class) {
+                if(instance==null)
+                    instance = new Singleton();
+            }
+        }
+        return instance;
+    }
+}
+````
+
+&emsp;&emsp;至于为何需要这么写请参考：《Java 中的双重检查（Double-Check）》http://blog.csdn.net/dl88250/article/details/5439024
