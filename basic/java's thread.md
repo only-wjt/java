@@ -374,7 +374,6 @@ public final void join() throws InterruptedException {
 ## 线程的优先级
 
 &emsp;&emsp;Java线程可以有优先级的设定，高优先级的线程比低优先级的线程有更高的几率得到执行（不完全正确，请参考下面的“线程优先级的问题“）。
-
 &emsp;&emsp;记住当线程的优先级没有指定时，所有线程都携带普通优先级。
 &emsp;&emsp;优先级可以用从1到10的范围指定。10表示最高优先级，1表示最低优先级，5是普通优先级。
 &emsp;&emsp;记住优先级最高的线程在执行时被给予优先。但是不能保证线程在启动时就进入运行状态。
@@ -383,6 +382,7 @@ public final void join() throws InterruptedException {
 &emsp;&emsp;t.setPriority()用来设定线程的优先级。
 &emsp;&emsp;记住在线程开始方法被调用之前，线程的优先级应该被设定。
 &emsp;&emsp;你可以使用常量，如MIN_PRIORITY,MAX_PRIORITY，NORM_PRIORITY来设定优先级
+
 &emsp;&emsp;优先级的取值
 &emsp;&emsp;Java线程的优先级是一个整数，其取值范围是1 （Thread.MIN_PRIORITY ） - 10 （Thread.MAX_PRIORITY ）。
 
