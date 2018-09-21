@@ -129,7 +129,7 @@ grammar_cjkRuby: true
 &emsp;&emsp;一个线程结束的标志是：run()方法结束。
 &emsp;&emsp;一个机锁被释放的标志是：synchronized块或方法结束。
 &emsp;&emsp;当有多个线程访问共享数据的时候，就需要对线程进行同步。线程同步相关的方法中的几个主要方法的按照所属可以分成：
-&emsp;&emsp;`Thread类的方法：sleep(),yield(),join()等`
+&emsp;&emsp;`Thread类的方法：sleep(),yield(),join()等`,join()底层还是用wait()实现的
 &emsp;&emsp;`Object的方法：wait()和notify()、notifyAll()等`
 &emsp;&emsp;Object中的对象头存放的锁信息在控制同步访问时使用。[见《java对象在内存中的结构（HotSpot虚拟机）》](http://www.cnblogs.com/duanxz/p/4967042.html)和[《Synchronized之二：synchronized的实现原理》](http://www.cnblogs.com/duanxz/p/4745871.html)
 
