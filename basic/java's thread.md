@@ -175,7 +175,7 @@ private void sched(TimerTask task, long time, long period) {
 
 ## Thread Join()的用法
  
-一、join用法
+### join用法
 
  
 1.join方法定义在Thread类中，则调用者必须是一个线程
