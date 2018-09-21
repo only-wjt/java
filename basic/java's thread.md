@@ -373,3 +373,88 @@ public final void join() throws InterruptedException {
 
 ## 线程的优先级
 
+&emsp;&emsp;Java线程可以有优先级的设定，高优先级的线程比低优先级的线程有更高的几率得到执行（不完全正确，请参考下面的“线程优先级的问题“）。
+
+&emsp;&emsp;记住当线程的优先级没有指定时，所有线程都携带普通优先级。
+&emsp;&emsp;优先级可以用从1到10的范围指定。10表示最高优先级，1表示最低优先级，5是普通优先级。
+&emsp;&emsp;记住优先级最高的线程在执行时被给予优先。但是不能保证线程在启动时就进入运行状态。
+&emsp;&emsp;与在线程池中等待运行机会的线程相比，当前正在运行的线程可能总是拥有更高的优先级。
+&emsp;&emsp;由调度程序决定哪一个线程被执行。
+&emsp;&emsp;t.setPriority()用来设定线程的优先级。
+&emsp;&emsp;记住在线程开始方法被调用之前，线程的优先级应该被设定。
+&emsp;&emsp;你可以使用常量，如MIN_PRIORITY,MAX_PRIORITY，NORM_PRIORITY来设定优先级
+&emsp;&emsp;优先级的取值
+&emsp;&emsp;Java线程的优先级是一个整数，其取值范围是1 （Thread.MIN_PRIORITY ） - 10 （Thread.MAX_PRIORITY ）。
+
+&emsp;&emsp;Thread源代码里对NORM_PRIORITY （数值为5） 的注释是“线程默认的优先级”
+
+````
+    public static final int MIN_PRIORITY = 1;
+    public static final int NORM_PRIORITY = 5;
+    public static final int MAX_PRIORITY = 10;
+````
+	
+其实不然。默认的优先级是父线程的优先级。在init方法里，
+
+Thread parent = currentThread();  
+this.priority = parent.getPriority();  
+ 或许这么解释是因为Java程序的主线程(main方法)的优先级默认是为NORM_PRIORITY，这样不主动设定优先级的，后续创建的线程的优先级也都是NORM_PRIORITY了。
+
+public static void main(String[] args) {  
+    System.out.println(Thread.currentThread().getPriority());  
+}  
+其执行结果是5。
+
+设置优先级
+可以通过setPriority方法（final的，不能被子类重载）更改优先级。优先级不能超出1-10的取值范围，否则抛出IllegalArgumentException。另外如果该线程已经属于一个线程组（ThreadGroup），该线程的优先级不能超过该线程组的优先级：
+
+复制代码
+    public final void setPriority(int i)
+    {
+        checkAccess();
+        if(i > 10 || i < 1)
+            throw new IllegalArgumentException();
+        ThreadGroup threadgroup;
+        if((threadgroup = getThreadGroup()) != null)
+        {
+            if(i > threadgroup.getMaxPriority())
+                i = threadgroup.getMaxPriority();
+            setPriority0(priority = i);
+        }
+    }
+复制代码
+ 其中setPriority0是一个本地方法。
+
+    private native void setPriority0(int i);
+线程组的最大优先级
+我们可以设定线程组的最大优先级，当创建属于该线程组的线程时该线程的优先级不能超过这个数。
+
+ 
+
+线程组最大优先级的设定：
+
+系统线程组的最大优先级默认为Thread.MAX_PRIORITY
+创建线程组的时候其最大优先级默认为父线程组（如果未指定父线程组，则其父线程组默认为当前线程所属线程组）的最大优先级
+可以通过setMaxPriority更改最大优先级，但无法超过父线程组的最大优先级
+setMaxPriority的问题：
+
+该方法只能更改本线程组及其子线程组（递归）的最大优先级。
+但不能影响已经创建的直接或间接属于该线程组的线程的优先级，也就是说，即使目前有一个子线程的优先级比新设定的线程组优先级大，也不会更改该子线程的优先级。只有当试图改变子线程的优先级或者创建新的子线程的时候，线程组的最大优先级才起作用。
+线程优先级的问题
+以下内容摘抄、翻译自JAVAMEX -> Java threading introduction -> Thread priorioties
+对于线程优先级，我们需要注意：
+
+* Thread.setPriority()可能根本不做任何事情，这跟你的操作系统和虚拟机版本有关
+* 线程优先级对于不同的线程调度器可能有不同的含义，可能并不是你直观的推测。特别地，优先级并不一定是指CPU的分享。在UNIX系统，优先级或多或少可以认为是CPU的分配，但Windows不是这样
+* 线程的优先级通常是全局的和局部的优先级设定的组合。Java的setPriority()方法只应用于局部的优先级。换句话说，你不能在整个可能的范围 内设定优先级。（这通常是一种保护的方式，你大概不希望鼠标指针的线程或者处理音频数据的线程被其它随机的用户线程所抢占）
+* 不同的系统有不同的线程优先级的取值范围，但是Java定义了10个级别（1-10）。这样就有可能出现几个线程在一个操作系统里有不同的优先级，在另外一个操作系统里却有相同的优先级（并因此可能有意想不到的行为）
+* 操作系统可能（并通常这么做）根据线程的优先级给线程添加一些专有的行为（例如”only give a quantum boost if the priority is below X“）。这里再重复一次，优先级的定义有部分在不同系统间有差别。
+* 大多数操作系统的线程调度器实际上执行的是在战略的角度上对线程的优先级做临时操作（例如当一个线程接收到它所等待的一个事件或者I/O），通常操作系统知道最多，试图手工控制优先级可能只会干扰这个系统。
+* 你的应用程序通常不知道有哪些其它进程运行的线程，所以对于整个系统来说，变更一个线程的优先级所带来的影响是难于预测的。例如你可能发现，你有一个预期 为偶尔在后台运行的低优先级的线程几乎没有运行，原因是一个病毒监控程序在一个稍微高一点的优先级（但仍然低于普通的优先级）上运行，并且无法预计你程序 的性能，它会根据你的客户使用的防病毒程序不同而不同。
+
+ 
+
+你可以参考Java优先级与各操作系统优先级之间的对应关系
+
+实际编码注意事项
+不要假定高优先级的线程一定先于低优先级的线程执行，不要有逻辑依赖于线程优先级，否则可能产生意外结果
