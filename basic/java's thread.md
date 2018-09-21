@@ -145,3 +145,28 @@ grammar_cjkRuby: true
 &emsp;&emsp;不同点： Thread.sleep(long)可以不在synchronized的块下调用，而且使用Thread.sleep()不会丢失当前线程对任何对象的同步锁(monitor); object.wait(long)必须在synchronized的块下来使用，调用了之后失去对object的monitor, 这样做的好处是它不影响其它的线程对object进行操作。
 
 &emsp;&emsp;举个java.util.Timer的例子来说明。
+
+````
+private void main Loop() {
+        while (true) {
+        ....
+        synchronized(queue) {
+        .....
+        if (!taskFired) // Task hasn't yet fired; wait
+               queue.wait(executionTime - currentTime);
+        }
+}
+````
+
+&emsp;&emsp;在这里为什么要使用queue.wait()，而不是Thread.sleep(), 是因为暂时放弃queue的对象锁，可以让允许其它的线程执行一些同步操作。如：
+
+````
+private void sched(TimerTask task, long time, long period) {
+          synchronized(queue) {
+              ...
+              queue.add(task);
+          }
+}
+````
+
+&emsp;&emsp;但是正如上篇文章讲到的，使用queue.wait(long)的前提条件是sched()动作执行的时间很短，否则如果很长，那么queue.wait()不能够按时醒来。
