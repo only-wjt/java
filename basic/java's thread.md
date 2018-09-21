@@ -61,7 +61,7 @@ grammar_cjkRuby: true
 &emsp;&emsp;下图显示了一个线程完整的生命周期
 
 
-![thread的生命周](./images/javathread.png)
+![thread的生命周期](./images/javathread.png)
 
 
 #### 新建状态:
