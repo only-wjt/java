@@ -1441,44 +1441,36 @@ doSomethingwithconfig(context);
 
 #### volatile的原理和实现机制
 
-　　前面讲述了源于volatile关键字的一些使用，下面我们来探讨一下volatile到底如何保证可见性和禁止指令重排序的。
+&emsp;&emsp;前面讲述了源于volatile关键字的一些使用，下面我们来探讨一下volatile到底如何保证可见性和禁止指令重排序的。
 
-　　下面这段话摘自《深入理解Java虚拟机》：
+&emsp;&emsp;下面这段话摘自《深入理解Java虚拟机》：
 
-　　“观察加入volatile关键字和没有加入volatile关键字时所生成的汇编代码发现，加入volatile关键字时，会多出一个lock前缀指令”
+&emsp;&emsp;“观察加入volatile关键字和没有加入volatile关键字时所生成的汇编代码发现，加入volatile关键字时，会多出一个lock前缀指令”
 
-　　lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：
+&emsp;&emsp;lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：
 
-　　1）它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；
+&emsp;&emsp;1）它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；
 
-　　2）它会强制将对缓存的修改操作立即写入主存；
+&emsp;&emsp;2）它会强制将对缓存的修改操作立即写入主存；
 
-　　3）如果是写操作，它会导致其他CPU中对应的缓存行无效。
+&emsp;&emsp;3）如果是写操作，它会导致其他CPU中对应的缓存行无效。
 
-五.使用volatile关键字的场景
-　　synchronized关键字是防止多个线程同时执行一段代码，那么就会很影响程序执行效率，而volatile关键字在某些情况下性能要优于synchronized，但是要注意volatile关键字是无法替代synchronized关键字的，因为volatile关键字无法保证操作的原子性。通常来说，使用volatile必须具备以下2个条件：
+#### 使用volatile关键字的场景
+&emsp;&emsp;synchronized关键字是防止多个线程同时执行一段代码，那么就会很影响程序执行效率，而volatile关键字在某些情况下性能要优于synchronized，但是要注意volatile关键字是无法替代synchronized关键字的，因为volatile关键字无法保证操作的原子性。通常来说，使用volatile必须具备以下2个条件：
 
-　　1）对变量的写操作不依赖于当前值
+&emsp;&emsp;1）对变量的写操作不依赖于当前值
 
-　　2）该变量没有包含在具有其他变量的不变式中
+&emsp;&emsp;2）该变量没有包含在具有其他变量的不变式中
 
-　　实际上，这些条件表明，可以被写入 volatile 变量的这些有效值独立于任何程序的状态，包括变量的当前状态。
+&emsp;&emsp;实际上，这些条件表明，可以被写入 volatile 变量的这些有效值独立于任何程序的状态，包括变量的当前状态。
 
-　　事实上，我的理解就是上面的2个条件需要保证操作是原子性操作，才能保证使用volatile关键字的程序在并发时能够正确执行。
+&emsp;&emsp;事实上，我的理解就是上面的2个条件需要保证操作是原子性操作，才能保证使用volatile关键字的程序在并发时能够正确执行。
 
-　　下面列举几个Java中使用volatile的几个场景。
+&emsp;&emsp;下面列举几个Java中使用volatile的几个场景。
 
-1.状态标记量
+##### 状态标记量
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
+````
 volatile boolean flag = false;
  
 while(!flag){
@@ -1488,18 +1480,9 @@ while(!flag){
 public void setFlag() {
     flag = true;
 }
- 
+ ````
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
+````
 volatile boolean inited = false;
 //线程1:
 context = loadContext();  
@@ -1510,4 +1493,4 @@ while(!inited ){
 sleep()
 }
 doSomethingwithconfig(context);
- 
+ ````
