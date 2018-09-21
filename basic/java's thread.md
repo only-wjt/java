@@ -394,22 +394,28 @@ public final void join() throws InterruptedException {
     public static final int MAX_PRIORITY = 10;
 ````
 	
-其实不然。默认的优先级是父线程的优先级。在init方法里，
+&emsp;&emsp;其实不然。默认的优先级是父线程的优先级。在init方法里，
 
+````
 Thread parent = currentThread();  
 this.priority = parent.getPriority();  
- 或许这么解释是因为Java程序的主线程(main方法)的优先级默认是为NORM_PRIORITY，这样不主动设定优先级的，后续创建的线程的优先级也都是NORM_PRIORITY了。
+````
 
+&emsp;&emsp;或许这么解释是因为Java程序的主线程(main方法)的优先级默认是为NORM_PRIORITY，这样不主动设定优先级的，后续创建的线程的优先级也都是NORM_PRIORITY了。
+
+````
 public static void main(String[] args) {  
     System.out.println(Thread.currentThread().getPriority());  
 }  
-其执行结果是5。
+````
 
-设置优先级
-可以通过setPriority方法（final的，不能被子类重载）更改优先级。优先级不能超出1-10的取值范围，否则抛出IllegalArgumentException。另外如果该线程已经属于一个线程组（ThreadGroup），该线程的优先级不能超过该线程组的优先级：
+&emsp;&emsp;其执行结果是5。
 
-复制代码
-    public final void setPriority(int i)
+&emsp;&emsp;设置优先级
+&emsp;&emsp;可以通过setPriority方法（final的，不能被子类重载）更改优先级。优先级不能超出1-10的取值范围，否则抛出IllegalArgumentException。另外如果该线程已经属于一个线程组（ThreadGroup），该线程的优先级不能超过该线程组的优先级：
+
+````
+public final void setPriority(int i)
     {
         checkAccess();
         if(i > 10 || i < 1)
@@ -422,12 +428,15 @@ public static void main(String[] args) {
             setPriority0(priority = i);
         }
     }
-复制代码
- 其中setPriority0是一个本地方法。
+````
 
+&emsp;&emsp; 其中setPriority0是一个本地方法。
+
+````
     private native void setPriority0(int i);
-线程组的最大优先级
-我们可以设定线程组的最大优先级，当创建属于该线程组的线程时该线程的优先级不能超过这个数。
+````
+
+&emsp;&emsp;线程组的最大优先级,我们可以设定线程组的最大优先级，当创建属于该线程组的线程时该线程的优先级不能超过这个数。
 
  
 
