@@ -178,48 +178,51 @@ private void sched(TimerTask task, long time, long period) {
 ### join用法
 
  
-1.join方法定义在Thread类中，则调用者必须是一个线程
+&emsp;&emsp;1.`join方法定义在Thread类中，则调用者必须是一个线程`
 
  
-例如：
+&emsp;&emsp;例如：
 
- 
+ ````
 Thread t = new CustomThread();//这里一般是自定义的线程类
 t.start();//线程起动
 t.join();//此处会抛出InterruptedException异常
+````
  
-2.上面的两行代码也是在一个线程里面执行的
+&emsp;&emsp;2.上面的两行代码也是在一个线程里面执行的
 
  
-以上出现了两个线程，一个是我们自定义的线程类，我们实现了run方法，做一些我们需要的工作；另外一个线程，生成我们自定义线程类的对象，然后执行
+&emsp;&emsp;以上出现了两个线程，一个是我们自定义的线程类，我们实现了run方法，做一些我们需要的工作；另外一个线程，生成我们自定义线程类的对象，然后执行
 
- 
+ ````
 customThread.start();
 customThread.join();
+````
  
-在这种情况下，两个线程的关系是一个线程由另外一个线程生成并起动，所以我们暂且认为第一个线程叫做“子线程”，另外一个线程叫做“主线程”。
+&emsp;&emsp;在这种情况下，两个线程的关系是一个线程由另外一个线程生成并起动，所以我们暂且认为第一个线程叫做“子线程”，另外一个线程叫做“主线程”。
 
  
-二、为什么要用join()方法
+### 为什么要用join()方法
 
  
-主线程生成并启动了子线程，而子线程里要进行大量的耗时的运算(这里可以借鉴下线程的作用)，当主线程处理完其他的事务后，需要用到子线程的处理结果，这个时候就要用到join();方法了。
+&emsp;&emsp;主线程生成并启动了子线程，而子线程里要进行大量的耗时的运算(这里可以借鉴下线程的作用)，当主线程处理完其他的事务后，需要用到子线程的处理结果，这个时候就要用到join();方法了。
 
  
-三、join方法的作用
+### join方法的作用
 
  
-在网上看到有人说“将两个线程合并”。这样解释我觉得理解起来还更麻烦。不如就借鉴下API里的说法：
+&emsp;&emsp;在网上看到有人说“将两个线程合并”。这样解释我觉得理解起来还更麻烦。不如就借鉴下API里的说法：
 
  
-“等待该线程终止。”
+&emsp;&emsp;“等待该线程终止。”
 
  
-解释一下，是主线程等待子线程的终止。也就是说主线程的代码块中，如果碰到了t.join()方法，此时主线程需要等待（阻塞），等待子线程结束了(Waits for this thread to die.),才能继续执行t.join()之后的代码块。
+&emsp;&emsp;解释一下，是主线程等待子线程的终止。也就是说主线程的代码块中，如果碰到了t.join()方法，此时主线程需要等待（阻塞），等待子线程结束了(Waits for this thread to die.),才能继续执行t.join()之后的代码块。
 
  
-四、示例
-复制代码
+### 示例
+
+````
 class BThread extends Thread {
     public BThread() {
         super("[BThread] Thread");
@@ -272,10 +275,10 @@ public class TestDemo {
         System.out.println(threadName + " end!");
     }
 }
-复制代码
+````
 结果：
 
-复制代码
+````
 main start.    //主线程起动，因为调用了at.join()，要等到at结束了，此线程才能向下执行。 
 [BThread] Thread start. 
 [BThread] Thread loop at 0 
@@ -287,10 +290,11 @@ main start.    //主线程起动，因为调用了at.join()，要等到at结束�
 [BThread] Thread end. 
 [AThread] Thread end.    // 线程AThread在bt.join();阻塞处启动，向下继续执行的结果 
 main end!      //线程AThread结束，此线程在at.join();阻塞处启起动，向下继续执行的结果。
-复制代码
+````
+
 修改一下代码：
 
-复制代码
+````
 public class TestDemo {
     public static void main(String[] args) {
         String threadName = Thread.currentThread().getName();
@@ -308,10 +312,11 @@ public class TestDemo {
         System.out.println(threadName + " end!");
     }
 }
-复制代码
+````
+
 结果：
 
-复制代码
+````
 main start.    // 主线程起动，因为Thread.sleep(2000)，主线程没有马上结束;
 
 [BThread] Thread start.    //线程BThread起动
@@ -324,14 +329,18 @@ main end!   // 在sleep两秒后主线程结束，AThread执行的bt.join();并�
 [BThread] Thread loop at 4
 [BThread] Thread end.    //线程BThread结束了
 [AThread] Thread end.    // 线程AThread在bt.join();阻塞处起动，向下继续执行的结果
-复制代码
-五、从源码看join()方法
+````
+
+### 从源码看join()方法
 在AThread的run方法里，执行了bt.join();，进入看一下它的JDK源码：
 
+````
 public final void join() throws InterruptedException {
     join(0L);
 }
-复制代码
+````
+
+````
     public final synchronized void join(long l)
         throws InterruptedException
     {
@@ -353,5 +362,6 @@ public final void join() throws InterruptedException {
                 l2 = System.currentTimeMillis() - l1;
             } while(true);
     }
-复制代码
-Join方法实现是通过wait（小提示：Object 提供的方法）。 当main线程调用t.join时候，main线程会获得线程对象t的锁（wait 意味着拿到该对象的锁),调用该对象的wait(等待时间)，直到该对象唤醒main线程 ，比如退出后。这就意味着main 线程调用t.join时，必须能够拿到线程t对象的锁。
+````
+
+&emsp;&emsp;Join方法实现是通过wait（小提示：Object 提供的方法）。 当main线程调用t.join时候，main线程会获得线程对象t的锁（wait 意味着拿到该对象的锁),调用该对象的wait(等待时间)，直到该对象唤醒main线程 ，比如退出后。这就意味着main 线程调用t.join时，必须能够拿到线程t对象的锁。
