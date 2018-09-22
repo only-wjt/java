@@ -541,7 +541,7 @@ public class Main {
 
 　　　　MyThread2 myThread=new MyThread2();
 
-　　　　Thread thread=new Thread(myThread);
+　　　　Thread thread=new Thread(myThread);//这个才是真正的线程对象
 
 　　　　thread.start();
 
