@@ -405,9 +405,9 @@ public final native void wait(long l)
 
 &emsp;&emsp;这三个方法最终调用的都是jvm级的final native方法。随着jvm运行平台的不同可能有些许差异。
 
-&emsp;&emsp;如果对象调用了wait方法就会使持有该对象的线程把该对象的控制权交出去，然后处于等待状态。
-&emsp;&emsp;如果对象调用了notify方法就会通知某个正在等待这个对象的控制权的线程可以继续运行。
-&emsp;&emsp;如果对象调用了notifyAll方法就会通知所有等待这个对象控制权的线程继续运行。
+&emsp;&emsp;如果对象调用了wait方法就会使持有该对象的线程`把该对象的控制权交出去，然后处于等待状态。`
+&emsp;&emsp;如果对象调用了notify方法就会`通知某个正在等待这个对象的控制权的线程可以继续运行。`
+&emsp;&emsp;如果对象调用了notifyAll方法就会通知`所有等待这个对象控制权的线程继续运行。`
 &emsp;&emsp;其中wait方法有三个over load方法：
 
 ````
@@ -521,7 +521,7 @@ Exception in thread "notify01" java.lang.IllegalMonitorStateException
     at com.dxz.synchronizeddemo.NotifyTest$NotifyThread.run(NotifyTest.java:19)
 ````
 
-&emsp;&emsp;在wait和notify的地方都报错java.lang.IllegalMonitorStateException，前面也讲过，wait和notify方法一定要在synchronized里面，更具体点说有：
+&emsp;&emsp;在wait和notify的地方都报错java.lang.IllegalMonitorStateException，前面也讲过，`wait和notify方法一定要在synchronized里面，`更具体点说有：
 
 &emsp;&emsp;任何一个时刻，对象的控制权（monitor）只能被一个线程拥有。
 &emsp;&emsp;无论是执行对象的wait、notify还是notifyAll方法，必须保证当前运行的线程取得了该对象的控制权（monitor）
