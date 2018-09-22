@@ -696,7 +696,7 @@ public class NotifyTest2 {
 
 &emsp;&emsp;下面是一个很好的例子：
 
-复制代码
+````
 package com.dxz.synchronizeddemo;
 
 public class NotifyTest3 {
@@ -761,8 +761,9 @@ public class NotifyTest3 {
         waitThread03.start();
     }
 }
-复制代码
-结果：
+````
+
+&emsp;&emsp;结果：
 
 ````
 Main Thread Run!
