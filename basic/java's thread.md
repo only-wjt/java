@@ -490,8 +490,7 @@ public final void setPriority(int i)
 
 &emsp;&emsp;3)启动线程，即调用线程的start()方法
 
-代码实例
-
+````
 public class MyThread extends Thread{//继承Thread类
 
 　　public void run(){
@@ -511,6 +510,7 @@ public class Main {
 　　}
 
 }
+````
 
 ------------------------实现Runnable接口创建线程---------------------
 
