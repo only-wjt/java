@@ -1311,7 +1311,7 @@ workQueue：任务执行前保存任务的队列，仅保存由execute方法提�
         return isInterrupted(false);
     }
     private native boolean isInterrupted(boolean flag);
-````	
+````
 
 &emsp;&emsp;该方法却直接调用当前线程的native isInterrupted(false)的方法，不清除中断状态。
 
