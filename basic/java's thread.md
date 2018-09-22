@@ -684,6 +684,7 @@ public class TestCachedThreadPool{
     }   
 }   
   
+  //相当于runable中的run()
 class TestRunnable implements Runnable{   
     public void run(){   
         System.out.println(Thread.currentThread().getName() + "线程被调用了。");   
