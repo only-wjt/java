@@ -371,6 +371,414 @@ public final void join() throws InterruptedException {
 
 &emsp;&emsp;Join方法实现是通过wait（小提示：Object 提供的方法）。 当main线程调用t.join时候，main线程会获得线程对象t的锁（wait 意味着拿到该对象的锁),调用该对象的wait(等待时间)，直到该对象唤醒main线程 ，比如退出后。这就意味着main 线程调用t.join时，必须能够拿到线程t对象的锁。
 
+
+## Object里的wait、notify、notifyAll的使用方法
+
+wait()、notify()、notifyAll()是三个定义在Object类里的方法，可以用来控制线程的状态
+
+复制代码
+public final native void notify();
+
+public final native void notifyAll();
+
+public final native void wait(long l)
+        throws InterruptedException;
+
+    public final void wait(long l, int i)
+        throws InterruptedException
+    {
+        if(l < 0L)
+            throw new IllegalArgumentException("timeout value is negative");
+        if(i < 0 || i > 999999)
+            throw new IllegalArgumentException("nanosecond timeout value out of range");
+        if(i > 0)
+            l++;
+        wait(l);
+    }
+
+    public final void wait()
+        throws InterruptedException
+    {
+        wait(0L);
+    }
+复制代码
+这三个方法最终调用的都是jvm级的final native方法。随着jvm运行平台的不同可能有些许差异。
+
+如果对象调用了wait方法就会使持有该对象的线程把该对象的控制权交出去，然后处于等待状态。
+如果对象调用了notify方法就会通知某个正在等待这个对象的控制权的线程可以继续运行。
+如果对象调用了notifyAll方法就会通知所有等待这个对象控制权的线程继续运行。
+其中wait方法有三个over load方法：
+
+wait()
+
+wait(long)
+
+wait(long,int)
+
+wait方法通过参数可以指定等待的时长。如果没有指定参数，默认一直等待直到被通知。
+
+ 
+
+以下是一个演示代码，以最简洁的方式说明复杂的问题：
+
+简要说明下：
+
+NotifyThread是用来模拟3秒钟后通知其他等待状态的线程的线程类；
+
+WaitThread是用来模拟等待的线程类；
+
+等待的中间对象是flag，一个String对象；
+
+main方法中同时启动一个Notify线程和三个wait线程；
+
+复制代码
+package com.dxz.synchronizeddemo;
+
+public class NotifyTest {
+    private String flag = "true";
+
+    class NotifyThread extends Thread {
+        public NotifyThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            try {
+                sleep(3000);// 推迟3秒钟通知
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            flag = "false";
+            flag.notify();
+        }
+    };
+
+    class WaitThread extends Thread {
+        public WaitThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            System.out.println(getName() +  "  flag:" + flag);
+            while (!flag.equals("false")) {
+                System.out.println(getName() + " begin waiting!");
+                long waitTime = System.currentTimeMillis();
+                try {
+                    flag.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                waitTime = System.currentTimeMillis() - waitTime;
+                System.out.println("wait time :" + waitTime);
+            }
+            System.out.println(getName() + " end waiting!");
+
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main Thread Run!");
+        NotifyTest test = new NotifyTest();
+        NotifyThread notifyThread = test.new NotifyThread("notify01");
+        WaitThread waitThread01 = test.new WaitThread("waiter01");
+        WaitThread waitThread02 = test.new WaitThread("waiter02");
+        WaitThread waitThread03 = test.new WaitThread("waiter03");
+        notifyThread.start();
+        waitThread01.start();
+        waitThread02.start();
+        waitThread03.start();
+    }
+}
+复制代码
+结果：
+
+复制代码
+Main Thread Run!
+Exception in thread "waiter03" waiter03  flag:true
+waiter02  flag:true
+waiter03 begin waiting!
+waiter01  flag:true
+waiter02 begin waiting!
+waiter01 begin waiting!
+Exception in thread "waiter02" Exception in thread "waiter01" java.lang.IllegalMonitorStateException
+    at java.lang.Object.wait(Native Method)
+    at java.lang.Object.wait(Object.java:502)
+    at com.dxz.synchronizeddemo.NotifyTest$WaitThread.run(NotifyTest.java:34)
+java.lang.IllegalMonitorStateException
+    at java.lang.Object.wait(Native Method)
+    at java.lang.Object.wait(Object.java:502)
+    at com.dxz.synchronizeddemo.NotifyTest$WaitThread.run(NotifyTest.java:34)
+java.lang.IllegalMonitorStateException
+    at java.lang.Object.wait(Native Method)
+    at java.lang.Object.wait(Object.java:502)
+    at com.dxz.synchronizeddemo.NotifyTest$WaitThread.run(NotifyTest.java:34)
+Exception in thread "notify01" java.lang.IllegalMonitorStateException
+    at java.lang.Object.notify(Native Method)
+    at com.dxz.synchronizeddemo.NotifyTest$NotifyThread.run(NotifyTest.java:19)
+复制代码
+在wait和notify的地方都报错java.lang.IllegalMonitorStateException，前面也讲过，wait和notify方法一定要在synchronized里面，更具体点说有：
+
+任何一个时刻，对象的控制权（monitor）只能被一个线程拥有。
+无论是执行对象的wait、notify还是notifyAll方法，必须保证当前运行的线程取得了该对象的控制权（monitor）
+如果在没有控制权的线程里执行对象的以上三种方法，就会报java.lang.IllegalMonitorStateException异常。
+JVM基于多线程，默认情况下不能保证运行时线程的时序性
+基于以上几点事实，我们需要确保让线程拥有对象的控制权。
+
+也就是说在waitThread中执行wait方法时，要保证waitThread对flag有控制权；
+
+在notifyThread中执行notify方法时，要保证notifyThread对flag有控制权。
+
+线程取得控制权的方法有三：见《Synchronized之一：基本使用》
+
+同步的实例方法（锁用的是其实例对象本身。所有的非静态同步方法执行需要顺序执行，即不能并行执行。）
+同步的静态方法（锁用的是其类对象本身。所有的静态同步方法执行需要顺序执行，即不能并行执行。）
+实例方法中的同步块（锁是自己指定的，但不能是引用性对象及null对象）
+静态方法中的同步块（锁是自己指定的，但不能是引用性对象及null对象）
+我们用第三种方法来做说明：
+将以上notify和wait方法包在同步块中
+复制代码
+//nofity放入synchronized中
+            synchronized (flag) {
+                flag = "false";
+                flag.notify();
+            }
+//wait放入synchronized中
+            synchronized (flag) {
+                while (!flag.equals("false")) {
+                    System.out.println(getName() + " begin waiting!");
+                    long waitTime = System.currentTimeMillis();
+                    try {
+                        flag.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    waitTime = System.currentTimeMillis() - waitTime;
+                    System.out.println("wait time :" + waitTime);
+                }
+            }
+复制代码
+再运行的结果：
+
+复制代码
+Main Thread Run!
+waiter02 flag:true
+waiter01 flag:true
+waiter03 flag:true
+waiter02 begin waiting!
+waiter03 begin waiting!
+waiter01 begin waiting!
+Exception in thread "notify01" java.lang.IllegalMonitorStateException
+at java.lang.Object.notify(Native Method)
+at com.dxz.synchronizeddemo.NotifyTest$NotifyThread.run(NotifyTest.java:20)
+
+复制代码
+在flag.notify();的地方还是会报错java.lang.IllegalMonitorStateException。这时的异常是由于在针对flag对象同步块中，更改了flag对象的状态所导致的。如下：
+
+flag="false";  //改变的对象的内容
+flag.notify();
+对在同步块中对flag进行了赋值操作，使得flag引用的对象改变，这时候再调用notify方法时，因为没有控制权所以抛出异常。
+
+ 
+
+我们可以改进一下，将flag改成一个JavaBean，然后更改它的属性不会影响到flag的引用。
+
+我们这里改成数组来试试，也可以达到同样的效果：
+
+private String flag[] = {"true"}; 
+　　　　　　　synchronized (flag) {  
+                flag[0] = "false";
+                flag.notify();
+            }
+复制代码
+             synchronized (flag) { 
+                System.out.println(getName() +  "  flag:" + flag);
+                while (!flag[0].equals("false")) {
+                    System.out.println(getName() + " begin waiting!");
+                    long waitTime = System.currentTimeMillis();
+                    try {
+                        flag.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    waitTime = System.currentTimeMillis() - waitTime;
+                    System.out.println("wait time :" + waitTime);
+                }
+                System.out.println(getName() + " end waiting!");
+            }
+复制代码
+这时候再运行，不再报异常，但是线程没有结束是吧，没错，还有线程堵塞，处于wait状态。
+
+原因很简单，我们有三个wait线程，只有一个notify线程，notify线程运行notify方法的时候，是随机通知一个正在等待的线程，所以，现在应该还有两个线程在waiting。
+
+我们只需要将NotifyThread线程类中的flag.notify()方法改成notifyAll()就可以了。notifyAll方法会通知所有正在等待对象控制权的线程。
+
+ 
+
+最终完成版如下：
+
+复制代码
+package com.dxz.synchronizeddemo;
+
+public class NotifyTest2 {
+    private String flag[] = {"true"};  
+
+    class NotifyThread extends Thread {
+        public NotifyThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            try {
+                sleep(3000);// 推迟3秒钟通知
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized (flag) {  
+                flag[0] = "false";
+                flag.notify();
+            }
+        }
+    };
+
+    class WaitThread extends Thread {
+        public WaitThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            synchronized (flag) { 
+                System.out.println(getName() +  "  flag:" + flag);
+                while (!flag[0].equals("false")) {
+                    System.out.println(getName() + " begin waiting!");
+                    long waitTime = System.currentTimeMillis();
+                    try {
+                        flag.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    waitTime = System.currentTimeMillis() - waitTime;
+                    System.out.println("wait time :" + waitTime);
+                }
+                System.out.println(getName() + " end waiting!");
+            }
+
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main Thread Run!");
+        NotifyTest2 test = new NotifyTest2();
+        NotifyThread notifyThread = test.new NotifyThread("notify01");
+        WaitThread waitThread01 = test.new WaitThread("waiter01");
+        WaitThread waitThread02 = test.new WaitThread("waiter02");
+        WaitThread waitThread03 = test.new WaitThread("waiter03");
+        notifyThread.start();
+        waitThread01.start();
+        waitThread02.start();
+        waitThread03.start();
+    }
+}
+复制代码
+ 
+notify()和notifyAll()的本质区别
+notify()和notifyAll()都是Object对象用于通知处在等待该对象的线程的方法。两者的最大区别在于：
+
+notifyAll使所有原来在该对象上等待被notify的所有线程统统退出wait的状态，变成等待该对象上的锁，一旦该对象被解锁，他们就会去竞争。
+notify则文明得多，它只是选择一个wait状态线程进行通知，并使它获得该对象上的锁，但不惊动其他同样在等待被该对象notify的线程们，当第一个线程运行完毕以后释放对象上的锁此时如果该对象没有再次使用notify语句，则即便该对象已经空闲，其他wait状态等待的线程由于没有得到该对象的通知，继续处在wait状态，直到这个对象发出一个notify或notifyAll，它们等待的是被notify或notifyAll，而不是锁。
+
+下面是一个很好的例子：
+
+复制代码
+package com.dxz.synchronizeddemo;
+
+public class NotifyTest3 {
+    private String flag[] = { "true" };
+
+    class NotifyThread extends Thread {
+        public NotifyThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            try {
+                sleep(3000);// 推迟3秒钟通知
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            synchronized (flag) {
+                flag[0] = "false";
+                flag.notifyAll();
+            }
+        }
+    };
+
+    class WaitThread extends Thread {
+        public WaitThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            System.out.println(getName() + "  flag:" + flag);
+            synchronized (flag) {
+                System.out.println(getName() + "  flag:" + flag);
+                while (!flag[0].equals("false")) {
+                    System.out.println(getName() + " begin waiting!");
+                    long waitTime = System.currentTimeMillis();
+                    try {
+                        flag.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    waitTime = System.currentTimeMillis() - waitTime;
+                    System.out.println("wait time :" + waitTime);
+                }
+                System.out.println(getName() + " end waiting!");
+            }
+            System.out.println(getName() + " end waiting!");
+
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main Thread Run!");
+        NotifyTest3 test = new NotifyTest3();
+        NotifyThread notifyThread = test.new NotifyThread("notify01");
+        WaitThread waitThread01 = test.new WaitThread("waiter01");
+        WaitThread waitThread02 = test.new WaitThread("waiter02");
+        WaitThread waitThread03 = test.new WaitThread("waiter03");
+        notifyThread.start();
+        waitThread01.start();
+        waitThread02.start();
+        waitThread03.start();
+    }
+}
+复制代码
+结果：
+
+复制代码
+Main Thread Run!
+waiter01  flag:[Ljava.lang.String;@584aceca
+waiter01  flag:[Ljava.lang.String;@584aceca
+waiter02  flag:[Ljava.lang.String;@584aceca
+waiter01 begin waiting!
+waiter02  flag:[Ljava.lang.String;@584aceca
+waiter02 begin waiting!
+waiter03  flag:[Ljava.lang.String;@584aceca
+waiter03  flag:[Ljava.lang.String;@584aceca
+waiter03 begin waiting!
+wait time :3000
+waiter03 end waiting!
+waiter03 end waiting!
+wait time :3001
+waiter02 end waiting!
+waiter02 end waiting!
+wait time :3001
+waiter01 end waiting!
+waiter01 end waiting!
+
+
 ## 线程的优先级
 
 &emsp;&emsp;Java线程可以有优先级的设定，高优先级的线程比低优先级的线程有更高的几率得到执行（不完全正确，请参考下面的“线程优先级的问题“）。
