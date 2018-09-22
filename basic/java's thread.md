@@ -692,7 +692,7 @@ public class NotifyTest2 {
 &emsp;&emsp;notify()和notifyAll()的本质区别
 &emsp;&emsp;notify()和notifyAll()都是Object对象用于通知处在等待该对象的线程的方法。两者的最大区别在于：
 
-&emsp;&emsp;notifyAll使所有原来在该对象上等待被notify的所有线程统统退出wait的状态，变成等待该对象上的锁，一旦该对象被解锁，他们就会去竞争。
+&emsp;&emsp;`notifyAll使所有原来在该对象上等待被notify的所有线程统统退出wait的状态，变成等待该对象上的锁，一旦该对象被解锁，他们就会去竞争。`
 &emsp;&emsp;notify则文明得多，它只是选择一个wait状态线程进行通知，并使它获得该对象上的锁，但不惊动其他同样在等待被该对象notify的线程们，当第一个线程运行完毕以后释放对象上的锁此时如果该对象没有再次使用notify语句，则即便该对象已经空闲，其他wait状态等待的线程由于没有得到该对象的通知，继续处在wait状态，直到这个对象发出一个notify或notifyAll，它们等待的是被notify或notifyAll，而不是锁。
 
 &emsp;&emsp;下面是一个很好的例子：
