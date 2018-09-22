@@ -554,11 +554,11 @@ public class Main {
 
 ### 使用Callable和Future创建线程
 
-和Runnable接口不一样，Callable接口提供了一个call（）方法作为线程执行体，call()方法比run()方法功能要强大。
+&emsp;&emsp;和Runnable接口不一样，Callable接口提供了一个call（）方法作为线程执行体，call()方法比run()方法功能要强大。
 
-》call()方法可以有返回值
+&emsp;&emsp;1call()方法可以有返回值
 
-》call()方法可以声明抛出异常
+&emsp;&emsp;2) call()方法可以声明抛出异常
 
 Java5提供了Future接口来代表Callable接口里call()方法的返回值，并且为Future接口提供了一个实现类FutureTask，这个实现类既实现了Future接口，还实现了Runnable接口，因此可以作为Thread类的target。在Future接口里定义了几个公共方法来控制它关联的Callable任务。
 
