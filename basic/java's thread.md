@@ -583,8 +583,8 @@ public class Main {
 
 &emsp;&emsp;4) 调用FutureTask对象的get()方法来获得子线程执行结束后的返回值
 
-代码实例：
 
+````
 public class Main {
 
 　　public static void main(String[] args){
@@ -620,7 +620,40 @@ public class Main {
 　　}
 
 }
+````
 
----------------------
 
-本文来自 愿好 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/m0_37840000/article/details/79756932?utm_source=copy 
+### 使用线程池例如用Executor框架
+
+&emsp;&emsp;1.5后引入的Executor框架的最大优点是把任务的提交和执行解耦。要执行任务的人只需把Task描述清楚，然后提交即可。这个Task是怎么被执行的，被谁执行的，什么时候执行的，提交的人就不用关心了。具体点讲，提交一个Callable对象给ExecutorService（如最常用的线程池ThreadPoolExecutor），将得到一个Future对象，调用Future对象的get方法等待执行结果就好了。Executor框架的内部使用了线程池机制，它在java.util.cocurrent 包下，通过该框架来控制线程的启动、执行和关闭，可以简化并发编程的操作。因此，在Java 5之后，通过Executor来启动线程比使用Thread的start方法更好，除了更易管理，效率更好（用线程池实现，节约开销）外，还有关键的一点：有助于避免this逃逸问题——如果我们在构造器中启动一个线程，因为另一个任务可能会在构造器结束之前开始执行，此时可能会访问到初始化了一半的对象用Executor在构造器中。
+
+&emsp;&emsp;Executor框架包括：线程池，Executor，Executors，ExecutorService，CompletionService，Future，Callable等。
+
+&emsp;&emsp;Executor接口中之定义了一个方法execute（Runnable command），该方法接收一个Runable实例，它用来执行一个任务，任务即一个实现了Runnable接口的类。ExecutorService接口继承自Executor接口，它提供了更丰富的实现多线程的方法，比如，ExecutorService提供了关闭自己的方法，以及可为跟踪一个或多个异步任务执行状况而生成 Future 的方法。 可以调用ExecutorService的shutdown（）方法来平滑地关闭 ExecutorService，调用该方法后，将导致ExecutorService停止接受任何新的任务且等待已经提交的任务执行完成(已经提交的任务会分两类：一类是已经在执行的，另一类是还没有开始执行的)，当所有已经提交的任务执行完毕后将会关闭ExecutorService。因此我们一般用该接口来实现和管理多线程。
+
+&emsp;&emsp;ExecutorService的生命周期包括三种状态：运行、关闭、终止。创建后便进入运行状态，当调用了shutdown（）方法时，便进入关闭状态，此时意味着ExecutorService不再接受新的任务，但它还在执行已经提交了的任务，当素有已经提交了的任务执行完后，便到达终止状态。如果不调用shutdown（）方法，ExecutorService会一直处在运行状态，不断接收新的任务，执行新的任务，服务器端一般不需要关闭它，保持一直运行即可。
+
+&emsp;&emsp;Executors提供了一系列工厂方法用于创先线程池，返回的线程池都实现了ExecutorService接口。   
+
+````
+    public static ExecutorService newFixedThreadPool(int nThreads)
+
+    创建固定数目线程的线程池。
+
+    public static ExecutorService newCachedThreadPool()
+
+    创建一个可缓存的线程池，调用execute将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线   程并添加到池中。终止并从缓存中移除那些已有 60 秒钟未被使用的线程。
+
+    public static ExecutorService newSingleThreadExecutor()
+
+    创建一个单线程化的Executor。
+
+    public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize)
+
+    创建一个支持定时及周期性的任务执行的线程池，多数情况下可用来替代Timer类。
+
+ 
+
+    这四种方法都是用的Executors中的ThreadFactory建立的线程，下面就以上四个方法做个比较
+````
+
