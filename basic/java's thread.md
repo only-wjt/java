@@ -1290,8 +1290,8 @@ workQueue：任务执行前保存任务的队列，仅保存由execute方法提�
 ![线程中断方法](https://www.github.com/only-wjt/images/raw/master/小书匠/线程中断方法.png)
 
 ##### interrupt() 
-interrupt方法用于中断线程。调用该方法的线程的状态为将被置为"中断"状态。
-注意：线程中断仅仅是置线程的中断状态位，不会停止线程。需要用户自己去监视线程的状态为并做处理。支持线程中断的方法（也就是线程中断后会抛出interruptedException的方法）就是在监视线程的中断状态，一旦线程的中断状态被置为“中断状态”，就会抛出中断异常。
+&emsp;&emsp;interrupt方法用于中断线程。调用该方法的线程的状态为将被置为"中断"状态。
+&emsp;&emsp;注意：线程中断仅仅是置线程的中断状态位，不会停止线程。需要用户自己去监视线程的状态为并做处理。支持线程中断的方法（也就是线程中断后会抛出interruptedException的方法）就是在监视线程的中断状态，一旦线程的中断状态被置为“中断状态”，就会抛出中断异常。
 ##### interrupted()
 
 ````
@@ -1301,7 +1301,8 @@ interrupt方法用于中断线程。调用该方法的线程的状态为将被�
     }
 ````
 
-该方法就是直接调用当前线程的isInterrupted(true)的方法。静态方法interrupted会将当前线程的中断状态清除，但这个方法的命名极不直观，很容易造成误解，需要特别注意。
+&emsp;&emsp;该方法就是直接调用当前线程的isInterrupted(true)的方法。静态方法interrupted会将当前线程的中断状态清除，但这个方法的命名极不直观，很容易造成误解，需要特别注意。
+
 ##### isInterrupted()
 
 ````
@@ -1312,14 +1313,18 @@ interrupt方法用于中断线程。调用该方法的线程的状态为将被�
     private native boolean isInterrupted(boolean flag);
 ````	
 
-该方法却直接调用当前线程的native isInterrupted(false)的方法，不清除中断状态。
+&emsp;&emsp;该方法却直接调用当前线程的native isInterrupted(false)的方法，不清除中断状态。
 
-因此interrupted()和isInterrupted()这两个方法主要区别：这两个方法最终都会调用同一个方法-----isInterrupted( Boolean 参数)（重载方法,是私有的native方法），只不过参数固定为一个是true，一个是false；
+&emsp;&emsp;因此interrupted()和isInterrupted()这两个方法主要区别：这两个方法最终都会调用同一个方法-----isInterrupted( Boolean 参数)（重载方法,是私有的native方法），只不过参数固定为一个是true，一个是false；
 
-由于第二个区别主要体现在调用的方法的参数上，让我们来看一看这个参数是什么含义：
-先来看一看被调用的方法 isInterrupted(boolean arg)（Thread类中重载的方法）的定义：
+&emsp;&emsp;由于第二个区别主要体现在调用的方法的参数上，让我们来看一看这个参数是什么含义：
+&emsp;&emsp;先来看一看被调用的方法 isInterrupted(boolean arg)（Thread类中重载的方法）的定义：
 
+````
 private native boolean isInterrupted( boolean flag);
-这个本地方法，看不到源码。作用是要清除状态位。如果这个参数为true，说明返回线程的状态位后，要清掉原来的状态位（恢复成原来情况）。这个参数为false，就是直接返回线程的状态位。
+
+````
+
+&emsp;&emsp;&emsp;&emsp;这个本地方法，看不到源码。作用是要清除状态位。如果这个参数为true，说明返回线程的状态位后，要清掉原来的状态位（恢复成原来情况）。这个参数为false，就是直接返回线程的状态位。
 
 这两个方法很好区分，只有当前线程才能清除自己的中断位（对应interrupted()方法）
