@@ -684,7 +684,7 @@ public class TestCachedThreadPool{
     }   
 }   
   
-  //相当于runable中的run()
+  //相当于runable中的run()，此处在main函数中进行new对象操作
 class TestRunnable implements Runnable{   
     public void run(){   
         System.out.println(Thread.currentThread().getName() + "线程被调用了。");   
