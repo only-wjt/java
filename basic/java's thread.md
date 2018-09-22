@@ -1531,3 +1531,64 @@ false
 ![图2](https://www.github.com/only-wjt/images/raw/master/小书匠/图2.png)
 
 
+##### 处于非阻塞状态的线程需要我们手动进行中断检测并结束程序--示例
+
+````
+package com.dxz.synchronize;
+
+import java.util.concurrent.TimeUnit;
+
+public class InterruputThread {
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    // 判断当前线程是否被中断
+                    if (this.isInterrupted()) {
+                        System.out.println("线程中断");
+                        break;
+                    }
+                }
+
+                System.out.println("已跳出循环,线程中断!");
+            }
+        };
+        t1.start();
+        TimeUnit.SECONDS.sleep(2);
+        t1.interrupt();
+    }
+}
+````
+
+&emsp;&emsp;结果：
+
+````
+线程中断
+已跳出循环,线程中断!
+````
+
+##### 类库中的有些类的方法也可能会调用中断
+&emsp;&emsp;此外，类库中的有些类的方法也可能会调用中断，如FutureTask中的cancel方法，如果传入的参数为true，它将会在正在运行异步任务的线程上调用interrupt方法，如果正在执行的异步任务中的代码没有对中断做出响应，那么cancel方法中的参数将不会起到什么效果；又如ThreadPoolExecutor中的shutdownNow方法会遍历线程池中的工作线程并调用线程的interrupt方法来中断线程，所以如果工作线程中正在执行的任务没有对中断做出响应，任务将一直执行直到正常结束。
+
+### 线程被中断的检测（判断）
+&emsp;&emsp;判断某个线程是否已被发送过中断请求，请使用Thread.currentThread().isInterrupted()方法（因为它将线程中断标示位设置为true后，不会立刻清除中断标示位，即不会将中断标设置为false），而不要使用thread.interrupted()（该方法调用后会将中断标示位清除，即重新设置为false）方法来判断，下面是线程在循环中时的中断方式：
+
+````
+while(!Thread.currentThread().isInterrupted() && more work to do){
+do more work
+}
+````
+
+### 处理时机
+&emsp;&emsp;显然，作为一种协作机制，不会强求被中断线程一定要在某个点进行处理。实际上，被中断线程只需在合适的时候处理即可，如果没有合适的时间点，甚至可以不处理，这时候在任务处理层面，就跟没有调用中断方法一样。“合适的时候”与线程正在处理的业务逻辑紧密相关，例如，每次迭代的时候，进入一个可能阻塞且无法中断的方法之前等，但多半不会出现在某个临界区更新另一个对象状态的时候，因为这可能会导致对象处于不一致状态。
+&emsp;&emsp;处理时机决定着程序的效率与中断响应的灵敏性。频繁的检查中断状态可能会使程序执行效率下降，相反，检查的较少可能使中断请求得不到及时响应。如果发出中断请求之后，被中断的线程继续执行一段时间不会给系统带来灾难，那么就可以将中断处理放到方便检查中断，同时又能从一定程度上保证响应灵敏度的地方。当程序的性能指标比较关键时，可能需要建立一个测试模型来分析最佳的中断检测点，以平衡性能和响应灵敏性。
+
+###  中断的响应
+&emsp;&emsp;程序里发现中断后该怎么响应？这就得视实际情况而定了。有些程序可能一检测到中断就立马将线程终止，有些可能是退出当前执行的任务，继续执行下一个任务……作为一种协作机制，这要与中断方协商好，当调用interrupt会发生些什么都是事先知道的，如做一些事务回滚操作，一些清理工作，一些补偿操作等。若不确定调用某个线程的interrupt后该线程会做出什么样的响应，那就不应当中断该线程。
+
+### Thread.interrupt VS Thread.stop
+&emsp;&emsp;Thread.stop方法已经不推荐使用了。而在某些方面Thread.stop与中断机制有着相似之处。如当线程在等待内置锁或IO时，stop跟interrupt一样，不会中止这些操作；当catch住stop导致的异常时，程序也可以继续执行，虽然stop本意是要停止线程，这么做会让程序行为变得更加混乱。
+&emsp;&emsp;那么它们的区别在哪里？最重要的就是中断需要程序自己去检测然后做相应的处理，而Thread.stop会直接在代码执行过程中抛出ThreadDeath错误，这是一个java.lang.Error的子类。
+
+
