@@ -598,6 +598,8 @@ private String flag[] = {"true"};
                 flag[0] = "false";
                 flag.notify();
             }
+			
+			
              synchronized (flag) { 
                 System.out.println(getName() +  "  flag:" + flag);
                 while (!flag[0].equals("false")) {
