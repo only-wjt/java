@@ -556,7 +556,7 @@ public class Main {
 
 &emsp;&emsp;和Runnable接口不一样，Callable接口提供了一个call（）方法作为线程执行体，call()方法比run()方法功能要强大。
 
-&emsp;&emsp;1call()方法可以有返回值
+&emsp;&emsp;1) call()方法可以有返回值
 
 &emsp;&emsp;2) call()方法可以声明抛出异常
 
