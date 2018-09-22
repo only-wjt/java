@@ -1526,5 +1526,8 @@ false
 
 ![图1](https://www.github.com/only-wjt/images/raw/master/小书匠/图1.png)
 
+&emsp;&emsp;可以看到T线程在主线程结束了，还在运行。
+
 ![图2](https://www.github.com/only-wjt/images/raw/master/小书匠/图2.png)
+
 
