@@ -1524,5 +1524,7 @@ public class ThreadDemo3B  {
 false
 ````
 
+![图1](https://www.github.com/only-wjt/images/raw/master/小书匠/图1.png)
 
+![图2](https://www.github.com/only-wjt/images/raw/master/小书匠/图2.png)
 
