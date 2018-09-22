@@ -480,3 +480,4 @@ public final void setPriority(int i)
 &emsp;&emsp;下面让我们分别来看看这四种创建线程的方法。
 
  
+### 继承Thread类
