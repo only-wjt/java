@@ -1286,3 +1286,5 @@ workQueue：任务执行前保存任务的队列，仅保存由execute方法提�
 
 #### java.lang.Thread类提供了几个方法来操作这个中断状态：
 
+
+![线程中断方法](https://www.github.com/only-wjt/images/raw/master/小书匠/线程中断方法.png)
