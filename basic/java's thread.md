@@ -598,7 +598,6 @@ private String flag[] = {"true"};
                 flag[0] = "false";
                 flag.notify();
             }
-复制代码
              synchronized (flag) { 
                 System.out.println(getName() +  "  flag:" + flag);
                 while (!flag[0].equals("false")) {
