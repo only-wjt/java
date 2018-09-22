@@ -757,7 +757,7 @@ public class NotifyTest3 {
 复制代码
 结果：
 
-复制代码
+````
 Main Thread Run!
 waiter01  flag:[Ljava.lang.String;@584aceca
 waiter01  flag:[Ljava.lang.String;@584aceca
@@ -777,6 +777,7 @@ waiter02 end waiting!
 wait time :3001
 waiter01 end waiting!
 waiter01 end waiting!
+````
 
 
 ## 线程的优先级
