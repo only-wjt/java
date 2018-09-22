@@ -552,7 +552,7 @@ public class Main {
 }
 ````
 
-------------------------使用Callable和Future创建线程---------------------
+### 使用Callable和Future创建线程
 
 和Runnable接口不一样，Callable接口提供了一个call（）方法作为线程执行体，call()方法比run()方法功能要强大。
 
