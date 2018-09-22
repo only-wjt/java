@@ -757,19 +757,13 @@ class TaskWithResult implements Callable<String>{
 } 
 ````
 
--从结果中可以同样可以看出，submit也是首先选择空闲线程来执行任务，如果没有，才会创建新的线程来执行任务。另外，需要注意：如果Future的返回尚未完成，则get（）方法会阻塞等待，直到Future完成返回，可以通过调用isDone（）方法判断Future是否完成了返回。
-
- 
-
- 
-
- 
-
-自定义线程池
-    自定义线程池，可以用ThreadPoolExecutor类创建，它有多个构造方法来创建线程池，用该类很容易实现自定义的线程池，这里先贴上示例程序：
-] view plai
+&emsp;&emsp;从结果中可以同样可以看出，submit也是首先选择空闲线程来执行任务，如果没有，才会创建新的线程来执行任务。另外，需要注意：如果Future的返回尚未完成，则get（）方法会阻塞等待，直到Future完成返回，可以通过调用isDone（）方法判断Future是否完成了返回。
 
 
+#### 自定义线程池
+&emsp;&emsp;自定义线程池，可以用ThreadPoolExecutor类创建，它有多个构造方法来创建线程池，用该类很容易实现自定义的线程池，这里先贴上示例程序：
+
+````
 import java.util.concurrent.ArrayBlockingQueue;   
 import java.util.concurrent.BlockingQueue;   
 import java.util.concurrent.ThreadPoolExecutor;   
@@ -812,12 +806,13 @@ class MyThread implements Runnable{
             e.printStackTrace();   
         }   
     }   
-}  
+}
+````
 
-从结果中可以看出，七个任务是在线程池的三个线程上执行的。这里简要说明下用到的ThreadPoolExecuror类的构造方法中各个参数的含义。   
+&emsp;&emsp;从结果中可以看出，七个任务是在线程池的三个线程上执行的。这里简要说明下用到的ThreadPoolExecuror类的构造方法中各个参数的含义。   
 
  
-
+````
 public ThreadPoolExecutor (int corePoolSize, int maximumPoolSize, long         keepAliveTime, TimeUnit unit,BlockingQueue<Runnable> workQueue)
  
 
@@ -830,33 +825,22 @@ keepAliveTime：当线程数大于核心数时，该参数为所有的任务终�
 unit：等待时间的单位。
 
 workQueue：任务执行前保存任务的队列，仅保存由execute方法提交的Runnable任务。
+````
 
 
+### 四种创建线程方法对比
 
----------------------
+&emsp;&emsp;实现Runnable和实现Callable接口的方式基本相同，不过是后者执行call()方法有返回值，后者线程执行体run()方法无返回值，因此可以把这两种方式归为一种这种方式与继承Thread类的方法之间的差别如下：
 
-本文来自 愿好 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/m0_37840000/article/details/79756932?utm_source=copy 
+&emsp;&emsp;1、线程只是实现Runnable或实现Callable接口，还可以继承其他类。
 
+&emsp;&emsp;2、这种方式下，多个线程可以共享一个target对象，非常适合多线程处理同一份资源的情形。
 
+&emsp;&emsp;3、但是编程稍微复杂，如果需要访问当前线程，必须调用Thread.currentThread()方法。
 
+&emsp;&emsp;4、继承Thread类的线程类不能再继承其他父类（Java单继承决定）。
 
+&emsp;&emsp;5、前三种的线程如果创建关闭频繁会消耗系统资源影响性能，而使用线程池可以不用线程的时候放回线程池，用的时候再从线程池取，项目开发中主要使用线程池
 
-四种创建线程方法对比--------------------------------------
+&emsp;&emsp;注：在前三种中一般推荐采用实现接口的方式来创建多线程
 
-实现Runnable和实现Callable接口的方式基本相同，不过是后者执行call()方法有返回值，后者线程执行体run()方法无返回值，因此可以把这两种方式归为一种这种方式与继承Thread类的方法之间的差别如下：
-
-1、线程只是实现Runnable或实现Callable接口，还可以继承其他类。
-
-2、这种方式下，多个线程可以共享一个target对象，非常适合多线程处理同一份资源的情形。
-
-3、但是编程稍微复杂，如果需要访问当前线程，必须调用Thread.currentThread()方法。
-
-4、继承Thread类的线程类不能再继承其他父类（Java单继承决定）。
-
-5、前三种的线程如果创建关闭频繁会消耗系统资源影响性能，而使用线程池可以不用线程的时候放回线程池，用的时候再从线程池取，项目开发中主要使用线程池
-
-注：在前三种中一般推荐采用实现接口的方式来创建多线程
-
----------------------
-
-本文来自 愿好 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/m0_37840000/article/details/79756932?utm_source=copy 
