@@ -467,17 +467,16 @@ public final void setPriority(int i)
 
 ## 线程的创建方法
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Java使用Thread类代表线程，所有的线程对象都必须是Thread类或其子类的实例。Java可以用四种方式来创建线程，如下所示：
+&emsp;&emsp;&emsp;&emsp;Java使用Thread类代表线程，所有的线程对象都必须是Thread类或其子类的实例。Java可以用四种方式来创建线程，如下所示：
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1）继承Thread类创建线程
+&emsp;&emsp;1）继承Thread类创建线程
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;2）实现Runnable接口创建线程
+&emsp;&emsp;2）实现Runnable接口创建线程
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;3）使用Callable和Future创建线程
+&emsp;&emsp;3）使用Callable和Future创建线程
 
-&emsp;&emsp;&emsp;&emsp;4）使用线程池例如用Executor框架
+&emsp;&emsp;4）使用线程池例如用Executor框架
 
 &emsp;&emsp;下面让我们分别来看看这四种创建线程的方法。
 
  
-
