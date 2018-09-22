@@ -484,7 +484,7 @@ public final void setPriority(int i)
 
 &emsp;&emsp;通过继承Thread类来创建并启动多线程的一般步骤如下
 
-&emsp;&emsp;1)定义Thread类的子类，并重写该类的run()方法，该方法的方法体就是线程需要完成的任务，run()方法也称为线程执行体。
+&emsp;&emsp;1)定义Thread类的子类，`并重写该类的run()方法，`该方法的方法体就是线程需要完成的任务，`run()方法也称为线程执行体。`
 
 &emsp;&emsp;2)创建Thread子类的实例，也就是创建了线程对象
 
