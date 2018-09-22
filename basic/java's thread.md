@@ -1327,4 +1327,202 @@ private native boolean isInterrupted( boolean flag);
 
 &emsp;&emsp;&emsp;&emsp;这个本地方法，看不到源码。作用是要清除状态位。如果这个参数为true，说明返回线程的状态位后，要清掉原来的状态位（恢复成原来情况）。这个参数为false，就是直接返回线程的状态位。
 
-这两个方法很好区分，只有当前线程才能清除自己的中断位（对应interrupted()方法）
+&emsp;&emsp;这两个方法很好区分，只有当前线程才能清除自己的中断位（对应interrupted()方法）
+
+
+#### 中断方法
+
+##### interrupt()
+&emsp;&emsp;interrupt()只是改变中断状态而已，interrupt()不会中断（不是停止线程）一个正在运行的线程。这一方法实际上完成的是，给线程抛出一个中断信号， 这样受阻线程就得以退出阻塞的状态（不会停止线程。需要用户自己去监视线程的状态为并做处理）。更确切的说，如果线程被Object.wait, Thread.join和Thread.sleep三种方法之一阻塞，那么，它将接收到一个中断异常（InterruptedException），从而提早地终结被阻塞状态。
+
+&emsp;&emsp;如果线程是阻塞（Object.wait, Thread.join和Thread.sleep）的，则线程会自动检测中断，抛出中断异常（InterruptedException），给应用提供中断相宜的处理。
+&emsp;&emsp;如果线程没有被阻塞，则线程不会帮助我们检测中断，需要我们手动进行中断检测，在检测到中断后，应用可以做相应的处理（同上）。如2.2.1.4中示例
+&emsp;&emsp;或者可以简单总结一下中断两种情况：
+
+&emsp;&emsp;一种是当线程处于阻塞状态或者试图执行一个阻塞操作时，我们可以使用实例方法interrupt()进行线程中断，执行中断操作后将会抛出interruptException异常(该异常必须捕捉无法向外抛出)并将中断状态复位；
+&emsp;&emsp;另外一种是当线程处于运行状态时，我们也可调用实例方法interrupt()进行线程中断，但同时必须手动判断中断状态，并编写中断线程的代码(其实就是结束run方法体的代码)
+
+&emsp;&emsp;例如：
+&emsp;&emsp;线程A在执行sleep,wait,join时,线程B调用线程A的interrupt方法,的确这一个时候A会有InterruptedException 异常抛出来。 但这其实是在sleep,wait,join这些方法内部会不断检查中断状态的值,而自己抛出的InterruptedException。
+&emsp;&emsp;如果线程A正在执行一些指定的操作时如赋值,for,while,if,调用方法等,都不会去检查中断状态,所以线程A不会抛出 InterruptedException,而会一直执行着自己的操作。当线程A终于执行到wait(),sleep(),join()时,才马上会抛出 InterruptedException.
+&emsp;&emsp;若没有调用sleep(),wait(),join()这些方法,即没有在线程里自己检查中断状态自己抛出InterruptedException的话,那InterruptedException是不会被抛出来的。
+
+&emsp;&emsp;注意1:当线程A执行到wait(),sleep(),join()时,抛出InterruptedException后，中断状态已经被系统复位了，线程A调用Thread.interrupted()返回的是false。
+
+##### sleep() & interrupt()示例
+
+&emsp;&emsp;线程A正在使用sleep()暂停着: Thread.sleep(100000);
+&emsp;&emsp;如果要取消他的等待状态,可以在正在执行的线程里(比如这里是B)调用。
+
+&emsp;&emsp;a.interrupt();
+
+&emsp;&emsp;令线程A放弃睡眠操作,这里a是线程A对应到的Thread实例
+&emsp;&emsp;当在sleep中时 线程被调用interrupt()时,就马上会放弃暂停的状态.并抛出InterruptedException.丢出异常的,是A线程。
+
+````
+package com.dxz.interrupt;
+
+
+public class ThreadDemo1A extends Thread {
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("线程a开始工作");
+            sleep(30000);
+        } catch (InterruptedException e) {
+            System.out.println(this.isInterrupted());
+        }
+    }
+}
+
+
+package com.dxz.interrupt;
+
+import java.util.concurrent.TimeUnit;
+
+public class ThreadDemo1B {
+
+    public static void main(String[] args) throws InterruptedException {
+        ThreadDemo1A threada = new ThreadDemo1A();
+        threada.start();
+        TimeUnit.SECONDS.sleep(3);
+        System.out.println("开始中断线程a");
+        threada.interrupt();
+    }
+}
+````
+
+结果：
+
+````
+线程a开始工作
+开始中断线程a
+false
+````
+
+##### wait() & interrupt()示例
+
+&emsp;&emsp;线程A调用了wait()进入了等待状态,也可以用interrupt()取消。
+&emsp;&emsp;不过这时候要小心锁定的问题.线程在进入等待区,会把锁定解除,当对等待中的线程调用interrupt()时,会先重新获取锁定,再抛出异常。在获取锁定之前,是无法抛出异常的。
+
+````
+package com.dxz.interrupt;
+
+public class ThreadDemo2A extends Thread {
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("线程a开始工作");
+            synchronized (this) {
+                wait(30000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(this.isInterrupted());
+        }
+    }
+}
+
+package com.dxz.interrupt;
+
+import java.util.concurrent.TimeUnit;
+
+public class ThreadDemo2B {
+
+    public static void main(String[] args) throws InterruptedException {
+        ThreadDemo2A threada = new ThreadDemo2A();
+        threada.start();
+        TimeUnit.SECONDS.sleep(3);
+        System.out.println("开始中断线程a");
+        threada.interrupt();
+    }
+}
+````
+
+&emsp;&emsp;结果：
+
+````
+线程a开始工作
+开始中断线程a
+false
+````
+
+##### join() & interrupt()示例
+
+&emsp;&emsp;当线程以join()等待其他线程结束时,当它被调用interrupt()，它与sleep()时一样, 会马上跳到catch块里。注意，是对谁调用interrupt()方法,一定是调用被阻塞线程的interrupt方法.如在线程a中调用来线程t.join()，
+则a会等t执行完后在执行t.join后的代码,当在线程b中调用a.interrupt()方法,则会抛出InterruptedException，当然线程t的join()也就被取消了。线程t还会继续运行下去。
+
+````
+package com.dxz.interrupt;
+
+public class T extends Thread {
+
+    public T(String s) {
+        super(s);
+    }
+    
+    @Override
+    public void run() {
+        System.out.println("线程t开始进入死循环");
+        for(;;);
+    }
+}
+
+package com.dxz.interrupt;
+
+
+public class ThreadDemo3A extends Thread {
+
+    public ThreadDemo3A(String s) {
+        super(s);
+    }
+    @Override
+    public void run() {
+        try {
+            System.out.println("线程a等待线程t执行");
+            T t = new T("demo3t");
+            t.start();
+            t.join();
+            System.out.println("线程a中的线程t已经结束");
+        } catch (InterruptedException e) {
+            System.out.println(this.isInterrupted());
+        }
+    }
+
+}
+package com.dxz.interrupt;
+
+import java.util.concurrent.TimeUnit;
+
+public class ThreadDemo3B  {
+
+    public static void main(String[] args) {
+        ThreadDemo3A threada = new ThreadDemo3A("demo3a");
+        threada.start();
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("开始中断线程a");
+        threada.interrupt();
+        System.out.println("--------");
+    }
+    
+}
+````
+
+&emsp;&emsp;结果：
+
+````
+线程a等待线程t执行
+线程t开始进入死循环
+开始中断线程a
+
+false
+````
+
+
+
