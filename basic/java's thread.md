@@ -481,3 +481,145 @@ public final void setPriority(int i)
 
  
 ### 继承Thread类
+
+通过继承Thread类来创建并启动多线程的一般步骤如下
+
+1)d定义Thread类的子类，并重写该类的run()方法，该方法的方法体就是线程需要完成的任务，run()方法也称为线程执行体。
+
+2)创建Thread子类的实例，也就是创建了线程对象
+
+3)启动线程，即调用线程的start()方法
+
+代码实例
+
+public class MyThread extends Thread{//继承Thread类
+
+　　public void run(){
+
+　　//重写run方法
+
+　　}
+
+}
+
+public class Main {
+
+　　public static void main(String[] args){
+
+　　　　new MyThread().start();//创建并启动线程
+
+　　}
+
+}
+
+------------------------实现Runnable接口创建线程---------------------
+
+通过实现Runnable接口创建并启动线程一般步骤如下：
+
+1】定义Runnable接口的实现类，一样要重写run()方法，这个run（）方法和Thread中的run()方法一样是线程的执行体
+
+2】创建Runnable实现类的实例，并用这个实例作为Thread的target来创建Thread对象，这个Thread对象才是真正的线程对象
+
+3】第三部依然是通过调用线程对象的start()方法来启动线程
+
+代码实例：
+
+public class MyThread2 implements Runnable {//实现Runnable接口
+
+　　public void run(){
+
+　　//重写run方法
+
+　　}
+
+}
+
+public class Main {
+
+　　public static void main(String[] args){
+
+　　　　//创建并启动线程
+
+　　　　MyThread2 myThread=new MyThread2();
+
+　　　　Thread thread=new Thread(myThread);
+
+　　　　thread().start();
+
+　　　　//或者    new Thread(new MyThread2()).start();
+
+　　}
+
+}
+
+------------------------使用Callable和Future创建线程---------------------
+
+和Runnable接口不一样，Callable接口提供了一个call（）方法作为线程执行体，call()方法比run()方法功能要强大。
+
+》call()方法可以有返回值
+
+》call()方法可以声明抛出异常
+
+Java5提供了Future接口来代表Callable接口里call()方法的返回值，并且为Future接口提供了一个实现类FutureTask，这个实现类既实现了Future接口，还实现了Runnable接口，因此可以作为Thread类的target。在Future接口里定义了几个公共方法来控制它关联的Callable任务。
+
+>boolean cancel(boolean mayInterruptIfRunning)：视图取消该Future里面关联的Callable任务
+
+>V get()：返回Callable里call（）方法的返回值，调用这个方法会导致程序阻塞，必须等到子线程结束后才会得到返回值
+
+>V get(long timeout,TimeUnit unit)：返回Callable里call（）方法的返回值，最多阻塞timeout时间，经过指定时间没有返回抛出TimeoutException
+
+>boolean isDone()：若Callable任务完成，返回True
+
+>boolean isCancelled()：如果在Callable任务正常完成前被取消，返回True
+
+介绍了相关的概念之后，创建并启动有返回值的线程的步骤如下：
+
+1】创建Callable接口的实现类，并实现call()方法，然后创建该实现类的实例（从java8开始可以直接使用Lambda表达式创建Callable对象）。
+
+2】使用FutureTask类来包装Callable对象，该FutureTask对象封装了Callable对象的call()方法的返回值
+
+3】使用FutureTask对象作为Thread对象的target创建并启动线程（因为FutureTask实现了Runnable接口）
+
+4】调用FutureTask对象的get()方法来获得子线程执行结束后的返回值
+
+代码实例：
+
+public class Main {
+
+　　public static void main(String[] args){
+
+　　　MyThread3 th=new MyThread3();
+
+　　　//使用Lambda表达式创建Callable对象
+
+　　   //使用FutureTask类来包装Callable对象
+
+　　　FutureTask<Integer> future=new FutureTask<Integer>(
+
+　　　　(Callable<Integer>)()->{
+
+　　　　　　return 5;
+
+　　　　}
+
+　　  );
+
+　　　new Thread(task,"有返回值的线程").start();//实质上还是以Callable对象来创建并启动线程
+
+　　  try{
+
+　　　　System.out.println("子线程的返回值："+future.get());//get()方法会阻塞，直到子线程执行结束才返回
+
+ 　　 }catch(Exception e){
+
+　　　　ex.printStackTrace();
+
+　　　}
+
+　　}
+
+}
+
+---------------------
+
+本文来自 愿好 的CSDN 博客 ，全文地址请点击：https://blog.csdn.net/m0_37840000/article/details/79756932?utm_source=copy 
