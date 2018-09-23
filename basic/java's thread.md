@@ -1352,11 +1352,7 @@ private native boolean isInterrupted( boolean flag);
 ##### sleep() & interrupt()示例
 
 &emsp;&emsp;线程A正在使用sleep()暂停着: Thread.sleep(100000);
-&emsp;&emsp;如果要取消他的等待状态,可以在正在执行的线程里(比如这里是B)调用。
-
-&emsp;&emsp;a.interrupt();
-
-&emsp;&emsp;令线程A放弃睡眠操作,这里a是线程A对应到的Thread实例
+&emsp;&emsp;如果要取消他的等待状态,可以在正在执行的线程里(比如这里是B)调用a.interrupt()令线程A放弃睡眠操作,这里a是线程A对应到的Thread实例
 &emsp;&emsp;当在sleep中时 线程被调用interrupt()时,就马上会放弃暂停的状态.并抛出InterruptedException.丢出异常的,是A线程。
 
 ````
