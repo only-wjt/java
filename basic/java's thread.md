@@ -1587,3 +1587,6 @@ do more work
 &emsp;&emsp;那么它们的区别在哪里？最重要的就是中断需要程序自己去检测然后做相应的处理，而Thread.stop会直接在代码执行过程中抛出ThreadDeath错误，这是一个java.lang.Error的子类。
 
 
+## ~~线程之stop()~~
+
+
