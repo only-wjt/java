@@ -2109,9 +2109,10 @@ synchronized void {
 ````
 &emsp;&emsp;想一想，如果一个正在sleep的线程，在调用interrupt后，会如何？wait方法检查到isInterrupted()为true，抛出异常， 而你又没有处理。而一个抛出了InterruptedException的线程的状态马上就会被置为非中断状态，如果catch语句没有处理异常，则下一 次循环中isInterrupted()为false，线程会继续执行，可能你N次抛出异常，也无法让线程停止。
 这个错误情况的实例代码
+
 ThreadA
 
-
+````
 public class ThreadA extends Thread {
    int count=0;
    public void run(){
@@ -2129,9 +2130,11 @@ public class ThreadA extends Thread {
        System.out.println(getName()+"已经终止!");
    }
 }
+````
 
 ThreadDemo
 
+````
 public class ThreadDemo {
     
     public static void main(String argv[])throws InterruptedException{
@@ -2145,9 +2148,9 @@ public class ThreadDemo {
     }
 
 }
+````
 
-
-　那么如何能确保线程真正停止？在线程同步的时候我们有一个叫“二次惰性检测”(double check)，能在提高效率的基础上又确保线程真正中同步控制中。那么我把线程正确退出的方法称为“双重安全退出”，即不以isInterrupted ()为循环条件。而以一个标记作为循环条件：
+&emsp;&emsp;那么如何能确保线程真正停止？在线程同步的时候我们有一个叫“二次惰性检测”(double check)，能在提高效率的基础上又确保线程真正中同步控制中。那么我把线程正确退出的方法称为“双重安全退出”，即不以isInterrupted ()为循环条件。而以一个标记作为循环条件：
 正确的ThreadA代码是:
 
  
