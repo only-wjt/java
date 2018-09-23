@@ -1793,9 +1793,9 @@ public class ThreadFlag extends Thread
 } 
 ````
 
-在上面代码中定义了一个退出标志exit，当exit为true时，while循环退出，exit的默认值为false.在定义exit时，使用了一个Java关键字volatile，这个关键字的目的是使exit同步，也就是说在同一时刻只能由一个线程来修改exit的值。
+&emsp;&emsp;在上面代码中定义了一个退出标志exit，当exit为true时，while循环退出，exit的默认值为false.在定义exit时，使用了一个Java关键字volatile，这个关键字的目的是使exit同步，也就是说在同一时刻只能由一个线程来修改exit的值。
 
-2、通过Thread.interrupt方法中断线程
+### 通过Thread.interrupt方法中断线程
 通常情况下，我们应该使用第一种方式来代替Thread.stop方法。然而以下几种方式应该使用Thread.interrupt方法来中断线程（该方法通常也会结合第一种方法使用）。
 一开始使用interrupt方法时，会有莫名奇妙的感觉：难道该方法有问题？
 API文档上说，该方法用于"Interrupts this thread"。请看下面的例子：
