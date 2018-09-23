@@ -1893,3 +1893,378 @@ public class TestThread2 implements Runnable {
 ````
 
 &emsp;&emsp;因为调用interrupt方法后，会设置线程的中断状态，所以，通过监视该状态来达到终止线程的目的。
+
+
+&emsp;&emsp;当外部线程对某线程调用了thread.interrupt()方法后，java语言的处理机制如下：
+
+如果该线程处在可中断状态下，（调用了xx.wait()，或者Selector.select(),Thread.sleep()等特定会发生阻塞的api），那么该线程会立即被唤醒，同时会受到一个InterruptedException，同时，如果是阻塞在io上，对应的资源会被关闭。如果该线程接下来不执行“Thread.interrupted()方法（不是interrupt），那么该线程处理任何io资源的时候，都会导致这些资源关闭。当然，解决的办法就是调用一下interrupted()，不过这里需要程序员自行根据代码的逻辑来设定，根据自己的需求确认是否可以直接忽略该中断，还是应该马上退出。
+
+&emsp;&emsp;如果该线程处在不可中断状态下，就是没有调用上述api，那么java只是设置一下该线程的interrupt状态，其他事情都不会发生，如果该线程之后会调用行数阻塞API，那到时候线程会马会上跳出，并抛出InterruptedException，接下来的事情就跟第一种状况一致了。如果不会调用阻塞API，那么这个线程就会一直执行下去。除非你就是要实现这样的线程，一般高性能的代码中肯定会有wait()，yield()之类出让cpu的函数，不会发生后者的情况。
+
+ 
+
+当线程处于非运行（Run）状态
+当线程处于下面的状况时，属于非运行状态：
+
+当sleep方法被调用。
+
+当wait方法被调用。
+
+当被I/O阻塞，可能是文件或者网络等等。
+
+当线程处于上述的状态时，使用前面介绍的方法就不可用了。这个时候，我们可以使用interrupt()来打破阻塞的情况，如：
+
+public void stop() {
+        Thread tmpBlinker = blinker;
+        blinker = null;
+        if (tmpBlinker != null) {
+           tmpBlinker.interrupt();
+        }
+    }
+当interrupt()被调用的时候，InterruptedException将被抛出，所以你可以再run方法中捕获这个异常，让线程安全退出：
+
+try {
+   ....
+   wait();
+} catch (InterruptedException iex) {
+   throw new RuntimeException("Interrupted",iex);
+}
+阻塞的I/O
+当线程被I/O阻塞的时候，调用interrupt()的情况是依赖与实际运行的平台的。在Solaris和Linux平台上将会抛出InterruptedIOException的异常，但是Windows上面不会有这种异常。所以，我们处理这种问题不能依靠于平台的实现。如：
+
+package com.cnblogs.gpcuster
+
+import java.net.*;
+import java.io.*;
+
+public abstract class InterruptibleReader extends Thread {
+
+    private Object lock = new Object( );
+    private InputStream is;
+    private boolean done;
+    private int buflen;
+    protected void processData(byte[] b, int n) { }
+
+    class ReaderClass extends Thread {
+
+        public void run( ) {
+            byte[] b = new byte[buflen];
+
+            while (!done) {
+                try {
+                    int n = is.read(b, 0, buflen);
+                    processData(b, n);
+                } catch (IOException ioe) {
+                    done = true;
+                }
+            }
+
+            synchronized(lock) {
+                lock.notify( );
+            }
+        }
+    }
+
+    public InterruptibleReader(InputStream is) {
+        this(is, 512);
+    }
+
+    public InterruptibleReader(InputStream is, int len) {
+        this.is = is;
+        buflen = len;
+    }
+
+    public void run( ) {
+        ReaderClass rc = new ReaderClass( );
+
+        synchronized(lock) {
+            rc.start( );
+            while (!done) {
+                try {
+                    lock.wait( );
+                } catch (InterruptedException ie) {
+                    done = true;
+                    rc.interrupt( );
+                    try {
+                        is.close( );
+                    } catch (IOException ioe) {}
+                }
+            }
+        }
+    }
+}
+ 
+
+另外，我们也可以使用InterruptibleChannel接口。 实现了InterruptibleChannel接口的类可以在阻塞的时候抛出ClosedByInterruptException。如：
+
+package com.cnblogs.gpcuster
+
+import java.io.BufferedReader;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.channels.Channels;
+
+public class InterruptInput {   
+    static BufferedReader in = new BufferedReader(
+            new InputStreamReader(
+            Channels.newInputStream(
+            (new FileInputStream(FileDescriptor.in)).getChannel())));
+    
+    public static void main(String args[]) {
+        try {
+            System.out.println("Enter lines of input (user ctrl+Z Enter to terminate):");
+            System.out.println("(Input thread will be interrupted in 10 sec.)");
+            // interrupt input in 10 sec
+            (new TimeOut()).start();
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                System.out.println("Read line:'"+line+"'");
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.toString()); // printStackTrace();
+        }
+    }
+    
+    public static class TimeOut extends Thread {
+        int sleepTime = 10000;
+        Thread threadToInterrupt = null;    
+        public TimeOut() {
+            // interrupt thread that creates this TimeOut.
+            threadToInterrupt = Thread.currentThread();
+            setDaemon(true);
+        }
+        
+        public void run() {
+            try {
+                sleep(10000); // wait 10 sec
+            } catch(InterruptedException ex) {/*ignore*/}
+            threadToInterrupt.interrupt();
+        }
+    }
+}
+这里还需要注意一点，当线程处于写文件的状态时，调用interrupt()不会中断线程。
+
+ 
+
+三、不提倡的stop()方法 
+臭名昭著的stop()停止线程的方法已不提倡使用了,原因是什么呢?
+　当在一个线程对象上调用stop()方法时，这个线程对象所运行的线程就会立即停止，并抛出特殊的ThreadDeath()异常。这里的“立即”因为太“立即”了，
+假如一个线程正在执行：
+
+synchronized void {
+ x = 3;
+ y = 4;
+}
+ 
+
+　　由于方法是同步的，多个线程访问时总能保证x,y被同时赋值，而如果一个线程正在执行到x = 3;时，被调用了 stop()方法，即使在同步块中，它也干脆地stop了，这样就产生了不完整的残废数据。而多线程编程中最最基础的条件要保证数据的完整性，所以请忘记 线程的stop方法，以后我们再也不要说“停止线程”了。
+
+　　 如何才能“结束”一个线程？
+
+interupt()中断线程
+
+一个线程从运行到真正的结束，应该有三个阶段：
+
+正常运行.
+处理结束前的工作,也就是准备结束.
+结束退出.
+那么如何让一个线程结束呢？既然不能调用stop，可用的只的interrupt()方法。但interrupt()方法只是改变了线程的运行状态，如何让它退出运行？对于一般逻辑，只要线程状态已经中断，我们就可以让它退出，这里我们定义一个线程类ThreadA,所以这样的语句可以保证线程在中断后就能结束运行：
+
+ while(!isInterrupted()){
+  正常逻辑
+ }
+
+,一个测试类,ThreadDemo
+　　这样ThreadDemo调用interrupt()方法，isInterrupted()为true，就会退出运行。但是如果线程正在执行wait,sleep,join方法，你调用interrupt()方法，这个逻辑就不完全了。
+我们可以这样处理:
+
+ public void run(){
+  
+  while(!isInterrupted()){
+   try{
+    正常工作
+   }catch(InterruptedException e){
+    //nothing
+   }
+  
+  }
+ } 
+}
+想一想，如果一个正在sleep的线程，在调用interrupt后，会如何？wait方法检查到isInterrupted()为true，抛出异常， 而你又没有处理。而一个抛出了InterruptedException的线程的状态马上就会被置为非中断状态，如果catch语句没有处理异常，则下一 次循环中isInterrupted()为false，线程会继续执行，可能你N次抛出异常，也无法让线程停止。
+这个错误情况的实例代码
+ThreadA
+
+
+public class ThreadA extends Thread {
+   int count=0;
+   public void run(){
+       System.out.println(getName()+"将要运行...");
+       while(!this.isInterrupted()){
+           System.out.println(getName()+"运行中"+count++);
+           try{
+               Thread.sleep(400);
+           }catch(InterruptedException e){
+               System.out.println(getName()+"从阻塞中退出...");
+               System.out.println("this.isInterrupted()="+this.isInterrupted());
+
+           }
+       }
+       System.out.println(getName()+"已经终止!");
+   }
+}
+
+ThreadDemo
+
+public class ThreadDemo {
+    
+    public static void main(String argv[])throws InterruptedException{
+        ThreadA ta=new ThreadA();
+        ta.setName("ThreadA");
+        ta.start();
+        Thread.sleep(2000);
+        System.out.println(ta.getName()+"正在被中断...");
+        ta.interrupt();
+        System.out.println("ta.isInterrupted()="+ta.isInterrupted());
+    }
+
+}
+
+
+　那么如何能确保线程真正停止？在线程同步的时候我们有一个叫“二次惰性检测”(double check)，能在提高效率的基础上又确保线程真正中同步控制中。那么我把线程正确退出的方法称为“双重安全退出”，即不以isInterrupted ()为循环条件。而以一个标记作为循环条件：
+正确的ThreadA代码是:
+
+ 
+
+public class ThreadA extends Thread {
+    private boolean isInterrupted=false;
+   int count=0;
+   
+   public void interrupt(){
+       isInterrupted = true;
+       super.interrupt();
+      }
+   
+   public void run(){
+       System.out.println(getName()+"将要运行...");
+       while(!isInterrupted){
+           System.out.println(getName()+"运行中"+count++);
+           try{
+               Thread.sleep(400);
+           }catch(InterruptedException e){
+               System.out.println(getName()+"从阻塞中退出...");
+               System.out.println("this.isInterrupted()="+this.isInterrupted());
+
+           }
+       }
+       System.out.println(getName()+"已经终止!");
+   }
+}
+
+ 
+
+    在java多线程编程中，线程的终止可以说是一个必然会遇到的操作。但是这样一个常见的操作其实并不是一个能够轻而易举实现的操作，而且在某些场景下情况会变得更复杂更棘手。
+
+        Java标准API中的Thread类提供了stop方法可以终止线程，但是很遗憾，这种方法不建议使用，原因是这种方式终止线程中断临界区代码执行，并会释放线程之前获取的监控器锁，这样势必引起某些对象状态的不一致（因为临界区代码一般是原子的，不会被干扰的），具体原因可以参考资料[1]。这样一来，就必须根据线程的特点使用不同的替代方案以终止线程。根据停止线程时线程执行状态的不同有如下停止线程的方法。
+
+1 处于运行状态的线程停止
+        处于运行状态的线程就是常见的处于一个循环中不断执行业务流程的线程，这样的线程需要通过设置停止变量的方式，在每次循环开始处判断变量是否改变为停止，以达到停止线程的目的，比如如下代码框架：
+
+ 
+
+private volatile Thread blinker;  
+public void stop() {  
+        blinker = null;  
+}  
+public void run() {  
+        Thread thisThread = Thread.currentThread();  
+        while (blinker == thisThread) {  
+            try {  
+                //业务流程  
+            } catch (Exception e){}  
+        }  
+}<span style="font-size:12px;">  
+</span>  
+ 
+
+ 
+
+ 
+
+        如果主线程调用该线程对象的stop方法，blinker对象被设置为null，则线程的下次循环中blinker！=thisThread，因而可以退出循环，并退出run方法而使线程结束。将引用变量blinker的类型前加上volatile关键字的目的是防止编译器对该变量存取时的优化，这种优化主要是缓存对变量的修改，这将使其他线程不会立刻看到修改后的blinker值，从而影响退出。此外，Java标准保证被volatile修饰的变量的读写都是原子的。
+
+        上述的Thread类型的blinker完全可以由更为简单的boolean类型变量代替。
+
+ 
+
+2 即将或正在处于非运行态的线程停止
+        线程的非运行状态常见的有如下两种情况：
+
+可中断等待：线程调用了sleep或wait方法，这些方法可抛出InterruptedException；
+
+Io阻塞：线程调用了IO的read操作或者socket的accept操作，处于阻塞状态。
+
+2.1 处于可中断等待线程的停止
+        如果线程调用了可中断等待方法，正处于等待状态，则可以通过调用Thread的interrupt方法让等待方法抛出InterruptedException异常，然后在循环外截获并处理异常，这样便跳出了线程run方法中的循环，以使线程顺利结束。
+
+        上述的stop方法中需要做的修改就是在设置停止变量之后调用interrupt方法：
+
+ 
+
+private volatile Thread blinker;  
+public void stop() {  
+        Thread tmp = blinker;  
+        blinker = null;  
+        if(tmp!=null){  
+            tmp.interrupt();  
+        }  
+}  
+ 
+
+ 
+
+         特别的，Thread对象的interrupt方法会设置线程的interruptedFlag，所以我们可以通过判断Thread对象的isInterrupted方法的返回值来判断是否应该继续run方法内的循环，从而代替线程中的volatile停止变量。这时的上述run方法的代码框架就变为如下：
+
+public void run() {  
+        while (!Thread.currentThread().isInterrupted()) {  
+            try {  
+                //业务流程  
+            } catch (Exception e){}  
+        }  
+}  
+ 
+
+        需要注意的是Thread对象的isInterrupted不会清除interrupted标记，但是Thread对象的interrupted方法（与interrupt方法区别）会清除该标记。
+
+2.2 处于IO阻塞状态线程的停止
+         Java中的输入输出流并没有类似于Interrupt的机制，但是Java的InterruptableChanel接口提供了这样的机制，任何实现了InterruptableChanel接口的类的IO阻塞都是可中断的，中断时抛出ClosedByInterruptedException，也是由Thread对象调用Interrupt方法完成中断调用。IO中断后将关闭通道。
+
+        以文件IO为例，构造一个可中断的文件输入流的代码如下：
+
+new InputStreamReader(  
+           Channels.newInputStream(  
+                   (new FileInputStream(FileDescriptor.in)).getChannel())));   
+         实现InterruptableChanel接口的类包括FileChannel,ServerSocketChannel, SocketChannel, Pipe.SinkChannel andPipe.SourceChannel，也就是说，原则上可以实现文件、Socket、管道的可中断IO阻塞操作。
+
+        虽然解除IO阻塞的方法还可以直接调用IO对象的Close方法，这也会抛出IO异常。但是InterruptableChanel机制能够使处于IO阻塞的线程能够有一个和处于中断等待的线程一致的线程停止方案。
+
+3 处于大数据IO读写中的线程停止
+         处于大数据IO读写中的线程实际上处于运行状态，而不是等待或阻塞状态，因此上面的interrupt机制不适用。线程处于IO读写中可以看成是线程运行中的一种特例。停止这样的线程的办法是强行close掉io输入输出流对象，使其抛出异常，进而使线程停止。
+
+        最好的建议是将大数据的IO读写操作放在循环中进行，这样可以在每次循环中都有线程停止的时机，这也就将问题转化为如何停止正在运行中的线程的问题了。
+
+4 在线程运行前停止线程
+         有时，线程中的run方法需要足够健壮以支持在线程实际运行前终止线程的情况。即在Thread创建后，到Thread的start方法调用前这段时间，调用自定义的stop方法也要奏效。从上述的停止处于等待状态线程的代码示例中，stop方法并不能终止运行前的线程，因为在Thread的start方法被调用前，调用interrupt方法并不会将Thread对象的中断状态置位，这样当run方法执行时，currentThread的isInterrupted方法返回false，线程将继续执行下去。
+
+         为了解决这个问题，不得不自己再额外创建一个volatile标志量，并将其加入run方法的最开头：
+
+public void run() {  
+        if (myThread == null) {  
+           return; // stopped before started.  
+        }  
+        while(!Thread.currentThread().isInterrupted()){  
+    //业务逻辑  
+        }  
+}  
+         还有一种解决方法，也可以在run中直接使用该自定义标志量，而不使用isInterrupted方法判断线程是否应该停止。这种方法的run代码框架实际上和停止运行时线程的一样。
