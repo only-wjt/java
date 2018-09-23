@@ -2151,10 +2151,10 @@ public class ThreadDemo {
 ````
 
 &emsp;&emsp;那么如何能确保线程真正停止？在线程同步的时候我们有一个叫“二次惰性检测”(double check)，能在提高效率的基础上又确保线程真正中同步控制中。那么我把线程正确退出的方法称为“双重安全退出”，即不以isInterrupted ()为循环条件。而以一个标记作为循环条件：
+
 正确的ThreadA代码是:
-
  
-
+````
 public class ThreadA extends Thread {
     private boolean isInterrupted=false;
    int count=0;
@@ -2179,9 +2179,8 @@ public class ThreadA extends Thread {
        System.out.println(getName()+"已经终止!");
    }
 }
-
+````
  
-
     在java多线程编程中，线程的终止可以说是一个必然会遇到的操作。但是这样一个常见的操作其实并不是一个能够轻而易举实现的操作，而且在某些场景下情况会变得更复杂更棘手。
 
         Java标准API中的Thread类提供了stop方法可以终止线程，但是很遗憾，这种方法不建议使用，原因是这种方式终止线程中断临界区代码执行，并会释放线程之前获取的监控器锁，这样势必引起某些对象状态的不一致（因为临界区代码一般是原子的，不会被干扰的），具体原因可以参考资料[1]。这样一来，就必须根据线程的特点使用不同的替代方案以终止线程。根据停止线程时线程执行状态的不同有如下停止线程的方法。
