@@ -2056,7 +2056,7 @@ public class InterruptInput {
 ### 不提倡的stop()方法 
 
 &emsp;&emsp;臭名昭著的stop()停止线程的方法已不提倡使用了,原因是什么呢?
-　当在一个线程对象上调用stop()方法时，这个线程对象所运行的线程就会立即停止，并抛出特殊的ThreadDeath()异常。这里的“立即”因为太“立即”了，
+&emsp;&emsp;当在一个线程对象上调用stop()方法时，这个线程对象所运行的线程就会立即停止，并抛出特殊的ThreadDeath()异常。这里的“立即”因为太“立即”了，
 假如一个线程正在执行：
 
 synchronized void {
