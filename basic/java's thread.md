@@ -1901,19 +1901,18 @@ public class TestThread2 implements Runnable {
 
 &emsp;&emsp;如果该线程处在不可中断状态下，就是没有调用上述api，那么java只是设置一下该线程的interrupt状态，其他事情都不会发生，如果该线程之后会调用行数阻塞API，那到时候线程会马会上跳出，并抛出InterruptedException，接下来的事情就跟第一种状况一致了。如果不会调用阻塞API，那么这个线程就会一直执行下去。除非你就是要实现这样的线程，一般高性能的代码中肯定会有wait()，yield()之类出让cpu的函数，不会发生后者的情况。
 
- 
+&emsp;&emsp;当线程处于非运行（Run）状态
+&emsp;&emsp;当线程处于下面的状况时，属于非运行状态：
 
-当线程处于非运行（Run）状态
-当线程处于下面的状况时，属于非运行状态：
+&emsp;&emsp;当sleep方法被调用。
 
-当sleep方法被调用。
+&emsp;&emsp;当wait方法被调用。
 
-当wait方法被调用。
+&emsp;&emsp;当被I/O阻塞，可能是文件或者网络等等。
 
-当被I/O阻塞，可能是文件或者网络等等。
+&emsp;&emsp;当线程处于上述的状态时，使用前面介绍的方法就不可用了。这个时候，我们可以使用interrupt()来打破阻塞的情况，如：
 
-当线程处于上述的状态时，使用前面介绍的方法就不可用了。这个时候，我们可以使用interrupt()来打破阻塞的情况，如：
-
+```
 public void stop() {
         Thread tmpBlinker = blinker;
         blinker = null;
@@ -1929,9 +1928,11 @@ try {
 } catch (InterruptedException iex) {
    throw new RuntimeException("Interrupted",iex);
 }
-阻塞的I/O
-当线程被I/O阻塞的时候，调用interrupt()的情况是依赖与实际运行的平台的。在Solaris和Linux平台上将会抛出InterruptedIOException的异常，但是Windows上面不会有这种异常。所以，我们处理这种问题不能依靠于平台的实现。如：
+````
 
+&emsp;&emsp;阻塞的I/O:当线程被I/O阻塞的时候，调用interrupt()的情况是依赖与实际运行的平台的。在Solaris和Linux平台上将会抛出InterruptedIOException的异常，但是Windows上面不会有这种异常。所以，我们处理这种问题不能依靠于平台的实现。如：
+
+````
 package com.cnblogs.gpcuster
 
 import java.net.*;
@@ -1993,10 +1994,11 @@ public abstract class InterruptibleReader extends Thread {
         }
     }
 }
- 
+```` 
 
-另外，我们也可以使用InterruptibleChannel接口。 实现了InterruptibleChannel接口的类可以在阻塞的时候抛出ClosedByInterruptException。如：
+&emsp;&emsp;另外，我们也可以使用InterruptibleChannel接口。 实现了InterruptibleChannel接口的类可以在阻塞的时候抛出ClosedByInterruptException。如：
 
+````
 package com.cnblogs.gpcuster
 
 import java.io.BufferedReader;
@@ -2044,7 +2046,8 @@ public class InterruptInput {
         }
     }
 }
-这里还需要注意一点，当线程处于写文件的状态时，调用interrupt()不会中断线程。
+````
+&emsp;&emsp;这里还需要注意一点，当线程处于写文件的状态时，调用interrupt()不会中断线程。
 
  
 
