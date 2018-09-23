@@ -2088,7 +2088,7 @@ synchronized void {
 ````
 
 &emsp;&emsp;一个测试类,ThreadDemo
-　　&emsp;&emsp;这样ThreadDemo调用interrupt()方法，isInterrupted()为true，就会退出运行。但是如果线程正在执行wait,sleep,join方法，你调用interrupt()方法，这个逻辑就不完全了。
+&emsp;&emsp;这样ThreadDemo调用interrupt()方法，isInterrupted()为true，就会退出运行。但是如果线程正在执行wait,sleep,join方法，你调用interrupt()方法，这个逻辑就不完全了。
 我们可以这样处理:
 
  public void run(){
