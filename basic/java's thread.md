@@ -1796,10 +1796,12 @@ public class ThreadFlag extends Thread
 &emsp;&emsp;在上面代码中定义了一个退出标志exit，当exit为true时，while循环退出，exit的默认值为false.在定义exit时，使用了一个Java关键字volatile，这个关键字的目的是使exit同步，也就是说在同一时刻只能由一个线程来修改exit的值。
 
 ### 通过Thread.interrupt方法中断线程
-通常情况下，我们应该使用第一种方式来代替Thread.stop方法。然而以下几种方式应该使用Thread.interrupt方法来中断线程（该方法通常也会结合第一种方法使用）。
-一开始使用interrupt方法时，会有莫名奇妙的感觉：难道该方法有问题？
-API文档上说，该方法用于"Interrupts this thread"。请看下面的例子：
-复制代码
+
+&emsp;&emsp;通常情况下，我们应该使用第一种方式来代替Thread.stop方法。然而以下几种方式应该使用Thread.interrupt方法来中断线程（该方法通常也会结合第一种方法使用）。
+&emsp;&emsp;一开始使用interrupt方法时，会有莫名奇妙的感觉：难道该方法有问题？
+&emsp;&emsp;API文档上说，该方法用于"Interrupts this thread"。请看下面的例子：
+
+````
 package com.jvm.study.thread;
 
 public class TestThread implements Runnable{ 
@@ -1827,8 +1829,11 @@ public class TestThread implements Runnable{
         System.out.println("My Thread exiting under request..." ); 
     } 
 } 
-复制代码
+````
+
 运行后的结果是：
+
+````
 Starting thread...
 My Thread is running...
 My Thread is running...
@@ -1843,6 +1848,8 @@ Stopping application...
 My Thread is running...
 My Thread is running...
 ……
+````
+
 应用程序并不会退出，启动的线程没有因为调用interrupt而终止，可是从调用isInterrupted方法返回的结果可以清楚地知道该线程已经中断了。那位什么会出现这种情况呢？到底是interrupt方法出问题了还是isInterrupted方法出问题了？在Thread类中还有一个测试中断状态的方法（静态的）interrupted，换用这个方法测试，得到的结果是一样的。由此似乎应该是interrupt方法出问题了。实际上，在JAVA API文档中对该方法进行了详细的说明。该方法实际上只是设置了一个中断状态，当该线程由于下列原因而受阻时，这个中断状态就起作用了：
 （1）如果线程在调用 Object 类的 wait()、wait(long) 或 wait(long, int) 方法，或者该类的 join()、join(long)、join(long, int)、sleep(long) 或 sleep(long, int) 方法过程中受阻，则其中断状态将被清除，它还将收到一个InterruptedException异常。这个时候，我们可以通过捕获InterruptedException异常来终止线程的执行，具体可以通过return等退出或改变共享变量的值使其退出。
 （2）如果该线程在可中断的通道上的 I/O 操作中受阻，则该通道将被关闭，该线程的中断状态将被设置并且该线程将收到一个 ClosedByInterruptException。这时候处理方法一样，只是捕获的异常不一样而已。
