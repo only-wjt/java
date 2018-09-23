@@ -1765,11 +1765,12 @@ Because it is inherently unsafe. Stopping a thread causes it to unlock all the m
 &emsp;&emsp;大部分需要使用stop的地方应该使用这种方法来达到中断线程的目的。
  
 &emsp;&emsp;这种方法有几个要求或注意事项：
-（1）目标线程必须有规律的检查变量，当该变量指示它应该停止运行时，该线程应该按一定的顺序从它执行的方法中返回。
-（2）该变量必须定义为volatile，或者所有对它的访问必须同步(synchronized)。
+&emsp;&emsp;（1）目标线程必须有规律的检查变量，当该变量指示它应该停止运行时，该线程应该按一定的顺序从它执行的方法中返回。
+&emsp;&emsp;（2）该变量必须定义为volatile，或者所有对它的访问必须同步(synchronized)。
  
 例如：
-复制代码
+
+````
 package chapter2; 
 
 public class ThreadFlag extends Thread 
@@ -1790,8 +1791,9 @@ public class ThreadFlag extends Thread
         System.out.println("线程退出!"); 
     } 
 } 
-复制代码
- 在上面代码中定义了一个退出标志exit，当exit为true时，while循环退出，exit的默认值为false.在定义exit时，使用了一个Java关键字volatile，这个关键字的目的是使exit同步，也就是说在同一时刻只能由一个线程来修改exit的值。
+````
+
+在上面代码中定义了一个退出标志exit，当exit为true时，while循环退出，exit的默认值为false.在定义exit时，使用了一个Java关键字volatile，这个关键字的目的是使exit同步，也就是说在同一时刻只能由一个线程来修改exit的值。
 
 2、通过Thread.interrupt方法中断线程
 通常情况下，我们应该使用第一种方式来代替Thread.stop方法。然而以下几种方式应该使用Thread.interrupt方法来中断线程（该方法通常也会结合第一种方法使用）。
