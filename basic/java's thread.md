@@ -2071,7 +2071,8 @@ synchronized void {
 
 &emsp;&emsp;如何才能“结束”一个线程？
 
-interupt()中断线程
+
+#### interupt()中断线程
 
 一个线程从运行到真正的结束，应该有三个阶段：
 
