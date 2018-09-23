@@ -1748,3 +1748,6 @@ public static void main(String[] args) {
 
 
 &emsp;&emsp;从上面的三点我就可以看到stop方法释放锁是在第二点的，通过抛出异常来释放锁，通过证明，这种方式是不安全的，不可靠的。
+
+
+## 停止线程的方法总结
