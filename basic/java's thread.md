@@ -2220,6 +2220,7 @@ public void run() {
 &emsp;&emsp;Io阻塞：线程调用了IO的read操作或者socket的accept操作，处于阻塞状态。
 
 #### 处于可中断等待线程的停止
+
 &emsp;&emsp;如果线程调用了可中断等待方法，正处于等待状态，则可以通过调用Thread的interrupt方法让等待方法抛出InterruptedException异常，然后在循环外截获并处理异常，这样便跳出了线程run方法中的循环，以使线程顺利结束。
 
 &emsp;&emsp;上述的stop方法中需要做的修改就是在设置停止变量之后调用interrupt方法：
