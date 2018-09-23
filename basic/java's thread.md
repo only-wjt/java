@@ -1850,12 +1850,13 @@ My Thread is running...
 ……
 ````
 
-应用程序并不会退出，启动的线程没有因为调用interrupt而终止，可是从调用isInterrupted方法返回的结果可以清楚地知道该线程已经中断了。那位什么会出现这种情况呢？到底是interrupt方法出问题了还是isInterrupted方法出问题了？在Thread类中还有一个测试中断状态的方法（静态的）interrupted，换用这个方法测试，得到的结果是一样的。由此似乎应该是interrupt方法出问题了。实际上，在JAVA API文档中对该方法进行了详细的说明。该方法实际上只是设置了一个中断状态，当该线程由于下列原因而受阻时，这个中断状态就起作用了：
-（1）如果线程在调用 Object 类的 wait()、wait(long) 或 wait(long, int) 方法，或者该类的 join()、join(long)、join(long, int)、sleep(long) 或 sleep(long, int) 方法过程中受阻，则其中断状态将被清除，它还将收到一个InterruptedException异常。这个时候，我们可以通过捕获InterruptedException异常来终止线程的执行，具体可以通过return等退出或改变共享变量的值使其退出。
-（2）如果该线程在可中断的通道上的 I/O 操作中受阻，则该通道将被关闭，该线程的中断状态将被设置并且该线程将收到一个 ClosedByInterruptException。这时候处理方法一样，只是捕获的异常不一样而已。
+&emsp;&emsp;应用程序并不会退出，启动的线程没有因为调用interrupt而终止，可是从调用isInterrupted方法返回的结果可以清楚地知道该线程已经中断了。那位什么会出现这种情况呢？到底是interrupt方法出问题了还是isInterrupted方法出问题了？在Thread类中还有一个测试中断状态的方法（静态的）interrupted，换用这个方法测试，得到的结果是一样的。由此似乎应该是interrupt方法出问题了。实际上，在JAVA API文档中对该方法进行了详细的说明。`该方法实际上只是设置了一个中断状态，当该线程由于下列原因而受阻时，这个中断状态就起作用了：`
+&emsp;&emsp;（1）如果线程在调用 Object 类的 wait()、wait(long) 或 wait(long, int) 方法，或者该类的 join()、join(long)、join(long, int)、sleep(long) 或 sleep(long, int) 方法过程中受阻，则其中断状态将被清除，它还将收到一个InterruptedException异常。这个时候，我们可以通过捕获InterruptedException异常来终止线程的执行，具体可以通过return等退出或改变共享变量的值使其退出。
+&emsp;&emsp;（2）如果该线程在可中断的通道上的 I/O 操作中受阻，则该通道将被关闭，该线程的中断状态将被设置并且该线程将收到一个 ClosedByInterruptException。这时候处理方法一样，只是捕获的异常不一样而已。
  
-其实对于这些情况有一个通用的处理方法：
-复制代码
+&emsp;&emsp;其实对于这些情况有一个通用的处理方法：
+
+````
 package com.jvm.study.thread;
 
 public class TestThread2 implements Runnable {
@@ -1889,5 +1890,6 @@ public class TestThread2 implements Runnable {
         System.out.println("My Thread exiting under request...");
     }
 }
-复制代码
-因为调用interrupt方法后，会设置线程的中断状态，所以，通过监视该状态来达到终止线程的目的。
+````
+
+&emsp;&emsp;因为调用interrupt方法后，会设置线程的中断状态，所以，通过监视该状态来达到终止线程的目的。
