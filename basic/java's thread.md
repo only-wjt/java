@@ -1741,7 +1741,10 @@ public static void main(String[] args) {
 &emsp;&emsp;Java中多线程锁释放的条件：
 
 &emsp;&emsp;1）执行完同步代码块，就会释放锁。（synchronized）
+
 &emsp;&emsp;2）在执行同步代码块的过程中，遇到异常而导致线程终止，锁也会被释放。（exception）
+
 &emsp;&emsp;3）在执行同步代码块的过程中，执行了锁所属对象的wait()方法，这个线程会释放锁，进入对象的等待池。(wait)
+
 
 &emsp;&emsp;从上面的三点我就可以看到stop方法释放锁是在第二点的，通过抛出异常来释放锁，通过证明，这种方式是不安全的，不可靠的。
