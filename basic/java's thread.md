@@ -2081,12 +2081,14 @@ synchronized void {
 &emsp;&emsp;结束退出.
 &emsp;&emsp;那么如何让一个线程结束呢？既然不能调用stop，可用的只的interrupt()方法。但interrupt()方法只是改变了线程的运行状态，如何让它退出运行？对于一般逻辑，只要线程状态已经中断，我们就可以让它退出，这里我们定义一个线程类ThreadA,所以这样的语句可以保证线程在中断后就能结束运行：
 
+````
  while(!isInterrupted()){
   正常逻辑
  }
+````
 
-,一个测试类,ThreadDemo
-　　这样ThreadDemo调用interrupt()方法，isInterrupted()为true，就会退出运行。但是如果线程正在执行wait,sleep,join方法，你调用interrupt()方法，这个逻辑就不完全了。
+&emsp;&emsp;一个测试类,ThreadDemo
+　　&emsp;&emsp;这样ThreadDemo调用interrupt()方法，isInterrupted()为true，就会退出运行。但是如果线程正在执行wait,sleep,join方法，你调用interrupt()方法，这个逻辑就不完全了。
 我们可以这样处理:
 
  public void run(){
