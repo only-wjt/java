@@ -1667,4 +1667,60 @@ public class ThreadStopTest {
     }
 ````
 
+把上述工作线程的run()方法的同步去掉，再进行执行，结果就如上述第一点描述的那样了，运行结果如下：
 
+![enter description here](https://www.github.com/only-wjt/images/raw/master/小书匠/结果3.png)
+
+从结果中我们可以看到，调用stop方法会抛出一个ThreadDeath异常，这时候run方法也就执行结束了，线程就终止了，这种是用抛异常来结束线程的，但是这种抛出线程是不安全的，因为他不可控制，不知道到在run方法中的何处就可能抛出异常，所以是危险的。下面在看一下stop的这个隐患可能造成的影响：
+
+接下来是看看当调用thread.stop()时，被停止的线程会释放其所持有的锁，看如下代码：
+
+复制代码
+public static void main(String[] args) {
+        // 定义锁对象
+        final Object lock = new Object();
+        // 定义第一个线程，首先该线程拿到锁，而后等待3s,之后释放锁
+        try {
+            Thread t0 = new Thread() {
+                public void run() {
+                    try {
+                        synchronized (lock) {
+                            System.out.println("thread->" + getName() + " acquire lock.");
+                            sleep(3 * 1000);
+                            System.out.println("thread->" + getName() + " 等待3s");
+                            System.out.println("thread->" + getName() + " release lock.");
+                        }
+                    } catch (Throwable ex) {
+                        System.out.println("Caught in run: " + ex);
+                        ex.printStackTrace();
+                    }
+                }
+            };
+
+            // 定义第二个线程，等待拿到锁对象
+            Thread t1 = new Thread() {
+                public void run() {
+                    synchronized (lock) {
+                        System.out.println("thread->" + getName() + " acquire lock.");
+                    }
+                }
+            };
+
+            // 线程一先运行，先拿到lock
+            t0.start();
+            // 而后主线程等待100ms,为了做延迟
+            Thread.sleep(100);
+            // 停止线程一
+            // t0.stop();
+            // 这时候在开启线程二
+            t1.start();
+        } catch (Throwable t) {
+            System.out.println("Caught in main: " + t);
+            t.printStackTrace();
+        }
+
+    }
+	
+![结果4](https://www.github.com/only-wjt/images/raw/master/小书匠/结果4.png)
+
+![结果5](https://www.github.com/only-wjt/images/raw/master/小书匠/结果5.png)
