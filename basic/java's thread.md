@@ -1645,3 +1645,26 @@ public class ThreadStopTest {
 
 ![结果2](https://www.github.com/only-wjt/images/raw/master/小书匠/结果2.png)
 
+下面看一下stop的源码1.8版本：
+
+````
+    /**
+     * @deprecated Method stop is deprecated
+     */
+
+    public final void stop()
+    {
+        SecurityManager securitymanager = System.getSecurityManager();
+        if(securitymanager != null)
+        {
+            checkAccess();
+            if(this != currentThread())
+                securitymanager.checkPermission(SecurityConstants.STOP_THREAD_PERMISSION);
+        }
+        if(threadStatus != 0)
+            resume();
+        stop0(new ThreadDeath());
+    }
+````
+
+
