@@ -2212,19 +2212,19 @@ public void run() {
  
 
 ####  即将或正在处于非运行态的线程停止
-        线程的非运行状态常见的有如下两种情况：
 
-可中断等待：线程调用了sleep或wait方法，这些方法可抛出InterruptedException；
+&emsp;&emsp; 线程的非运行状态常见的有如下两种情况：
 
-Io阻塞：线程调用了IO的read操作或者socket的accept操作，处于阻塞状态。
+&emsp;&emsp;可中断等待：线程调用了sleep或wait方法，这些方法可抛出InterruptedException；
 
-2.1 处于可中断等待线程的停止
-        如果线程调用了可中断等待方法，正处于等待状态，则可以通过调用Thread的interrupt方法让等待方法抛出InterruptedException异常，然后在循环外截获并处理异常，这样便跳出了线程run方法中的循环，以使线程顺利结束。
+&emsp;&emsp;Io阻塞：线程调用了IO的read操作或者socket的accept操作，处于阻塞状态。
 
-        上述的stop方法中需要做的修改就是在设置停止变量之后调用interrupt方法：
+#### 处于可中断等待线程的停止
+&emsp;&emsp;如果线程调用了可中断等待方法，正处于等待状态，则可以通过调用Thread的interrupt方法让等待方法抛出InterruptedException异常，然后在循环外截获并处理异常，这样便跳出了线程run方法中的循环，以使线程顺利结束。
 
- 
+&emsp;&emsp;上述的stop方法中需要做的修改就是在设置停止变量之后调用interrupt方法：
 
+````
 private volatile Thread blinker;  
 public void stop() {  
         Thread tmp = blinker;  
@@ -2233,45 +2233,48 @@ public void stop() {
             tmp.interrupt();  
         }  
 }  
- 
+````
 
- 
+&emsp;&emsp;特别的，Thread对象的interrupt方法会设置线程的interruptedFlag，所以我们可以通过判断Thread对象的isInterrupted方法的返回值来判断是否应该继续run方法内的循环，从而代替线程中的volatile停止变量。这时的上述run方法的代码框架就变为如下：
 
-         特别的，Thread对象的interrupt方法会设置线程的interruptedFlag，所以我们可以通过判断Thread对象的isInterrupted方法的返回值来判断是否应该继续run方法内的循环，从而代替线程中的volatile停止变量。这时的上述run方法的代码框架就变为如下：
-
+````
 public void run() {  
         while (!Thread.currentThread().isInterrupted()) {  
             try {  
                 //业务流程  
             } catch (Exception e){}  
         }  
-}  
- 
+} 
+````
 
-        需要注意的是Thread对象的isInterrupted不会清除interrupted标记，但是Thread对象的interrupted方法（与interrupt方法区别）会清除该标记。
+&emsp;&emsp;需要注意的是Thread对象的isInterrupted不会清除interrupted标记，但是Thread对象的interrupted方法（与interrupt方法区别）会清除该标记。
 
-2.2 处于IO阻塞状态线程的停止
-         Java中的输入输出流并没有类似于Interrupt的机制，但是Java的InterruptableChanel接口提供了这样的机制，任何实现了InterruptableChanel接口的类的IO阻塞都是可中断的，中断时抛出ClosedByInterruptedException，也是由Thread对象调用Interrupt方法完成中断调用。IO中断后将关闭通道。
+#### 处于IO阻塞状态线程的停止
+&emsp;&emsp;Java中的输入输出流并没有类似于Interrupt的机制，但是Java的InterruptableChanel接口提供了这样的机制，任何实现了InterruptableChanel接口的类的IO阻塞都是可中断的，中断时抛出ClosedByInterruptedException，也是由Thread对象调用Interrupt方法完成中断调用。IO中断后将关闭通道。
 
-        以文件IO为例，构造一个可中断的文件输入流的代码如下：
+&emsp;&emsp;以文件IO为例，构造一个可中断的文件输入流的代码如下：
 
+````
 new InputStreamReader(  
            Channels.newInputStream(  
-                   (new FileInputStream(FileDescriptor.in)).getChannel())));   
-         实现InterruptableChanel接口的类包括FileChannel,ServerSocketChannel, SocketChannel, Pipe.SinkChannel andPipe.SourceChannel，也就是说，原则上可以实现文件、Socket、管道的可中断IO阻塞操作。
+                   (new FileInputStream(FileDescriptor.in)).getChannel()))); 
+````
 
-        虽然解除IO阻塞的方法还可以直接调用IO对象的Close方法，这也会抛出IO异常。但是InterruptableChanel机制能够使处于IO阻塞的线程能够有一个和处于中断等待的线程一致的线程停止方案。
+&emsp;&emsp;实现InterruptableChanel接口的类包括FileChannel,ServerSocketChannel, SocketChannel, Pipe.SinkChannel andPipe.SourceChannel，也就是说，原则上可以实现文件、Socket、管道的可中断IO阻塞操作。
 
-3 处于大数据IO读写中的线程停止
-         处于大数据IO读写中的线程实际上处于运行状态，而不是等待或阻塞状态，因此上面的interrupt机制不适用。线程处于IO读写中可以看成是线程运行中的一种特例。停止这样的线程的办法是强行close掉io输入输出流对象，使其抛出异常，进而使线程停止。
+&emsp;&emsp;虽然解除IO阻塞的方法还可以直接调用IO对象的Close方法，这也会抛出IO异常。但是InterruptableChanel机制能够使处于IO阻塞的线程能够有一个和处于中断等待的线程一致的线程停止方案。
 
-        最好的建议是将大数据的IO读写操作放在循环中进行，这样可以在每次循环中都有线程停止的时机，这也就将问题转化为如何停止正在运行中的线程的问题了。
+#### 处于大数据IO读写中的线程停止
+&emsp;&emsp;处于大数据IO读写中的线程实际上处于运行状态，而不是等待或阻塞状态，因此上面的interrupt机制不适用。线程处于IO读写中可以看成是线程运行中的一种特例。停止这样的线程的办法是强行close掉io输入输出流对象，使其抛出异常，进而使线程停止。
 
-4 在线程运行前停止线程
-         有时，线程中的run方法需要足够健壮以支持在线程实际运行前终止线程的情况。即在Thread创建后，到Thread的start方法调用前这段时间，调用自定义的stop方法也要奏效。从上述的停止处于等待状态线程的代码示例中，stop方法并不能终止运行前的线程，因为在Thread的start方法被调用前，调用interrupt方法并不会将Thread对象的中断状态置位，这样当run方法执行时，currentThread的isInterrupted方法返回false，线程将继续执行下去。
+&emsp;&emsp;最好的建议是将大数据的IO读写操作放在循环中进行，这样可以在每次循环中都有线程停止的时机，这也就将问题转化为如何停止正在运行中的线程的问题了。
 
-         为了解决这个问题，不得不自己再额外创建一个volatile标志量，并将其加入run方法的最开头：
+#### 在线程运行前停止线程
+&emsp;&emsp;有时，线程中的run方法需要足够健壮以支持在线程实际运行前终止线程的情况。即在Thread创建后，到Thread的start方法调用前这段时间，调用自定义的stop方法也要奏效。从上述的停止处于等待状态线程的代码示例中，stop方法并不能终止运行前的线程，因为在Thread的start方法被调用前，调用interrupt方法并不会将Thread对象的中断状态置位，这样当run方法执行时，currentThread的isInterrupted方法返回false，线程将继续执行下去。
 
+&emsp;&emsp; 为了解决这个问题，不得不自己再额外创建一个volatile标志量，并将其加入run方法的最开头：
+
+````
 public void run() {  
         if (myThread == null) {  
            return; // stopped before started.  
@@ -2279,5 +2282,7 @@ public void run() {
         while(!Thread.currentThread().isInterrupted()){  
     //业务逻辑  
         }  
-}  
-         还有一种解决方法，也可以在run中直接使用该自定义标志量，而不使用isInterrupted方法判断线程是否应该停止。这种方法的run代码框架实际上和停止运行时线程的一样。
+}
+````
+
+&emsp;&emsp;还有一种解决方法，也可以在run中直接使用该自定义标志量，而不使用isInterrupted方法判断线程是否应该停止。这种方法的run代码框架实际上和停止运行时线程的一样。
