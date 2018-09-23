@@ -1752,7 +1752,7 @@ public static void main(String[] args) {
 
 ## 停止线程的方法总结
 
-在JAVA中，曾经使用stop方法来停止线程，然而，该方法具有固有的不安全性，因而已经被抛弃(Deprecated)。那么应该怎么结束一个进程呢？官方文档中对此有详细说明：《为何不赞成使用 Thread.stop、Thread.suspend 和 Thread.resume？》。在此引用stop方法的说明：
+&emsp;&emsp;在JAVA中，曾经使用stop方法来停止线程，然而，该方法具有固有的不安全性，因而已经被抛弃(Deprecated)。那么应该怎么结束一个进程呢？官方文档中对此有详细说明：[《为何不赞成使用 Thread.stop、Thread.suspend 和 Thread.resume？》](http://download.oracle.com/javase/6/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html)。在此引用stop方法的说明：
 
 1. Why is Thread.stop deprecated?
 Because it is inherently unsafe. Stopping a thread causes it to unlock all the monitors that it has locked. (The monitors are unlocked as the ThreadDeath exception propagates up the stack.) If any of the objects previously protected by these monitors were in an inconsistent state, other threads may now view these objects in an inconsistent state. Such objects are said to be damaged. When threads operate on damaged objects, arbitrary behavior can result. This behavior may be subtle and difficult to detect, or it may be pronounced. Unlike other unchecked exceptions, ThreadDeath kills threads silently; thus, the user has no warning that his program may be corrupted. The corruption can manifest itself at any time after the actual damage occurs, even hours or days in the future.
