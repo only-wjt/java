@@ -1673,9 +1673,9 @@ public class ThreadStopTest {
 
 &emsp;&emsp;从结果中我们可以看到，调用stop方法会抛出一个ThreadDeath异常，这时候run方法也就执行结束了，线程就终止了，这种是用抛异常来结束线程的，但是这种抛出线程是不安全的，因为他不可控制，不知道到在run方法中的何处就可能抛出异常，所以是危险的。下面在看一下stop的这个隐患可能造成的影响：
 
-接下来是看看当调用thread.stop()时，被停止的线程会释放其所持有的锁，看如下代码：
+&emsp;&emsp;接下来是看看当调用thread.stop()时，被停止的线程会释放其所持有的锁，看如下代码：
 
-复制代码
+````
 public static void main(String[] args) {
         // 定义锁对象
         final Object lock = new Object();
@@ -1720,8 +1720,9 @@ public static void main(String[] args) {
         }
 
     }
+````
 	
-	运行结果如下
+&emsp;&emsp;运行结果如下
 	
 ![结果4](https://www.github.com/only-wjt/images/raw/master/小书匠/结果4.png)
 
