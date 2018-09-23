@@ -1592,3 +1592,50 @@ do more work
 
 &emsp;&emsp;存在很大问题，很多人已经不再使用，下面可以看到stop()方法存在什么样的问题
 
+
+&emsp;&emsp;从SUN的官方文档可以得知，调用Thread.stop()方法是不安全的，这是因为当调用Thread.stop()方法时，会发生下面两件事：
+
+&emsp;&emsp;1. 即刻抛出ThreadDeath异常，在线程的run()方法内，任何一点都有可能抛出ThreadDeath Error，包括在catch或finally语句中。
+
+&emsp;&emsp;2. 会释放该线程所持有的所有的锁，而这种释放是不可控制的，非预期的。
+
+ 
+
+&emsp;&emsp;当线程抛出ThreadDeath异常时，会导致该线程的run()方法突然返回来达到停止该线程的目的。ThreadDetath异常可以在该线程run()方法的任意一个执行点抛出。但是，线程的stop()方法一经调用线程的run()方法就会即刻返回吗？
+
+````
+package com.dxz.threadstop;
+
+public class ThreadStopTest {
+    public static void main(String[] args) {
+        try {
+            Thread t = new Thread() {
+                // 对于方法进行了同步操作，锁对象就是线程本身
+                public synchronized void run() {
+                    try {
+                        long start = System.currentTimeMillis();
+                        // 开始计数
+                        for (int i = 0; i < 100000; i++)
+                            System.out.println("runing.." + i);
+                        System.out.println((System.currentTimeMillis() - start) + "ms");
+                    } catch (Throwable ex) {
+                        System.out.println("Caught in run: " + ex);
+                        ex.printStackTrace();
+                    }
+                }
+            };
+            // 开始计数
+            t.start();
+            // 主线程休眠100ms
+            Thread.sleep(100);
+            // 停止线程的运行
+            t.stop();
+        } catch (Throwable t) {
+            System.out.println("Caught in main: " + t);
+            t.printStackTrace();
+        }
+
+    }
+}
+````
+
