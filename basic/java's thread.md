@@ -1751,3 +1751,135 @@ public static void main(String[] args) {
 
 
 ## 停止线程的方法总结
+
+在JAVA中，曾经使用stop方法来停止线程，然而，该方法具有固有的不安全性，因而已经被抛弃(Deprecated)。那么应该怎么结束一个进程呢？官方文档中对此有详细说明：《为何不赞成使用 Thread.stop、Thread.suspend 和 Thread.resume？》。在此引用stop方法的说明：
+
+1. Why is Thread.stop deprecated?
+Because it is inherently unsafe. Stopping a thread causes it to unlock all the monitors that it has locked. (The monitors are unlocked as the ThreadDeath exception propagates up the stack.) If any of the objects previously protected by these monitors were in an inconsistent state, other threads may now view these objects in an inconsistent state. Such objects are said to be damaged. When threads operate on damaged objects, arbitrary behavior can result. This behavior may be subtle and difficult to detect, or it may be pronounced. Unlike other unchecked exceptions, ThreadDeath kills threads silently; thus, the user has no warning that his program may be corrupted. The corruption can manifest itself at any time after the actual damage occurs, even hours or days in the future.
+大概意思是：
+因为该方法本质上是不安全的。停止一个线程将释放它已经锁定的所有监视器（作为沿堆栈向上传播的未检查 ThreadDeath 异常的一个自然后果）。如果以前受这些监视器保护的任何对象都处于一种不一致的状态，则损坏的对象将对其他线程可见，这有可能导致任意的行为。此行为可能是微妙的，难以察觉，也可能是显著的。不像其他的未检查异常，ThreadDeath异常会在后台杀死线程，因此，用户并不会得到警告，提示他的程序可能已损坏。这种损坏有可能在实际破坏发生之后的任何时间表现出来，也有可能在多小时甚至在未来的很多天后。
+在文档中还提到，程序员不能通过捕获ThreadDeath异常来修复已破坏的对象。具体原因见原文。
+既然stop方法不建议使用，那么应该用什么方法来代理stop已实现相应的功能呢？
+ 
+1、通过修改共享变量来通知目标线程停止运行
+ 
+大部分需要使用stop的地方应该使用这种方法来达到中断线程的目的。
+ 
+这种方法有几个要求或注意事项：
+（1）目标线程必须有规律的检查变量，当该变量指示它应该停止运行时，该线程应该按一定的顺序从它执行的方法中返回。
+（2）该变量必须定义为volatile，或者所有对它的访问必须同步(synchronized)。
+ 
+例如：
+复制代码
+package chapter2; 
+
+public class ThreadFlag extends Thread 
+{ 
+    public volatile boolean exit = false; 
+
+    public void run() 
+    { 
+        while (!exit); 
+    } 
+    public static void main(String[] args) throws Exception 
+    { 
+        ThreadFlag thread = new ThreadFlag(); 
+        thread.start(); 
+        sleep(5000); // 主线程延迟5秒 
+        thread.exit = true;  // 终止线程thread 
+        thread.join(); 
+        System.out.println("线程退出!"); 
+    } 
+} 
+复制代码
+ 在上面代码中定义了一个退出标志exit，当exit为true时，while循环退出，exit的默认值为false.在定义exit时，使用了一个Java关键字volatile，这个关键字的目的是使exit同步，也就是说在同一时刻只能由一个线程来修改exit的值。
+
+2、通过Thread.interrupt方法中断线程
+通常情况下，我们应该使用第一种方式来代替Thread.stop方法。然而以下几种方式应该使用Thread.interrupt方法来中断线程（该方法通常也会结合第一种方法使用）。
+一开始使用interrupt方法时，会有莫名奇妙的感觉：难道该方法有问题？
+API文档上说，该方法用于"Interrupts this thread"。请看下面的例子：
+复制代码
+package com.jvm.study.thread;
+
+public class TestThread implements Runnable{ 
+     
+    boolean stop = false; 
+    public static void main(String[] args) throws Exception { 
+        Thread thread = new Thread(new TestThread(),"My Thread"); 
+        System.out.println( "Starting thread..." ); 
+        thread.start(); 
+        Thread.sleep( 3000 ); 
+        System.out.println( "Interrupting thread..." ); 
+        thread.interrupt(); 
+        System.out.println("线程是否中断：" + thread.isInterrupted()); 
+        Thread.sleep( 3000 ); 
+        System.out.println("Stopping application..." ); 
+    } 
+    public void run() { 
+        while(!stop){ 
+            System.out.println( "My Thread is running..." ); 
+            // 让该循环持续一段时间，使上面的话打印次数少点 
+            long time = System.currentTimeMillis(); 
+            while((System.currentTimeMillis()-time < 1000)) { 
+            } 
+        } 
+        System.out.println("My Thread exiting under request..." ); 
+    } 
+} 
+复制代码
+运行后的结果是：
+Starting thread...
+My Thread is running...
+My Thread is running...
+My Thread is running...
+My Thread is running...
+Interrupting thread...
+线程是否中断：true
+My Thread is running...
+My Thread is running...
+My Thread is running...
+Stopping application...
+My Thread is running...
+My Thread is running...
+……
+应用程序并不会退出，启动的线程没有因为调用interrupt而终止，可是从调用isInterrupted方法返回的结果可以清楚地知道该线程已经中断了。那位什么会出现这种情况呢？到底是interrupt方法出问题了还是isInterrupted方法出问题了？在Thread类中还有一个测试中断状态的方法（静态的）interrupted，换用这个方法测试，得到的结果是一样的。由此似乎应该是interrupt方法出问题了。实际上，在JAVA API文档中对该方法进行了详细的说明。该方法实际上只是设置了一个中断状态，当该线程由于下列原因而受阻时，这个中断状态就起作用了：
+（1）如果线程在调用 Object 类的 wait()、wait(long) 或 wait(long, int) 方法，或者该类的 join()、join(long)、join(long, int)、sleep(long) 或 sleep(long, int) 方法过程中受阻，则其中断状态将被清除，它还将收到一个InterruptedException异常。这个时候，我们可以通过捕获InterruptedException异常来终止线程的执行，具体可以通过return等退出或改变共享变量的值使其退出。
+（2）如果该线程在可中断的通道上的 I/O 操作中受阻，则该通道将被关闭，该线程的中断状态将被设置并且该线程将收到一个 ClosedByInterruptException。这时候处理方法一样，只是捕获的异常不一样而已。
+ 
+其实对于这些情况有一个通用的处理方法：
+复制代码
+package com.jvm.study.thread;
+
+public class TestThread2 implements Runnable {
+
+    boolean stop = false;
+
+    public static void main(String[] args) throws Exception {
+        Thread thread = new Thread(new TestThread2(), "My Thread2");
+        System.out.println("Starting thread...");
+        thread.start();
+        Thread.sleep(10000);
+        System.out.println("Interrupting thread...");
+        thread.interrupt();
+        System.out.println("线程是否中断：" + thread.isInterrupted());
+        Thread.sleep(3000);
+        System.out.println("Stopping application...");
+        Thread.sleep(30000);
+    }
+
+    public void run() {
+        while (!stop) {
+            System.out.println("My Thread is running...");
+            // 让该循环持续一段时间，使上面的话打印次数少点
+            long time = System.currentTimeMillis();
+            while ((System.currentTimeMillis() - time < 1000)) {
+            }
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+        }
+        System.out.println("My Thread exiting under request...");
+    }
+}
+复制代码
+因为调用interrupt方法后，会设置线程的中断状态，所以，通过监视该状态来达到终止线程的目的。
