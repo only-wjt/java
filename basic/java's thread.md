@@ -1758,8 +1758,7 @@ public static void main(String[] args) {
 Because it is inherently unsafe. Stopping a thread causes it to unlock all the monitors that it has locked. (The monitors are unlocked as the ThreadDeath exception propagates up the stack.) If any of the objects previously protected by these monitors were in an inconsistent state, other threads may now view these objects in an inconsistent state. Such objects are said to be damaged. When threads operate on damaged objects, arbitrary behavior can result. This behavior may be subtle and difficult to detect, or it may be pronounced. Unlike other unchecked exceptions, ThreadDeath kills threads silently; thus, the user has no warning that his program may be corrupted. The corruption can manifest itself at any time after the actual damage occurs, even hours or days in the future.
 &emsp;&emsp;大概意思是：
 &emsp;&emsp;因为该方法本质上是不安全的。停止一个线程将释放它已经锁定的所有监视器（作为沿堆栈向上传播的未检查 ThreadDeath 异常的一个自然后果）。如果以前受这些监视器保护的任何对象都处于一种不一致的状态，则损坏的对象将对其他线程可见，这有可能导致任意的行为。此行为可能是微妙的，难以察觉，也可能是显著的。不像其他的未检查异常，ThreadDeath异常会在后台杀死线程，因此，用户并不会得到警告，提示他的程序可能已损坏。这种损坏有可能在实际破坏发生之后的任何时间表现出来，也有可能在多小时甚至在未来的很多天后。
-在文档中还提到，程序员不能通过捕获ThreadDeath异常来修复已破坏的对象。具体原因见原文。
-既然stop方法不建议使用，那么应该用什么方法来代理stop已实现相应的功能呢？
+&emsp;&emsp;在文档中还提到，程序员不能通过捕获ThreadDeath异常来修复已破坏的对象。具体原因见原文。既然stop方法不建议使用，那么应该用什么方法来代理stop已实现相应的功能呢？
  
 1、通过修改共享变量来通知目标线程停止运行
  
