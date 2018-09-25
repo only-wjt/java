@@ -65,3 +65,12 @@ IoC很好的体现了面向对象设计法则之一—— 好莱坞法则：“�
    
    虽然spring对象是单例的，但类里面方法对每个线程来说都是独立运行的，不存在多线程问题，只有成员变量有多线程问题，所以方法里面如果有用到成员变量就要考虑用安全的数据结构，不知道你现在明白没。
    spring中的bean默认是单例的，通常对单例进行多线程访问时，为了线程安全而采用同步机制，以时间换空间的方式，而Spring中是利用ThreadLocal来以空间换取时间，为每一个线程提供变量副本，来保证变量副本对于某一线程都是线程安全的
+   
+   
+   生命周期执行的过程如下:1)spring对bean进行实例化,默认bean是单例2)spring对bean进行依赖注入3)如果bean实现了BeanNameAware接口,spring将bean的id传给setBeanName()方法4)如果bean实现了BeanFactoryAware接口,spring将调用setBeanFactory方法,将BeanFactory实例传进来5)如果bean实现了ApplicationContextAware()接口,spring将调用setApplicationContext()方法将应用上下文的引用传入6) 如果bean实现了BeanPostProcessor接口,spring将调用它们的postProcessBeforeInitialization接口方法7) 如果bean实现了InitializingBean接口,spring将调用它们的afterPropertiesSet接口方法,类似的如果bean使用了init-method属性声明了初始化方法,改方法也会被调用8)如果bean实现了BeanPostProcessor接口,spring将调用它们的postProcessAfterInitialization接口方法9)此时bean已经准备就绪,可以被应用程序使用了,他们将一直驻留在应用上下文中,直到该应用上下文被销毁10)若bean实现了DisposableBean接口,spring将调用它的distroy()接口方法。同样的,如果bean使用了destroy-method属性声明了销毁方法,则该方法被调用
+      其实很多时候我们并不会真的去实现上面说描述的那些接口,那么下面我们就除去那些接口针对bean的单例和非单例来描述下bean的生命周期:
+
+
+
+
+还有一点需要注意：如果通过set方法注入属性，那么spring会通过默认的空参构造方法来实例化对象，所以如果在类中写了一个带有参数的构造方法，一定要把空参数的构造方法写上，否则spring没有办法实例化对象，导致报错。 
