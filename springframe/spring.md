@@ -17,4 +17,4 @@ Spring 中的核心组件：
 5)	......
 
 
-## spring控制反转详解
+## spring控制反转详解[转](http://www.cnblogs.com/Mr-Rocker/p/7721824.html)
