@@ -5,6 +5,7 @@ grammar_cjkRuby: true
 ---
 
 
+**动态代理见[动态代理](https://github.com/only-wjt/java/blob/master/basic/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86.md)**
 Spring AOP通过代理模式实现，目前支持两种代理：JDK动态代理、CGLIB代理来创建AOP代理，Spring建议优先使用JDK动态代理。
 
 JDK动态代理：使用java.lang.reflect.Proxy动态代理实现，即提取目标对象的接口，然后对接口创建AOP代理。
