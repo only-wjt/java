@@ -241,7 +241,7 @@ class Music4 {
 
 ### 接口和抽象类的区别
 
-![区别](./images/接口和抽象类的区别.png)
+![区别](https://www.github.com/only-wjt/images/raw/master/小书匠/接口和抽象类的区别.png)
 
 ### 什么时候使用抽象类和接口
 
