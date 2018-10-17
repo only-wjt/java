@@ -172,6 +172,93 @@ upstream backend {
 - 半同步复制—解决数据丢失的问题
 - 并行复制—-解决从库复制延迟的问题
 
+## 线程中的死锁
+
+&emsp;&emsp;多个线程同时被阻塞,它们中的一个或者全部都在等待某个资源被释放.由于线程被无限期地阻塞,因此程序不能正常运行.形象的说就是:一个宝藏需要两把钥匙来打开,同时间正好来了两个人,他们一人一把钥匙,但是双方都再等着对方能交出钥匙来打开宝藏,谁都没释放自己的那把钥匙.就这样这俩人一直僵持下去,直到开发人员发现这个局面.
+
+### 死锁的产生
+
+死锁的产生大部分都是在你不知情的时候.我们通过一个例子来看下什么是死锁.
+
+1.synchronized嵌套.
+
+synchronized关键字可以保证多线程再访问到synchronized修饰的方法的时候保证了同步性.就是线程A访问到这个方法的时候线程B同时也来访问这个方法,这时线程B将进行阻塞,等待线程A执行完才可以去访问.这里就要用到synchronized所持有的同步锁.具体来看代码:
+
+````
+//首先我们先定义两个final的对象锁.可以看做是共有的资源.
+final Object lockA = new Object();
+final Object lockB = new Object();
+//生产者A
+class  ProductThreadA implements Runnable{
+    @Override
+    public void run() {
+//这里一定要让线程睡一会儿来模拟处理数据 ,要不然的话死锁的现象不会那么的明显.这里就是同步语句块里面,首先获得对象锁lockA,然后执行一些代码,随后我们需要对象锁lockB去执行另外一些代码.
+        synchronized (lockA){
+        //这里一个log日志
+            Log.e("CHAO","ThreadA lock  lockA");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized (lockB){
+             //这里一个log日志
+                Log.e("CHAO","ThreadA lock  lockB");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+}
+//生产者B
+class  ProductThreadB implements Runnable{
+//我们生产的顺序真好好生产者A相反,我们首先需要对象锁lockB,然后需要对象锁lockA.
+    @Override
+    public void run() {
+        synchronized (lockB){
+         //这里一个log日志
+            Log.e("CHAO","ThreadB lock  lockB");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized (lockA){
+             //这里一个log日志
+                Log.e("CHAO","ThreadB lock  lockA");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+}
+//这里运行线程
+ProductThreadA productThreadA = new ProductThreadA();
+ProductThreadB productThreadB = new ProductThreadB();
+
+    Thread threadA = new Thread(productThreadA);
+    Thread threadB = new Thread(productThreadB);
+    threadA.start();
+    threadB.start();
+`````
+分析一下,当threadA开始执行run方法的时候,它会先持有对象锁localA,然后睡眠2秒,这时候threadB也开始执行run方法,它持有的是localB对象锁.当threadA运行到第二个同步方法的时候,发现localB的对象锁不能使用(threadB未释放localB锁),threadA就停在这里等待localB锁.随后threadB也执行到第二个同步方法,去访问localA对象锁的时候发现localA还没有被释放(threadA未释放localA锁),threadB也停在这里等待localA锁释放.就这样两个线程都没办法继续执行下去,进入死锁的状态. 看下运行结果:
+
+10-20 14:54:39.940 18162-18178/? E/CHAO: ThreadA lock  lockA
+10-20 14:54:39.940 18162-18179/? E/CHAO: ThreadB lock  lockB
+--------------------- 
+作者：那个人_ 
+来源：CSDN 
+原文：https://blog.csdn.net/jsonChumpKlutz/article/details/78296424?utm_source=copy 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
 return无论在哪里,只要执行到就会返回,但唯一一点不同的是如果return在try或者catch中,即使返回了,最终finally中的代码都会被执行.这种情况最常用的是打开了某些资源后必须关闭,比如打开了一个OutputStream,那就应该在finally中关闭,这样无论有没有出现异常,都会被关闭。
