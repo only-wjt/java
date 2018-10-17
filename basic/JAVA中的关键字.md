@@ -338,7 +338,7 @@ public class Test {
     }
 }
  
-static class MyClass {
+ class MyClass {
     public int i = 0;
 }
 ````
