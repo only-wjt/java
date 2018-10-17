@@ -68,8 +68,7 @@ grammar_cjkRuby: true
 
 ## nginx的作用，以及实现负载均衡
 
-
-&emsp;&emsp; Nginx是一个轻量级、高性能、稳定性高、并发性好的HTTP和反向代理服务器。也是由于其的特性，其应用非常广。
+&emsp;&emsp; Nginx是一个轻量级、高性能、稳定性高、并发性好的HTTP和反向代理服务器，应用很广泛。
 
 主要功能
 反向代理          
