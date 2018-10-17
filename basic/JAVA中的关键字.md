@@ -362,7 +362,7 @@ public class Test {
     }
 }
  
-class MyClass {
+static class MyClass {
     public final double i = Math.random();
     public static double j = Math.random();
 }
