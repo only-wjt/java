@@ -178,11 +178,11 @@ upstream backend {
 
 ### 死锁的产生
 
-死锁的产生大部分都是在你不知情的时候.我们通过一个例子来看下什么是死锁.
+&emsp;&emsp;死锁的产生大部分都是在你不知情的时候.我们通过一个例子来看下什么是死锁.
 
-1.synchronized嵌套.
+&emsp;&emsp;1.synchronized嵌套.
 
-synchronized关键字可以保证多线程再访问到synchronized修饰的方法的时候保证了同步性.就是线程A访问到这个方法的时候线程B同时也来访问这个方法,这时线程B将进行阻塞,等待线程A执行完才可以去访问.这里就要用到synchronized所持有的同步锁.具体来看代码:
+&emsp;&emsp;synchronized关键字可以保证多线程再访问到synchronized修饰的方法的时候保证了同步性.就是线程A访问到这个方法的时候线程B同时也来访问这个方法,这时线程B将进行阻塞,等待线程A执行完才可以去访问.这里就要用到synchronized所持有的同步锁.具体来看代码:
 
 ````
 //首先我们先定义两个final的对象锁.可以看做是共有的资源.
@@ -249,15 +249,14 @@ ProductThreadB productThreadB = new ProductThreadB();
     threadA.start();
     threadB.start();
 `````
-分析一下,当threadA开始执行run方法的时候,它会先持有对象锁localA,然后睡眠2秒,这时候threadB也开始执行run方法,它持有的是localB对象锁.当threadA运行到第二个同步方法的时候,发现localB的对象锁不能使用(threadB未释放localB锁),threadA就停在这里等待localB锁.随后threadB也执行到第二个同步方法,去访问localA对象锁的时候发现localA还没有被释放(threadA未释放localA锁),threadB也停在这里等待localA锁释放.就这样两个线程都没办法继续执行下去,进入死锁的状态. 看下运行结果:
+&emsp;&emsp;分析一下,当threadA开始执行run方法的时候,它会先持有对象锁localA,然后睡眠2秒,这时候threadB也开始执行run方法,它持有的是localB对象锁.当threadA运行到第二个同步方法的时候,发现localB的对象锁不能使用(threadB未释放localB锁),threadA就停在这里等待localB锁.随后threadB也执行到第二个同步方法,去访问localA对象锁的时候发现localA还没有被释放(threadA未释放localA锁),threadB也停在这里等待localA锁释放.就这样两个线程都没办法继续执行下去,进入死锁的状态. 看下运行结果:
 
+````
 10-20 14:54:39.940 18162-18178/? E/CHAO: ThreadA lock  lockA
 10-20 14:54:39.940 18162-18179/? E/CHAO: ThreadB lock  lockB
---------------------- 
-作者：那个人_ 
-来源：CSDN 
-原文：https://blog.csdn.net/jsonChumpKlutz/article/details/78296424?utm_source=copy 
-版权声明：本文为博主原创文章，转载请附上博文链接！
+````
+
+&emsp;&emsp;通俗的讲就是因为，线程1执行线程2是，发现线程2的锁没有释放，而线程2的锁释放条件是拿到线程1的对象锁，这样的话就形成了死锁
 
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
