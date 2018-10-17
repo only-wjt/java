@@ -157,7 +157,7 @@ upstream backend {
 
 ![主从复制](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制.png)
 
-![主从复制辅助](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制2.png)
+![主从复制辅助图](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制2.png)
 
 &emsp;&emsp;可以知道，对于每一个主从复制的连接，都有三个线程。拥有多个从库的主库为每一个连接到主库的从库创建一个binlog输出线程，每一个从库都有它自己的I/O线程和SQL线程。
 &emsp;&emsp;步骤一：主库db的更新事件(update、insert、delete)被写到binlog
