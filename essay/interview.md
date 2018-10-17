@@ -351,28 +351,7 @@ Thread 2 waits randomly (e.g. 43 millis) before retrying.
 
 ## HahsMap
 
-HashMap的主干是一个Entry数组。Entry是HashMap的基本组成单元，每一个Entry包含一个key-value键值对。
-
-//HashMap的主干数组，可以看到就是一个Entry数组，初始值为空数组{}，主干数组的长度一定是2的次幂，至于为什么这么做，后面会有详细分析。
-transient Entry<K,V>[] table = (Entry<K,V>[]) EMPTY_TABLE;
- Entry是HashMap中的一个静态内部类。代码如下
-
-复制代码
-    static class Entry<K,V> implements Map.Entry<K,V> {
-        final K key;
-        V value;
-        Entry<K,V> next;//存储指向下一个Entry的引用，单链表结构
-        int hash;//对key的hashcode值进行hash运算后得到的值，存储在Entry，避免重复计算
-
-        /**
-         * Creates new entry.
-         */
-        Entry(int h, K k, V v, Entry<K,V> n) {
-            value = v;
-            next = n;
-            key = k;
-            hash = h;
-        } 
+我们知道，数据结构的物理存储结构只有两种：顺序存储结构和链式存储结构（像栈，队列，树，图等是从逻辑结构去抽象的，映射到内存中，也这两种物理组织形式），而在上面我们提到过，在数组中根据下标查找某个元素，一次定位就可以达到，哈希表利用了这种特性，哈希表的主干就是数组。
 
 HashMap的主干是一个Entry数组。Entry是HashMap的基本组成单元，每一个Entry包含一个key-value键值对。
 
@@ -402,6 +381,86 @@ static class Entry<K,V> implements Map.Entry<K,V> {
 ````
 
 ![HashMap的图解](https://www.github.com/only-wjt/images/raw/master/小书匠/HashMap结构图解.png)
+
+简单来说，HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的，如果定位到的数组位置不含链表（当前entry的next指向null）,那么对于查找，添加等操作很快，仅需一次寻址即可；如果定位到的数组包含链表，对于添加操作，其时间复杂度为O(n)，首先遍历链表，存在即覆盖，否则新增；对于查找操作来讲，仍需遍历链表，然后通过key对象的equals方法逐一比对查找。所以，性能考虑，HashMap中的链表出现越少，性能才会越好。
+
+
+HashMap ：先说HashMap，HashMap是线程不安全的，在并发环境下，可能会形成环状链表（扩容时可能造成，具体原因自行百度google或查看源码分析），导致get操作时，cpu空转，所以，在并发环境中使用HashMap是非常危险的。
+
+　　HashTable ： HashTable和HashMap的实现原理几乎一样，差别无非是1.HashTable不允许key和value为null；2.HashTable是线程安全的。但是HashTable线程安全的策略实现代价却太大了，简单粗暴，get/put所有相关操作都是synchronized的，这相当于给整个哈希表加了一把大锁，多线程访问时候，只要有一个线程访问或操作该对象，那其他线程只能阻塞，相当于将所有的操作串行化，在竞争激烈的并发场景中性能就会非常差。
+  
+  HashTable性能差主要是由于所有操作需要竞争同一把锁，而如果容器中有多把锁，每一把锁锁一段数据，这样在多线程访问时不同段的数据时，就不会存在锁竞争了，这样便可以有效地提高并发效率。这就是ConcurrentHashMap所采用的"分段锁"思想。
+  
+  ConcurrentHashMap采用了非常精妙的"分段锁"策略，ConcurrentHashMap的主干是个Segment数组。
+
+ final Segment<K,V>[] segments;
+　　Segment继承了ReentrantLock，所以它就是一种可重入锁（ReentrantLock)。在ConcurrentHashMap，一个Segment就是一个子哈希表，Segment里维护了一个HashEntry数组，并发环境下，对于不同Segment的数据进行操作是不用考虑锁竞争的。（就按默认的ConcurrentLeve为16来讲，理论上就允许16个线程并发执行，有木有很酷）
+
+　　所以，对于同一个Segment的操作才需考虑线程同步，不同的Segment则无需考虑。
+
+Segment类似于HashMap，一个Segment维护着一个HashEntry数组
+
+ transient volatile HashEntry<K,V>[] table;
+HashEntry是目前我们提到的最小的逻辑处理单元了。一个ConcurrentHashMap维护一个Segment数组，一个Segment维护一个HashEntry数组。
+
+复制代码
+ static final class HashEntry<K,V> {
+        final int hash;
+        final K key;
+        volatile V value;
+        volatile HashEntry<K,V> next;
+        //其他省略
+}    
+复制代码
+我们说Segment类似哈希表，那么一些属性就跟我们之前提到的HashMap差不离，比如负载因子loadFactor，比如阈值threshold等等，看下Segment的构造方法
+
+Segment(float lf, int threshold, HashEntry<K,V>[] tab) {
+            this.loadFactor = lf;//负载因子
+            this.threshold = threshold;//阈值
+            this.table = tab;//主干数组即HashEntry数组
+        }
+我们来看下ConcurrentHashMap的构造方法
+
+复制代码
+ 1  public ConcurrentHashMap(int initialCapacity,
+ 2                                float loadFactor, int concurrencyLevel) {
+ 3           if (!(loadFactor > 0) || initialCapacity < 0 || concurrencyLevel <= 0)
+ 4               throw new IllegalArgumentException();
+ 5           //MAX_SEGMENTS 为1<<16=65536，也就是最大并发数为65536
+ 6           if (concurrencyLevel > MAX_SEGMENTS)
+ 7               concurrencyLevel = MAX_SEGMENTS;
+ 8           //2的sshif次方等于ssize，例:ssize=16,sshift=4;ssize=32,sshif=5
+ 9          int sshift = 0;
+10          //ssize 为segments数组长度，根据concurrentLevel计算得出
+11          int ssize = 1;
+12          while (ssize < concurrencyLevel) {
+13              ++sshift;
+14              ssize <<= 1;
+15          }
+16          //segmentShift和segmentMask这两个变量在定位segment时会用到，后面会详细讲
+17          this.segmentShift = 32 - sshift;
+18          this.segmentMask = ssize - 1;
+19          if (initialCapacity > MAXIMUM_CAPACITY)
+20              initialCapacity = MAXIMUM_CAPACITY;
+21          //计算cap的大小，即Segment中HashEntry的数组长度，cap也一定为2的n次方.
+22          int c = initialCapacity / ssize;
+23          if (c * ssize < initialCapacity)
+24              ++c;
+25          int cap = MIN_SEGMENT_TABLE_CAPACITY;
+26          while (cap < c)
+27              cap <<= 1;
+28          //创建segments数组并初始化第一个Segment，其余的Segment延迟初始化
+29          Segment<K,V> s0 =
+30              new Segment<K,V>(loadFactor, (int)(cap * loadFactor),
+31                               (HashEntry<K,V>[])new HashEntry[cap]);
+32          Segment<K,V>[] ss = (Segment<K,V>[])new Segment[ssize];
+33          UNSAFE.putOrderedObject(ss, SBASE, s0); 
+34          this.segments = ss;
+35      }
+复制代码
+　　初始化方法有三个参数，如果用户不指定则会使用默认值，initialCapacity为16，loadFactor为0.75（负载因子，扩容时需要参考），concurrentLevel为16。
+
+　　从上面的代码可以看出来,Segment数组的大小ssize是由concurrentLevel来决定的，但是却不一定等于concurrentLevel，ssize一定是大于或等于concurrentLevel的最小的2的次幂。比如：默认情况下concurrentLevel是16，则ssize为16；若concurrentLevel为14，ssize为16；若concurrentLevel为17，则ssize为32。为什么Segment的数组大小一定是2的次幂？其实主要是便于通过按位与的散列算法来定位Segment的index。至于更详细的原因，有兴趣的话可以参考我的另一篇文章《HashMap实现原理及源码分析》，其中对于数组长度为什么一定要是2的次幂有较为详细的分析。
 
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
