@@ -155,6 +155,10 @@ upstream backend {
 
 &emsp;&emsp;&emsp;&emsp;3.从库的SQL线程:从库创建一个SQL线程，这个线程读取从库I/O线程写到relay log的更新事件并执行。
 
+![主从复制](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制.png)
+
+![主从复制辅助](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制2.png)
+
 &emsp;&emsp;可以知道，对于每一个主从复制的连接，都有三个线程。拥有多个从库的主库为每一个连接到主库的从库创建一个binlog输出线程，每一个从库都有它自己的I/O线程和SQL线程。
 &emsp;&emsp;步骤一：主库db的更新事件(update、insert、delete)被写到binlog
 &emsp;&emsp;步骤二：从库发起连接，连接到主库
