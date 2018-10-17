@@ -259,7 +259,7 @@ ProductThreadB productThreadB = new ProductThreadB();
 
 &emsp;&emsp;通俗的讲就是因为，线程1执行线程2时，发现线程2的锁没有释放，而线程2的锁释放条件是拿到线程1的对象锁，这样的话就形成了死锁。
 
-
+### 避免死锁的方法
 
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
