@@ -152,7 +152,6 @@ upstream backend {
 &emsp;&emsp;5.具体需要三个线程来操作：
 &emsp;&emsp;&emsp;&emsp;1.binlog输出线程:每当有从库连接到主库的时候，主库都会创建一个线程然后发送binlog内容到从库。在从库里，当复制开始的时候，从库就会创建两个线程进行处理：
 &emsp;&emsp;&emsp;&emsp;2.从库I/O线程:当START SLAVE语句在从库开始执行之后，从库创建一个I/O线程，该线程连接到主库并请求主库发送binlog里面的更新记录到从库上。从库I/O线程读取主库的binlog输出线程发送的更新并拷贝这些更新到本地文件，其中包括relay log文件。
-
 &emsp;&emsp;&emsp;&emsp;3.从库的SQL线程:从库创建一个SQL线程，这个线程读取从库I/O线程写到relay log的更新事件并执行。
 
 ![主从复制](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制.png)
