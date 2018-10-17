@@ -165,6 +165,13 @@ upstream backend {
 &emsp;&emsp;步骤四：从库启动之后，创建一个I/O线程，读取主库传过来的binlog内容并写入到relay log
 &emsp;&emsp;步骤五：还会创建一个SQL线程，从relay log里面读取内容，从Exec_Master_Log_Pos位置开始执行读取到的更新事件，将更新内容写入到slave的db.
 
+#### 从数据库的读的延迟问题了解吗？如何解决？做主从后主服务器挂了怎么办？
+- 主库宕机后，数据可能丢失
+- 从库只有一个sql Thread，主库写压力大，复制很可能延时
+
+- 半同步复制—解决数据丢失的问题
+- 并行复制—-解决从库复制延迟的问题
+
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
 return无论在哪里,只要执行到就会返回,但唯一一点不同的是如果return在try或者catch中,即使返回了,最终finally中的代码都会被执行.这种情况最常用的是打开了某些资源后必须关闭,比如打开了一个OutputStream,那就应该在finally中关闭,这样无论有没有出现异常,都会被关闭。
