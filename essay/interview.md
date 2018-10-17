@@ -41,6 +41,8 @@ grammar_cjkRuby: true
 正向代理，代理客户端，服务端不知道实际发起请求的客户端； 
 反向代理，代理服务端，客户端不知道实际提供服务的服务端； 
 
+![Diagram](./attachments/1539760796389.drawio.html)
+
 ## nginx的作用，以及实现负载均衡
 
 
