@@ -13,7 +13,7 @@ grammar_cjkRuby: true
 
 ![Diagram](./attachments/1539759743844.drawio.html)
 
-就想A向B借钱，但是B没有钱，于是B就向C借钱，然后把借来的钱给A，A并不知道这是B从C那借来的钱，
+就想A向B借钱，但是B没有钱，于是B就向C借钱，然后把借来的钱给A，A并不知道这是B从C那借来的钱。
 
 ### 概念
 
