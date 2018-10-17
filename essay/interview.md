@@ -342,11 +342,11 @@ Thread 2 waits randomly (e.g. 43 millis) before retrying.
 ## 创建对象的方式
 
 ````
-使用new关键字							            	} → 调用了构造函数
-使用Class类的newInstance方法			        } → 调用了构造函数
+使用new关键字							   } → 调用了构造函数
+使用Class类的newInstance方法			     } → 调用了构造函数
 使用Constructor类的newInstance方法	     } → 调用了构造函数
-使用clone方法								               } → 没有调用构造函数
-使用反序列化									             } → 没有调用构造函数
+使用clone方法								 } → 没有调用构造函数
+使用反序列化								   } → 没有调用构造函数
 ````
 
 ## try catch的执行顺序
