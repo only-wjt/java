@@ -485,6 +485,36 @@ Segment(float lf, int threshold, HashEntry<K,V>[] tab) {
 四大与对象：request、session、pacontext、application
 
 ## jsp和servlet的区别
+jsp和servlet的区别和联系：
+1.jsp经编译后就变成了Servlet.
+(JSP的本质就是Servlet，JVM只能识别java的类，不能识别JSP的代码,Web容器将JSP的代码编译成JVM能够识别的java类)
+2.jsp更擅长表现于页面显示,servlet更擅长于逻辑控制.
+3.Servlet中没有内置对象，Jsp中的内置对象都是必须通过HttpServletRequest对象，HttpServletResponse对象以及HttpServlet对象得到.
+Jsp是Servlet的一种简化，使用Jsp只需要完成程序员需要输出到客户端的内容，Jsp中的Java脚本如何镶嵌到一个类中，由Jsp容器完成。
+而Servlet则是个完整的Java类，这个类的Service方法用于生成对客户端的响应。
+
+
+联系：  
+JSP是Servlet技术的扩展，本质上就是Servlet的简易方式。JSP编译后是“类servlet”。
+Servlet和JSP最主要的不同点在于：
+Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML里分离开来。
+而JSP的情况是Java和HTML可以组合成一个扩展名为.jsp的文件。
+JSP侧重于视图，Servlet主要用于控制逻辑
+Servlet更多的是类似于一个Controller，用来做控制。
+
+
+
+理解以下三点即可：
+
+
+1、不同之处在哪？
+
+Servlet在Java代码中通过HttpServletResponse对象动态输出HTML内容
+JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HTML内容
+2、各自的特点
+
+Servlet能够很好地组织业务逻辑代码，但是在Java源文件中通过字符串拼接的方式生成动态HTML内容会导致代码维护困难、可读性差
+JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中混入大量、复杂的业务逻辑同样也是不可取的
 
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
