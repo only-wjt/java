@@ -521,6 +521,7 @@ JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中�
 导入标签库<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 ### foreach标签
+
 <c:forEach var="fruit" items="${fruits }" begin="2" end="4">
         <c:out value="${fruit }"></c:out><br>
     </c:forEach>
