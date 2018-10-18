@@ -516,6 +516,12 @@ JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HT
 Servlet能够很好地组织业务逻辑代码，但是在Java源文件中通过字符串拼接的方式生成动态HTML内容会导致代码维护困难、可读性差
 JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中混入大量、复杂的业务逻辑同样也是不可取的
 
+## jsp标签
+### foreach标签
+<c:forEach var="fruit" items="${fruits }" begin="2" end="4">
+        <c:out value="${fruit }"></c:out><br>
+    </c:forEach>
+
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
 return无论在哪里,只要执行到就会返回,但唯一一点不同的是如果return在try或者catch中,即使返回了,最终finally中的代码都会被执行.这种情况最常用的是打开了某些资源后必须关闭,比如打开了一个OutputStream,那就应该在finally中关闭,这样无论有没有出现异常,都会被关闭。
