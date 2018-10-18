@@ -521,6 +521,17 @@ JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中�
 导入标签库<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 ### foreach标签
+根据循环条件遍历集合中的元素
+
+var 设定变量名用于存储从集合取得的元素（必须无默认值）
+
+items指定要遍历的集合（必须无默认值）
+
+begin、end用于指定遍历的起始位置和终止位置‘
+
+step指定循环的步长
+
+varStatus通过index、count、first、last几个状态值，描述begin和end子集中的元素状态
 
 <c:forEach var="fruit" items="${fruits }" begin="2" end="4">
         <c:out value="${fruit }"></c:out><br>
