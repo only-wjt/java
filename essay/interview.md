@@ -525,6 +525,40 @@ JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中�
 <c:forEach var="fruit" items="${fruits }" begin="2" end="4">
         <c:out value="${fruit }"></c:out><br>
     </c:forEach>
+	
+### out标签
+
+ <c:out value="欢迎您"></c:out>
+    <%String str = "user"; request.setAttribute("name", str);%>
+    <c:out value="${empty name}"></c:out>
+    <!-- 当变量不存在时，通过default输出值 -->
+    <c:out value="${defalut }" default="error"></c:out><br>
+    <!-- escapeXML设置成false，转义生效 -->
+    <c:out value="&ltout标签&gt" escapeXml="false"></c:out>
+	
+### set标签：
+
+存值到scope中
+
+<c:set value="today" var="day" scope="session"></c:set>
+<c:set var="age" scope="application">12</c:set>
+
+
+test属性用于存放判断的条件，一般使用EL表达式来编写
+
+var指定名称用来存放判断的结果类型为true或false
+
+scope用来存放var属性存放的范围
+
+<form action="index.jsp" method="post">
+    <!-- 用户输入的数据存入到${param.score}变量中去 -->
+        <input type="text" name="score" value="${param.score }"/>
+        <input type="submit" value="submit"/>
+    </form>
+    <c:if test="${param.score>=90 }" var="result">
+        <c:out value="优秀"></c:out>
+    </c:if>
+    <c:out value="${result }"></c:out>
 
 ## try catch的执行顺序
 try{//正常执行的代码}catch (Exception e){//出错后执行的代码}finally{//无论正常执行还是出错,之后都会执行的代码}//跟上面try catch无关的代码正常执行的代码如果出现异常,就不会执行出现异常语句后面的所有正常代码。异常可能会被捕获掉,比如上面catch声明的是捕获Exception,那么所有Exception包括子类都会被捕获,但如Error或者是Throwable但又不是Exception(Exception继承Throwable)就不会被捕获。如果异常被捕获,就会执行catch里面的代码.如果异常没有被捕获,就会往外抛出,相当于这整个方法出现了异常。finally中的代码只要执行进了try catch永远都会被执行.执行完finally中的代码,如果异常被捕获就会执行外面跟这个try catch无关的代码.否则就会继续往外抛出异常。
