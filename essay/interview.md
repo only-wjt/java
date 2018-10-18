@@ -516,7 +516,7 @@ JSP在静态HTML内容中嵌入Java代码，Java代码被动态执行后生成HT
 Servlet能够很好地组织业务逻辑代码，但是在Java源文件中通过字符串拼接的方式生成动态HTML内容会导致代码维护困难、可读性差
 JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中混入大量、复杂的业务逻辑同样也是不可取的
 
-## jsp标签
+## JSTL标签
 ### foreach标签
 <c:forEach var="fruit" items="${fruits }" begin="2" end="4">
         <c:out value="${fruit }"></c:out><br>
