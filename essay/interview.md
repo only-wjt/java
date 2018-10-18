@@ -543,6 +543,7 @@ JSP虽然规避了Servlet在生成HTML内容方面的劣势，但是在HTML中�
 <c:set value="today" var="day" scope="session"></c:set>
 <c:set var="age" scope="application">12</c:set>
 
+### if标签
 
 test属性用于存放判断的条件，一般使用EL表达式来编写
 
