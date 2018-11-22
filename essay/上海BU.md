@@ -6,6 +6,9 @@ grammar_cjkRuby: true
 
 
 权限组，中的组织机构依赖于岗位角色，并且会用到权限服务中的角色权限设置。
+
+
+可以获取表单中的字段里面的值，，同时可以把值放到页面中存到Map中，之前做的在数据库中获取图片可以这样做
 ````
 public class TestFormAfterLoad extends ExecuteListener {
 
