@@ -94,3 +94,5 @@ public String orderByStatement(ProcessExecutionContext context) {
 场景4：自定义AJAX子表的表头JSON
 
 ![流程表单事件](https://www.github.com/only-wjt/images/raw/master/小书匠/1542856184282.png)
+
+字段权限在AWS各种策略中得优先次序
