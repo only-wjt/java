@@ -108,3 +108,4 @@ FORM_BEFORE_REMOVE
         //该参数仅在表单子表记录删除前（后）有效
         Connection conn = (Connection) param.getParameter(ListenerConst.FORM_EVENT_PARAM_CONNECTION);
 		
+删除子表时，与数据库操作有关系，与事务有关，应该采取上面的形式
