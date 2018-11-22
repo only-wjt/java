@@ -90,3 +90,5 @@ public String orderByStatement(ProcessExecutionContext context) {
     //return "field2 desc";//单个字段排序
 }
 ````
+场景3：自定义子表的表头Html
+场景4：自定义AJAX子表的表头JSON
