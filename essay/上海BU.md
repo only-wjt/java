@@ -41,3 +41,42 @@ public class TestFormAfterLoad extends ExecuteListener {
 
 
 FormGridRowLookAndFeel？？？
+
+
+
+PROCESS_FORM_GRID_FILTER
+
+````
+@Override
+public FormGridRowLookAndFeel acceptRowData(ProcessExecutionContext context, List<BOItemModel> boItemList, BO boData) {
+    String tableName = context.getParameterOfString(ListenerConst.FORM_EVENT_PARAM_BONAME);
+    if (tableName.equals("BO_ACT_PUTONGSUB1")) {
+        //创建一个对象
+        FormGridRowLookAndFeel diyLookAndFeel = new FormGridRowLookAndFeel();
+        String s3 = boData.getString("S3");
+        String s4 = boData.getString("S4");
+        if (s3 != null && s3.equals("50")) {
+            diyLookAndFeel.setLink(false);// 设置这行数据不展示链接
+            diyLookAndFeel.setRemove(false);// 设置这行数据不允许删除
+            diyLookAndFeel.setCellCSS("style='background-color:yellow;font-color: ffffff;font-weight: bold;height: 125px'");
+        }
+        if (s3 != null && s3.equals("55")) {
+            diyLookAndFeel.setDisplay(false);//不显示这条数据
+        }
+        if (s4 != null && s4.equals("60")) {
+            boData.set("S1", "<img src='../commons/img/add1_16.png' border=0>" + s4);// 重新设定一个字段的值
+        }
+        //特别说明：
+        //如果控制字段子表的`编辑`和`明细`链接的文字的显示隐藏
+        //可判断字段名是否是`字段子表`UI组件，然后进行赋值
+        //赋值规则：`编辑|明细`
+        //如果不显示`编辑`，将该部分留空，如果不显示`明细`，将该部分留空
+        //如：`|明细`，`编辑|`，`|`
+        boData.set("字段子表字段名", "编辑|明细");
+
+        //处理好之后，将该对象返回
+        return diyLookAndFeel;
+    }
+    return null;//返回null按照原始数据展示子表
+}
+````
