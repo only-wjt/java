@@ -80,3 +80,15 @@ public FormGridRowLookAndFeel acceptRowData(ProcessExecutionContext context, Lis
     return null;//返回null按照原始数据展示子表
 }
 ````
+
+还可以进行子表字段的排序
+
+场景2：指定子表排序
+开发示例
+````
+@Override
+public String orderByStatement(ProcessExecutionContext context) {
+    return "field1 asc,field2 desc";//两种字段组合的排序
+    //return "field2 desc";//单个字段排序
+}
+````
