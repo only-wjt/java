@@ -84,7 +84,6 @@ public FormGridRowLookAndFeel acceptRowData(ProcessExecutionContext context, Lis
 还可以进行子表字段的排序
 
 场景2：指定子表排序
-开发示例
 ````
 @Override
 public String orderByStatement(ProcessExecutionContext context) {
