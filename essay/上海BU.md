@@ -96,3 +96,15 @@ public String orderByStatement(ProcessExecutionContext context) {
 ![流程表单事件](https://www.github.com/only-wjt/images/raw/master/小书匠/1542856184282.png)
 
 字段权限在AWS各种策略中得优先次序
+
+FORM_BEFORE_REMOVE
+表单子表记录删除前被触发
+
+由于删除操作在底层代码中使用了数据库事务，如果在事件中需要对数据库进行操作，需要使用系统参数提供的数据库连接。否则，会出现数据库事务的问题。
+
+该参数仅在表单子表记录删除前（后）有效
+
+		//注意：由于使用了事务，操作数据库需要使用如下方式获取的Connection连接
+        //该参数仅在表单子表记录删除前（后）有效
+        Connection conn = (Connection) param.getParameter(ListenerConst.FORM_EVENT_PARAM_CONNECTION);
+		
