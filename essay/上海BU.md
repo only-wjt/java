@@ -109,3 +109,6 @@ FORM_BEFORE_REMOVE
         Connection conn = (Connection) param.getParameter(ListenerConst.FORM_EVENT_PARAM_CONNECTION);
 		
 删除子表时，与数据库操作有关系，与事务有关，应该采取上面的形式
+
+
+开发者应妥善保管AWS PaaS提供的私钥/口令字符串，建议在调用端加密后存至配置文件，源码中禁止含有私钥/口令信息
