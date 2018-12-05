@@ -191,3 +191,5 @@ window.onload = function () {
 ## 本地许可过期解决方法
 
 删除c盘目录下的用户目录中的.fe285ab55cf5e这样一串乱码的文件夹删除即可
+
+![本地平台许可过期解决方法](https://www.github.com/only-wjt/images/raw/master/小书匠/本地许可过期解决方法.png)
