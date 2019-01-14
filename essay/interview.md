@@ -19,7 +19,7 @@ grammar_cjkRuby: true
  ### 正向代理
  &emsp;&emsp;我们可以先从正向代理入手，正向代理一般用来作为对访问不到的资源的代理，我们知道从谁那得到的资源，但是资源处不知道具体是谁得到。
 
-![Diagram](./attachments/1539759743844.drawio.html)
+![Diagram](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447924906.png)
 
 &emsp;&emsp;就想A向B借钱，但是B没有钱，于是B就向C借钱，然后把借来的钱给A，A并不知道这是B从C那借来的钱。
 
@@ -30,7 +30,7 @@ grammar_cjkRuby: true
 &emsp;&emsp; 反向代理（Reverse Proxy），以`代理服务器来接受internet上的连接请求，然后将请求转发给内部网络上的服务器，`并将从服务器上得到的结果返回给internet上请求的客户端，此时代理服务器对外表现为一个反向代理服务器。 
 &emsp;&emsp; 理解起来有些抽象，可以这么说：A向B借钱，B没有拿自己的钱，而是悄悄地向C借钱，拿到钱之后再交给A,A以为是B的钱，他并不知道C的存在。 
 
-![Diagram](./attachments/1539760221643.drawio.html)
+![Diagram](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447924926.png)
 
 ### 正向代理和反向代理的区别； 
 
@@ -41,7 +41,7 @@ grammar_cjkRuby: true
 正向代理，代理客户端，服务端不知道实际发起请求的客户端； 
 反向代理，代理服务端，客户端不知道实际提供服务的服务端； 
 
-![Diagram](./attachments/1539760796389.drawio.html)
+![Diagram](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447925120.png)
 
 &emsp;&emsp; 备注：正向代理–HTTP代理为多个人提供翻墙服务；反向代理–百度外卖为多个商户提供平台给某个用户提供外卖服务。
 - 用途不同 
@@ -154,9 +154,9 @@ upstream backend {
 &emsp;&emsp;&emsp;&emsp;2.从库I/O线程:当START SLAVE语句在从库开始执行之后，从库创建一个I/O线程，该线程连接到主库并请求主库发送binlog里面的更新记录到从库上。从库I/O线程读取主库的binlog输出线程发送的更新并拷贝这些更新到本地文件，其中包括relay log文件。
 &emsp;&emsp;&emsp;&emsp;3.从库的SQL线程:从库创建一个SQL线程，这个线程读取从库I/O线程写到relay log的更新事件并执行。
 
-![主从复制](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制.png)
+![主从复制](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447925972.png)
 
-![主从复制辅助图](https://www.github.com/only-wjt/images/raw/master/小书匠/主从复制2.png)
+![主从复制辅助图](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447926552.png)
 
 &emsp;&emsp;可以知道，对于每一个主从复制的连接，都有三个线程。拥有多个从库的主库为每一个连接到主库的从库创建一个binlog输出线程，每一个从库都有它自己的I/O线程和SQL线程。
 &emsp;&emsp;步骤一：主库db的更新事件(update、insert、delete)被写到binlog
@@ -327,7 +327,7 @@ Thread 2 waits randomly (e.g. 43 millis) before retrying.
 
 &emsp;&emsp;下面是一幅关于四个线程（A,B,C和D）之间锁占有和请求的关系图。像这样的数据结构就可以被用来检测死锁。
 
-![死锁检测图解](https://www.github.com/only-wjt/images/raw/master/小书匠/死锁检测.png)
+![死锁检测图解](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447926399.png)
 
 &emsp;&emsp;那么当检测出死锁时，这些线程该做些什么呢？
 
@@ -380,7 +380,7 @@ static class Entry<K,V> implements Map.Entry<K,V> {
         } 
 ````
 
-![HashMap的图解](https://www.github.com/only-wjt/images/raw/master/小书匠/HashMap结构图解.png)
+![HashMap的图解](https://www.github.com/only-wjt/images/raw/master/小书匠/1547447929398.png)
 
 简单来说，HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的，如果定位到的数组位置不含链表（当前entry的next指向null）,那么对于查找，添加等操作很快，仅需一次寻址即可；如果定位到的数组包含链表，对于添加操作，其时间复杂度为O(n)，首先遍历链表，存在即覆盖，否则新增；对于查找操作来讲，仍需遍历链表，然后通过key对象的equals方法逐一比对查找。所以，性能考虑，HashMap中的链表出现越少，性能才会越好。
 
