@@ -188,3 +188,7 @@ window.onload = function () {
 ![sopa密码配置](https://www.github.com/only-wjt/images/raw/master/小书匠/soap密码配置.png)
 
 详细代码请看本地E:\上海建工\上海建工\sfeg_ykt
+
+
+## 年份(当前年份的前五年和后五年)
+@numSub(@year,5)|@numSub(@year,4)|@numSub(@year,3)|@numSub(@year,2)|@numSub(@year,1)|@numAdd(@year)|@numAdd(@year,1)|@numAdd(@year,2)|@numAdd(@year,3)|@numAdd(@year,4)|@numAdd(@year,5)
