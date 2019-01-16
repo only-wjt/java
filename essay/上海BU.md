@@ -196,4 +196,3 @@ window.onload = function () {
 
 
 
-（科目校验）
