@@ -192,3 +192,5 @@ window.onload = function () {
 ![webservice配置密码](https://www.github.com/only-wjt/images/raw/master/小书匠/webservice配置密码.png)
 ![密码配置](https://www.github.com/only-wjt/images/raw/master/小书匠/密码配置.png)
 ![sopa密码配置](https://www.github.com/only-wjt/images/raw/master/小书匠/soap密码配置.png)
+
+详细代码请看本地E:\上海建工\上海建工\sfeg_ykt
