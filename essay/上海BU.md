@@ -39,7 +39,6 @@ public class TestFormAfterLoad extends ExecuteListener {
 }
 ````
 
-
 ````
 @Override
 public FormGridRowLookAndFeel acceptRowData(ProcessExecutionContext context, List<BOItemModel> boItemList, BO boData) {
