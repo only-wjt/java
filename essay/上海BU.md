@@ -196,3 +196,5 @@ window.onload = function () {
 
 
 ## webservice配置使用方法
+
+![sopa密码配置](https://www.github.com/only-wjt/images/raw/master/小书匠/soap密码配置.png)
