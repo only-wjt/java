@@ -197,4 +197,6 @@ window.onload = function () {
 ## 部门字段可以多选并且可以以列表形式选填
 ![多选部门，还可以手填](https://www.github.com/only-wjt/images/raw/master/小书匠/1548294626957.png)
 
-SELECT DEPARTMENTNAME AS org_name,DEPARTMENTNO AS org_code FROM ORGDEPARTMENT
+其中sql语句为：SELECT DEPARTMENTNAME AS org_name,DEPARTMENTNO AS org_code FROM ORGDEPARTMENT
+
+ :wink: :crush: :cry: :tear: :laughing: :yum:
