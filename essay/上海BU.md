@@ -199,4 +199,4 @@ window.onload = function () {
 
 其中sql语句为：SELECT DEPARTMENTNAME AS org_name,DEPARTMENTNO AS org_code FROM ORGDEPARTMENT
 
- :wink: :crush: :cry: :tear: :laughing: :yum:
+ 
