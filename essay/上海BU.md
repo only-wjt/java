@@ -201,5 +201,6 @@ window.onload = function () {
 
 
 ## 根据集团外部和内部做不同而sql查询
+
 SELECT DOCUMENT_NO FROM BO_EU_GW_FHLX WHERE ('$ORG_TYPE' = '01' AND (DOCUMENT_TYPE = '$DOCUMENT_TYPE' AND COMPANY_NAME='$COMPANY_NAME')) or ('$ORG_TYPE'='02')
 
