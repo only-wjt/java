@@ -216,4 +216,7 @@ SELECT DOCUMENT_NO FROM BO_EU_GW_FHLX WHERE ('$ORG_TYPE' = '02' AND (DOCUMENT_TY
 	7.退出oracle用户到root结束操作  指令：exit
 
 ## 平台启动命令
+	1.ps -ef|grep java;
+	2.kill -9;
+	3.nohup ./aws_startup.sh;
 
