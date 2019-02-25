@@ -215,5 +215,5 @@ SELECT DOCUMENT_NO FROM BO_EU_GW_FHLX WHERE ('$ORG_TYPE' = '02' AND (DOCUMENT_TY
 	6.启动oracle监听   	  指令：lsnrctl start
 	7.退出oracle用户到root结束操作  指令：exit
 
-## 平台启动
+## 平台启动命令
 
