@@ -206,12 +206,12 @@ SELECT DOCUMENT_NO FROM BO_EU_GW_FHLX WHERE ('$ORG_TYPE' = '02' AND (DOCUMENT_TY
 
 
 ## oracle启动命令
-linux下重新启动oracle服务及监听服务（以root用户登录为例）
-1.切换到oracle用户    指令：su - oracle 
-2.打开sqlplus		  指令：sqlplus / as  sysdba
-3.先执行oracle关闭    指令：shutdown immediate;
-4.再执行oracle启动	  指令： startup;
-5.退出sqlplus         指令：exit;
-6.启动oracle监听   	  指令：lsnrctl start
-7.退出oracle用户到root结束操作  指令：exit
+	linux下重新启动oracle服务及监听服务（以root用户登录为例）
+	1.切换到oracle用户    指令：su - oracle 
+	2.打开sqlplus		  指令：sqlplus / as  sysdba
+	3.先执行oracle关闭    指令：shutdown immediate;
+	4.再执行oracle启动	  指令： startup;
+	5.退出sqlplus         指令：exit;
+	6.启动oracle监听   	  指令：lsnrctl start
+	7.退出oracle用户到root结束操作  指令：exit
 
